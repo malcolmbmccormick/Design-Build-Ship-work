@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mesa Trails — Immersive Full-Screen Storytelling</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000;
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ALL DESIGNS LINK */
+  .all-designs {
+    position: fixed;
+    top: 24px; left: 24px;
+    z-index: 1000;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+    text-transform: uppercase;
+  }
+  .all-designs:hover { color: #fff; }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 1000;
+    height: 3px;
+    background: rgba(255,255,255,0.15);
+  }
+  .progress-fill {
+    height: 100%;
+    background: #fff;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+  .trail-dots {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .dot.active { background: #fff; transform: scale(1.4); }
+
+  /* NAVIGATION ARROWS */
+  .nav-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, border-color 0.3s;
+    backdrop-filter: blur(4px);
+  }
+  .nav-arrow:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.6); }
+  .nav-prev { left: 24px; }
+  .nav-next { right: 24px; }
+  .nav-arrow.hidden { opacity: 0; pointer-events: none; }
+
+  /* SECTIONS */
+  .story-section {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+    pointer-events: none;
+  }
+  .story-section.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* HERO SECTION */
+  .hero-section {
+    background: #000;
+    flex-direction: column;
+    gap: 32px;
+    padding: 24px;
+  }
+  .hero-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5vw, 64px);
+    font-weight: 300;
+    text-align: center;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+    color: #fff;
+    max-width: 700px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s 0.3s, transform 0.8s 0.3s;
+  }
+  .hero-section.active .hero-tagline {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .click-prompt {
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    opacity: 0;
+    animation: pulse 2s ease-in-out infinite;
+    transition: opacity 0.8s 1.2s;
+    cursor: pointer;
+  }
+  .hero-section.active .click-prompt { opacity: 1; }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.9; }
+  }
+
+  /* TRAIL SECTION */
+  .trail-section {
+    overflow: hidden;
+  }
+  .trail-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.35);
+    transform: scale(1.05);
+    transition: transform 8s ease, filter 0.9s ease;
+  }
+  .story-section.active .trail-bg {
+    transform: scale(1.0);
+    filter: brightness(0.4);
+  }
+  .trail-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 700px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .trail-location {
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s 0.2s, transform 0.6s 0.2s;
+    margin-bottom: 16px;
+  }
+  .story-section.active .trail-location { opacity: 1; transform: translateY(0); }
+
+  .trail-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 7vw, 80px);
+    font-weight: 300;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s 0.5s, transform 0.7s 0.5s;
+    margin-bottom: 28px;
+  }
+  .story-section.active .trail-title { opacity: 1; transform: translateY(0); }
+
+  .trail-divider {
+    width: 60px;
+    height: 1px;
+    background: rgba(255,255,255,0.4);
+    opacity: 0;
+    transition: opacity 0.6s 0.8s, width 0.8s 0.8s;
+    margin-bottom: 28px;
+  }
+  .story-section.active .trail-divider { opacity: 1; width: 100px; }
+
+  .trail-stats {
+    display: flex;
+    gap: 36px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s 1.0s, transform 0.6s 1.0s;
+  }
+  .story-section.active .trail-stats { opacity: 1; transform: translateY(0); }
+
+  .stat-block { text-align: center; }
+  .stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-key {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .pull-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(16px, 2.5vw, 24px);
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(255,255,255,0.85);
+    text-align: center;
+    max-width: 560px;
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s 1.3s, transform 0.6s 1.3s;
+    margin-bottom: 8px;
+  }
+  .story-section.active .pull-quote { opacity: 1; transform: translateY(0); }
+
+  .quote-author {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    opacity: 0;
+    transition: opacity 0.6s 1.5s;
+    margin-bottom: 6px;
+  }
+  .story-section.active .quote-author { opacity: 1; }
+
+  .quote-row {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 6px;
+    opacity: 0;
+    transition: opacity 0.4s 1.6s;
+  }
+  .story-section.active .quote-row { opacity: 1; }
+
+  .difficulty-badge {
+    display: inline-block;
+    padding: 6px 18px;
+    border: 1px solid rgba(255,255,255,0.3);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.8);
+    opacity: 0;
+    transition: opacity 0.6s 0.9s;
+    margin-bottom: 24px;
+  }
+  .story-section.active .difficulty-badge { opacity: 1; }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="all-designs">← All Designs</a>
+
+<!-- PROGRESS -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="trail-dots" id="trailDots"></div>
+
+<!-- NAV ARROWS -->
+<button class="nav-arrow nav-prev hidden" id="prevBtn" onclick="navigate(-1)">&#8592;</button>
+<button class="nav-arrow nav-next" id="nextBtn" onclick="navigate(1)">&#8594;</button>
+
+<!-- SECTION 0: HERO -->
+<section class="story-section hero-section active" id="section-0">
+  <div class="hero-tagline">Five trails.<br>One desert.<br><em>Infinite wonder.</em></div>
+  <div class="click-prompt" onclick="navigate(1)">Click to begin &nbsp;&#8594;</div>
+</section>
+
+<!-- SECTION 1: WIND CAVE -->
+<section class="story-section trail-section" id="section-1">
+  <div class="trail-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg')"></div>
+  <div class="trail-content">
+    <div class="trail-location">Usery Mountain Regional Park</div>
+    <h2 class="trail-title">Wind Cave Trail</h2>
+    <div class="trail-divider"></div>
+    <div class="difficulty-badge">Moderate</div>
+    <div class="trail-stats">
+      <div class="stat-block"><div class="stat-val">3.2</div><div class="stat-key">Miles</div></div>
+      <div class="stat-block"><div class="stat-val">1.5–2</div><div class="stat-key">Hours</div></div>
+      <div class="stat-block"><div class="stat-val">+860</div><div class="stat-key">Feet</div></div>
+    </div>
+    <p class="pull-quote">"Stunning cave views at the top!"</p>
+    <div class="quote-author">— Jake R.</div>
+    <div class="quote-row"><span>⭐⭐⭐⭐⭐</span></div>
+    <p class="pull-quote" style="transition-delay:1.7s; font-size:clamp(14px,2vw,18px);">"Trail is well-marked and rewarding."</p>
+    <div class="quote-author" style="transition-delay:1.9s;">— Chris T.</div>
+    <div class="quote-row" style="transition-delay:2.0s;"><span>⭐⭐⭐⭐⭐</span></div>
+  </div>
+</section>
+
+<!-- SECTION 2: SIPHON DRAW -->
+<section class="story-section trail-section" id="section-2">
+  <div class="trail-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg')"></div>
+  <div class="trail-content">
+    <div class="trail-location">Lost Dutchman State Park</div>
+    <h2 class="trail-title">Siphon Draw Trail</h2>
+    <div class="trail-divider"></div>
+    <div class="difficulty-badge">Strenuous</div>
+    <div class="trail-stats">
+      <div class="stat-block"><div class="stat-val">4.2</div><div class="stat-key">Miles</div></div>
+      <div class="stat-block"><div class="stat-val">3–4</div><div class="stat-key">Hours</div></div>
+      <div class="stat-block"><div class="stat-val">+2,045</div><div class="stat-key">Feet</div></div>
+    </div>
+    <p class="pull-quote">"Epic views of the Superstitions!"</p>
+    <div class="quote-author">— Maria L.</div>
+    <div class="quote-row"><span>⭐⭐⭐⭐⭐</span></div>
+    <p class="pull-quote" style="transition-delay:1.7s; font-size:clamp(14px,2vw,18px);">"Best hike in the East Valley."</p>
+    <div class="quote-author" style="transition-delay:1.9s;">— Ava S.</div>
+    <div class="quote-row" style="transition-delay:2.0s;"><span>⭐⭐⭐⭐⭐</span></div>
+  </div>
+</section>
+
+<!-- SECTION 3: PERALTA -->
+<section class="story-section trail-section" id="section-3">
+  <div class="trail-bg" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg')"></div>
+  <div class="trail-content">
+    <div class="trail-location">Superstition Wilderness</div>
+    <h2 class="trail-title">Peralta Trail</h2>
+    <div class="trail-divider"></div>
+    <div class="difficulty-badge">Moderate–Strenuous</div>
+    <div class="trail-stats">
+      <div class="stat-block"><div class="stat-val">4.6</div><div class="stat-key">Miles</div></div>
+      <div class="stat-block"><div class="stat-val">3–3.5</div><div class="stat-key">Hours</div></div>
+      <div class="stat-block"><div class="stat-val">+1,425</div><div class="stat-key">Feet</div></div>
+    </div>
+    <p class="pull-quote">"Weaver's Needle views are unreal."</p>
+    <div class="quote-author">— Dan K.</div>
+    <div class="quote-row"><span>⭐⭐⭐⭐⭐</span></div>
+    <p class="pull-quote" style="transition-delay:1.7s; font-size:clamp(14px,2vw,18px);">"A must-do in Arizona."</p>
+    <div class="quote-author" style="transition-delay:1.9s;">— Noah P.</div>
+    <div class="quote-row" style="transition-delay:2.0s;"><span>⭐⭐⭐⭐⭐</span></div>
+  </div>
+</section>
+
+<!-- SECTION 4: HIEROGLYPHIC -->
+<section class="story-section trail-section" id="section-4">
+  <div class="trail-bg" style="background-image: url('https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg')"></div>
+  <div class="trail-content">
+    <div class="trail-location">Superstition Wilderness</div>
+    <h2 class="trail-title">Hieroglyphic Trail</h2>
+    <div class="trail-divider"></div>
+    <div class="difficulty-badge">Easy–Moderate</div>
+    <div class="trail-stats">
+      <div class="stat-block"><div class="stat-val">3.4</div><div class="stat-key">Miles</div></div>
+      <div class="stat-block"><div class="stat-val">2–2.5</div><div class="stat-key">Hours</div></div>
+      <div class="stat-block"><div class="stat-val">+800</div><div class="stat-key">Feet</div></div>
+    </div>
+    <p class="pull-quote">"Ancient petroglyphs are fascinating."</p>
+    <div class="quote-author">— Emma R.</div>
+    <div class="quote-row"><span>⭐⭐⭐⭐⭐</span></div>
+    <p class="pull-quote" style="transition-delay:1.7s; font-size:clamp(14px,2vw,18px);">"Hidden gem near Mesa."</p>
+    <div class="quote-author" style="transition-delay:1.9s;">— Zoe C.</div>
+    <div class="quote-row" style="transition-delay:2.0s;"><span>⭐⭐⭐⭐⭐</span></div>
+  </div>
+</section>
+
+<!-- SECTION 5: RED MOUNTAIN -->
+<section class="story-section trail-section" id="section-5">
+  <div class="trail-bg" style="background-image: url('https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg')"></div>
+  <div class="trail-content">
+    <div class="trail-location">Mesa, Arizona</div>
+    <h2 class="trail-title">Red Mountain Trail</h2>
+    <div class="trail-divider"></div>
+    <div class="difficulty-badge">Easy–Moderate</div>
+    <div class="trail-stats">
+      <div class="stat-block"><div class="stat-val">3.0</div><div class="stat-key">Miles</div></div>
+      <div class="stat-block"><div class="stat-val">1.5–2</div><div class="stat-key">Hours</div></div>
+      <div class="stat-block"><div class="stat-val">+400</div><div class="stat-key">Feet</div></div>
+    </div>
+    <p class="pull-quote">"The red volcanic formations are wild."</p>
+    <div class="quote-author">— Ben H.</div>
+    <div class="quote-row"><span>⭐⭐⭐⭐⭐</span></div>
+    <p class="pull-quote" style="transition-delay:1.7s; font-size:clamp(14px,2vw,18px);">"Short but scenic, great for all levels."</p>
+    <div class="quote-author" style="transition-delay:1.9s;">— Sam T.</div>
+    <div class="quote-row" style="transition-delay:2.0s;"><span>⭐⭐⭐⭐⭐</span></div>
+  </div>
+</section>
+
+<script>
+  const totalSections = 6; // 0 = hero, 1-5 = trails
+  let current = 0;
+
+  // Build dots (for trail sections only)
+  const dotsContainer = document.getElementById('trailDots');
+  for (let i = 0; i < 5; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.addEventListener('click', () => goTo(i + 1));
+    dotsContainer.appendChild(d);
+  }
+
+  function updateDots() {
+    const dots = document.querySelectorAll('.dot');
+    dots.forEach((d, i) => d.classList.toggle('active', current === i + 1));
+  }
+
+  function updateProgress() {
+    const fill = document.getElementById('progressFill');
+    if (current === 0) { fill.style.width = '0%'; return; }
+    fill.style.width = ((current / 5) * 100) + '%';
+  }
+
+  function updateArrows() {
+    document.getElementById('prevBtn').classList.toggle('hidden', current === 0);
+    document.getElementById('nextBtn').classList.toggle('hidden', current === totalSections - 1);
+  }
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= totalSections) return;
+    document.getElementById('section-' + current).classList.remove('active');
+    current = idx;
+    document.getElementById('section-' + current).classList.add('active');
+    updateDots();
+    updateProgress();
+    updateArrows();
+  }
+
+  function navigate(dir) {
+    goTo(current + dir);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') navigate(-1);
+  });
+
+  // Touch/swipe
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 50) navigate(dx > 0 ? 1 : -1);
+  });
+
+  // Init
+  updateDots();
+  updateProgress();
+  updateArrows();
+</script>
+</body>
+</html>

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desert Minimalist — Mesa Hiking Routes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --sand: #D4A96A;
+      --sand-light: #F5ECD9;
+      --sand-pale: #FDFAF5;
+      --text-dark: #1A1714;
+      --text-mid: #5C5449;
+      --text-light: #9C8F82;
+      --border: #E8DDD0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--sand-pale);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(253, 250, 245, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav a.back {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a.back:hover { color: var(--sand); }
+
+    nav .site-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: var(--text-dark);
+      letter-spacing: 0.02em;
+    }
+
+    nav .label {
+      font-size: 12px;
+      color: var(--text-light);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-img {
+      position: absolute;
+      inset: 0;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg') center/cover no-repeat;
+      animation: kenBurns 20s ease-in-out infinite alternate;
+      transform-origin: center center;
+    }
+
+    @keyframes kenBurns {
+      0%   { transform: scale(1.0) translate(0, 0); }
+      100% { transform: scale(1.12) translate(-2%, -1%); }
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(253,250,245,0.15) 0%,
+        rgba(253,250,245,0.55) 60%,
+        rgba(253,250,245,0.92) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 24px;
+      animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: 0.3s;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--sand);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(42px, 7vw, 88px);
+      font-weight: 700;
+      line-height: 1.05;
+      color: var(--text-dark);
+      margin-bottom: 24px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--sand);
+    }
+
+    .hero-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-mid);
+      max-width: 480px;
+      margin: 0 auto 40px;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-scroll {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .hero-scroll:hover { color: var(--sand); }
+
+    .scroll-line {
+      width: 40px;
+      height: 1px;
+      background: var(--sand);
+      transition: width 0.3s;
+    }
+    .hero-scroll:hover .scroll-line { width: 60px; }
+
+    /* TRAILS SECTION */
+    .trails-section {
+      padding: 100px 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--sand);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* TRAIL CARDS */
+    .trail-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--border);
+      background: #fff;
+      margin-bottom: 48px;
+      overflow: hidden;
+      transition: box-shadow 0.3s;
+    }
+
+    .trail-card:hover {
+      box-shadow: 0 8px 40px rgba(212,169,106,0.15);
+    }
+
+    .trail-card:nth-child(even) {
+      direction: rtl;
+    }
+    .trail-card:nth-child(even) > * {
+      direction: ltr;
+    }
+
+    .trail-img-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .trail-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+
+    .trail-card:hover .trail-img-wrap img {
+      transform: scale(1.04);
+    }
+
+    .trail-number {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-family: 'Playfair Display', serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--sand);
+      padding: 4px 10px;
+      letter-spacing: 0.05em;
+    }
+
+    .trail-body {
+      padding: 48px 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .trail-top {}
+
+    .trail-difficulty {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sand);
+      margin-bottom: 10px;
+    }
+
+    .trail-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+
+    .trail-location {
+      font-size: 13px;
+      color: var(--text-light);
+      font-style: italic;
+      margin-bottom: 28px;
+    }
+
+    .trail-stats {
+      display: flex;
+      gap: 28px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 28px;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    /* REVIEWS */
+    .reviews-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 16px;
+    }
+
+    .review-item {
+      margin-bottom: 14px;
+      padding-left: 14px;
+      border-left: 2px solid var(--border);
+    }
+    .review-item:last-child { margin-bottom: 0; }
+
+    .review-text {
+      font-size: 13px;
+      color: var(--text-mid);
+      font-style: italic;
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+
+    .review-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .review-stars {
+      font-size: 10px;
+      color: var(--sand);
+      letter-spacing: 1px;
+    }
+
+    .review-author {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-light);
+      letter-spacing: 0.05em;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 60px 48px;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
+
+    .footer-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    .footer-sub {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .trails-section { padding: 60px 20px; }
+      .trail-card { grid-template-columns: 1fr; }
+      .trail-card:nth-child(even) { direction: ltr; }
+      .trail-img-wrap { height: 240px; }
+      .trail-body { padding: 28px 24px; }
+      .section-header { flex-wrap: wrap; }
+      .section-line { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="back">← All Designs</a>
+    <span class="site-name">Mesa Trails</span>
+    <span class="label">Desert Minimalist</span>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-img"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Mesa, Arizona</p>
+      <h1 class="hero-title">Find Your<br /><em>Trail</em></h1>
+      <p class="hero-subtitle">Five remarkable routes through the Sonoran Desert — from gentle canyon walks to demanding mountain ascents.</p>
+      <a href="#trails" class="hero-scroll">
+        <span class="scroll-line"></span>
+        Explore Routes
+      </a>
+    </div>
+  </section>
+
+  <!-- TRAILS -->
+  <section class="trails-section" id="trails">
+    <div class="section-header">
+      <span class="section-label">Routes</span>
+      <h2 class="section-title">Five Trails to Explore</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <!-- Trail 1 -->
+    <div class="trail-card">
+      <div class="trail-img-wrap">
+        <span class="trail-number">01</span>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail" loading="lazy" />
+      </div>
+      <div class="trail-body">
+        <div class="trail-top">
+          <div class="trail-difficulty">Moderate</div>
+          <h3 class="trail-name">Wind Cave Trail</h3>
+          <p class="trail-location">Usery Mountain Regional Park</p>
+          <div class="trail-stats">
+            <div class="stat">
+              <span class="stat-label">Distance</span>
+              <span class="stat-value">3.2 mi</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Time</span>
+              <span class="stat-value">1.5–2 hrs</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Elevation</span>
+              <span class="stat-value">+860 ft</span>
+            </div>
+          </div>
+        </div>
+        <div class="reviews">
+          <p class="reviews-title">Hiker Reviews</p>
+          <div class="review-item">
+            <p class="review-text">"Stunning cave views at the top!"</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-author">Jake R.</span>
+            </div>
+          </div>
+          <div class="review-item">
+            <p class="review-text">"Great morning hike, bring water."</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★</span>
+              <span class="review-author">Sara M.</span>
+            </div>
+          </div>
+          <div class="review-item">
+            <p class="review-text">"Trail is well-marked and rewarding."</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-author">Chris T.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trail 2 -->
+    <div class="trail-card">
+      <div class="trail-img-wrap">
+        <span class="trail-number">02</span>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail" loading="lazy" />
+      </div>
+      <div class="trail-body">
+        <div class="trail-top">
+          <div class="trail-difficulty">Strenuous</div>
+          <h3 class="trail-name">Siphon Draw Trail</h3>
+          <p class="trail-location">Lost Dutchman State Park</p>
+          <div class="trail-stats">
+            <div class="stat">
+              <span class="stat-label">Distance</span>
+              <span class="stat-value">4.2 mi</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Time</span>
+              <span class="stat-value">3–4 hrs</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Elevation</span>
+              <span class="stat-value">+2,045 ft</span>
+            </div>
+          </div>
+        </div>
+        <div class="reviews">
+          <p class="reviews-title">Hiker Reviews</p>
+          <div class="review-item">
+            <p class="review-text">"Epic views of the Superstitions!"</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-author">Maria L.</span>
+            </div>
+          </div>
+          <div class="review-item">
+            <p class="review-text">"Very challenging but worth it."</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★</span>
+              <span class="review-author">Tom B.</span>
+            </div>
+          </div>
+          <div class="review-item">
+            <p class="review-text">"Best hike in the East Valley."</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-author">Ava S.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trail 3 -->
+    <div class="trail-card">
+      <div class="trail-img-wrap">
+        <span class="trail-number">03</span>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail" loading="lazy" />
+      </div>
+      <div class="trail-body">
+        <div class="trail-top">
+          <div class="trail-difficulty">Moderate–Strenuous</div>
+          <h3 class="trail-name">Peralta Trail</h3>
+          <p class="trail-location">Superstition Wilderness</p>
+          <div class="trail-stats">
+            <div class="stat">
+              <span class="stat-label">Distance</span>
+              <span class="stat-value">4.6 mi</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Time</span>
+              <span class="stat-value">3–3.5 hrs</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Elevation</span>
+              <span class="stat-value">+1,425 ft</span>
+            </div>
+          </div>
+        </div>
+        <div class="reviews">
+          <p class="reviews-title">Hiker Reviews</p>
+          <div class="review-item">
+            <p class="review-text">"Weaver's Needle views are unreal."</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-author">Dan K.</span>
+            </div>
+          </div>
+          <div class="review-item">
+            <p class="review-text">"Rocky but beautiful terrain."</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★</span>
+              <span class="review-author">Lily W.</span>
+            </div>
+          </div>
+          <div class="review-item">
+            <p class="review-text">"A must-do in Arizona."</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-author">Noah P.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trail 4 -->
+    <div class="trail-card">
+      <div class="trail-img-wrap">
+        <span class="trail-number">04</span>
+        <img src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail" loading="lazy" />
+      </div>
+      <div class="trail-body">
+        <div class="trail-top">
+          <div class="trail-difficulty">Easy–Moderate</div>
+          <h3 class="trail-name">Hieroglyphic Trail</h3>
+          <p class="trail-location">Superstition Wilderness</p>
+          <div class="trail-stats">
+            <div class="stat">
+              <span class="stat-label">Distance</span>
+              <span class="stat-value">3.4 mi</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Time</span>
+              <span class="stat-value">2–2.5 hrs</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Elevation</span>
+              <span class="stat-value">+800 ft</span>
+            </div>
+          </div>
+        </div>
+        <div class="reviews">
+          <p class="reviews-title">Hiker Reviews</p>
+          <div class="review-item">
+            <p class="review-text">"Ancient petroglyphs are fascinating."</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-author">Emma R.</span>
+            </div>
+          </div>
+          <div class="review-item">
+            <p class="review-text">"Perfect for beginners."</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★</span>
+              <span class="review-author">Liam F.</span>
+            </div>
+          </div>
+          <div class="review-item">
+            <p class="review-text">"Hidden gem near Mesa."</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-author">Zoe C.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trail 5 -->
+    <div class="trail-card">
+      <div class="trail-img-wrap">
+        <span class="trail-number">05</span>
+        <img src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail" loading="lazy" />
+      </div>
+      <div class="trail-body">
+        <div class="trail-top">
+          <div class="trail-difficulty">Easy–Moderate</div>
+          <h3 class="trail-name">Red Mountain Trail</h3>
+          <p class="trail-location">Red Mountain Trailhead</p>
+          <div class="trail-stats">
+            <div class="stat">
+              <span class="stat-label">Distance</span>
+              <span class="stat-value">3.0 mi</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Time</span>
+              <span class="stat-value">1.5–2 hrs</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Elevation</span>
+              <span class="stat-value">+400 ft</span>
+            </div>
+          </div>
+        </div>
+        <div class="reviews">
+          <p class="reviews-title">Hiker Reviews</p>
+          <div class="review-item">
+            <p class="review-text">"The red volcanic formations are wild."</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-author">Ben H.</span>
+            </div>
+          </div>
+          <div class="review-item">
+            <p class="review-text">"Kids loved it!"</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★</span>
+              <span class="review-author">Priya N.</span>
+            </div>
+          </div>
+          <div class="review-item">
+            <p class="review-text">"Short but scenic, great for all levels."</p>
+            <div class="review-meta">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-author">Sam T.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+    <p class="footer-title">Mesa Hiking Routes</p>
+    <p class="footer-sub">Explore the Sonoran Desert, one trail at a time.</p>
+  </footer>
+
+</body>
+</html>

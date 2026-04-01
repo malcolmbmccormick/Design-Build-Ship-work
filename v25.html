@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mesa.trails — Instagram Style</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --white: #FFFFFF;
+    --black: #000000;
+    --bg: #FAFAFA;
+    --border: #DBDBDB;
+    --text-secondary: #8E8E8E;
+    --text-primary: #262626;
+    --ig-gradient: linear-gradient(45deg, #F09433 0%, #E6683C 25%, #DC2743 50%, #CC2366 75%, #BC1888 100%);
+    --story-gradient: linear-gradient(45deg, #F09433, #E6683C, #DC2743, #CC2366, #BC1888);
+  }
+
+  body {
+    background: var(--bg);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text-primary);
+    overflow-x: hidden;
+  }
+
+  /* ── TOP NAV ── */
+  .ig-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 100%;
+  }
+  .ig-nav-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    font-family: 'Inter', serif;
+  }
+  .ig-nav-icons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .ig-nav-icons span {
+    font-size: 1.4rem;
+    cursor: pointer;
+  }
+  .ig-back {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+  .ig-back:hover { background: var(--bg); }
+
+  /* ── MAIN CONTAINER ── */
+  .container {
+    max-width: 935px;
+    margin: 0 auto;
+    padding: 30px 20px 0;
+  }
+
+  /* ── PROFILE HEADER ── */
+  .profile-header {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .avatar-ring {
+    position: relative;
+    flex-shrink: 0;
+  }
+  .avatar-ring::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: var(--ig-gradient);
+    z-index: 0;
+  }
+  .avatar-ring::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    background: var(--white);
+    z-index: 1;
+  }
+  .avatar-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    position: relative;
+    z-index: 2;
+  }
+
+  .profile-info { flex: 1; }
+
+  .profile-username {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .verified-badge {
+    background: var(--ig-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.1rem;
+  }
+
+  .profile-actions {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .btn-follow {
+    background: var(--ig-gradient);
+    color: var(--white);
+    border: none;
+    padding: 8px 28px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .btn-follow:hover { opacity: 0.85; }
+  .btn-message {
+    background: var(--bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    padding: 8px 20px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .profile-stats {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 16px;
+  }
+  .stat-block { text-align: center; }
+  .stat-num {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+  }
+  .stat-lbl {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .profile-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+  .profile-bio {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+  .profile-bio a {
+    color: #003569;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* ── STORY CIRCLES ── */
+  .stories-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+  .stories-row::-webkit-scrollbar { display: none; }
+
+  .story-circle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .story-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--ig-gradient);
+    padding: 2.5px;
+    transition: transform 0.2s;
+  }
+  .story-ring:hover { transform: scale(1.06); }
+  .story-ring-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2.5px solid var(--white);
+    overflow: hidden;
+    background: var(--white);
+  }
+  .story-ring-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .story-label {
+    font-size: 0.72rem;
+    color: var(--text-primary);
+    text-align: center;
+    max-width: 72px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ── GRID ── */
+  .grid-nav {
+    display: flex;
+    border-top: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+  .grid-nav-tab {
+    flex: 1;
+    text-align: center;
+    padding: 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    border-top: 2px solid transparent;
+    cursor: pointer;
+  }
+  .grid-nav-tab.active {
+    color: var(--text-primary);
+    border-top-color: var(--text-primary);
+  }
+
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    margin-bottom: 40px;
+  }
+
+  .grid-cell {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--border);
+  }
+  .grid-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease, filter 0.35s ease;
+    opacity: 0;
+    animation: grid-fade-in 0.5s ease forwards;
+  }
+
+  @keyframes grid-fade-in {
+    to { opacity: 1; }
+  }
+
+  .grid-cell:nth-child(1) img { animation-delay: 0.05s; }
+  .grid-cell:nth-child(2) img { animation-delay: 0.12s; }
+  .grid-cell:nth-child(3) img { animation-delay: 0.19s; }
+  .grid-cell:nth-child(4) img { animation-delay: 0.26s; }
+  .grid-cell:nth-child(5) img { animation-delay: 0.33s; }
+  .grid-cell:nth-child(6) img { animation-delay: 0.40s; }
+  .grid-cell:nth-child(7) img { animation-delay: 0.47s; }
+  .grid-cell:nth-child(8) img { animation-delay: 0.54s; }
+  .grid-cell:nth-child(9) img { animation-delay: 0.61s; }
+
+  .grid-cell-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.38);
+    opacity: 0;
+    transition: opacity 0.25s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    color: var(--white);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .grid-cell:hover .grid-cell-overlay { opacity: 1; }
+  .grid-cell:hover img { transform: scale(1.04); }
+
+  .like-count::before { content: '♥ '; }
+
+  /* ── STORY OVERLAY (modal) ── */
+  .story-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .story-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .story-modal {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    height: 90vh;
+    max-height: 740px;
+    background: var(--black);
+    border-radius: 12px;
+    overflow: hidden;
+    transform: scale(0.94);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    display: flex;
+    flex-direction: column;
+  }
+  .story-overlay.open .story-modal {
+    transform: scale(1);
+  }
+
+  /* Progress bars */
+  .story-progress {
+    position: absolute;
+    top: 12px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    gap: 4px;
+    z-index: 10;
+  }
+  .progress-seg {
+    height: 2.5px;
+    flex: 1;
+    background: rgba(255,255,255,0.35);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--white);
+    width: 0%;
+    transition: width 5s linear;
+  }
+  .progress-fill.done { width: 100%; transition: none; }
+  .progress-fill.active { width: 100%; }
+
+  /* Story header */
+  .story-header {
+    position: absolute;
+    top: 24px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+  }
+  .story-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .story-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--white);
+    object-fit: cover;
+  }
+  .story-username {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--white);
+  }
+  .story-time {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.7);
+  }
+  .story-close {
+    color: var(--white);
+    font-size: 1.6rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 8px;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+  .story-close:hover { opacity: 1; }
+
+  /* Story image */
+  .story-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Story bottom info */
+  .story-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+    padding: 40px 20px 24px;
+    z-index: 10;
+  }
+  .story-trail-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .story-trail-park {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 14px;
+  }
+  .story-stats-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .story-stat {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(6px);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  .story-diff {
+    background: var(--ig-gradient);
+    color: var(--white);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+  .story-swipe {
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 1px;
+  }
+  .story-swipe-arrow {
+    display: block;
+    font-size: 1.2rem;
+    animation: bounce-up 1.5s infinite;
+  }
+  @keyframes bounce-up {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-6px); }
+  }
+
+  /* Story actions */
+  .story-actions {
+    position: absolute;
+    bottom: 24px;
+    right: 16px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+  .story-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+  .story-action-icon {
+    font-size: 1.5rem;
+    color: var(--white);
+    transition: transform 0.2s;
+  }
+  .story-action-btn:hover .story-action-icon { transform: scale(1.2); }
+  .story-action-count {
+    font-size: 0.72rem;
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  /* Story review section */
+  .story-reviews {
+    position: absolute;
+    left: 0; right: 0;
+    bottom: 80px;
+    padding: 0 20px;
+    z-index: 10;
+  }
+  .story-review-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .story-review-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--ig-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 0.7rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .story-review-bubble {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(6px);
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    color: var(--white);
+    line-height: 1.4;
+  }
+  .story-review-name {
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  /* Story nav areas */
+  .story-nav-left, .story-nav-right {
+    position: absolute;
+    top: 60px; bottom: 120px;
+    width: 35%;
+    z-index: 9;
+    cursor: pointer;
+  }
+  .story-nav-left { left: 0; }
+  .story-nav-right { right: 0; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<div class="ig-nav">
+  <a href="index.html" class="ig-back">&#8592; Gallery</a>
+  <div class="ig-nav-logo">mesa.trails</div>
+  <div class="ig-nav-icons">
+    <span>&#9776;</span>
+    <span>&#9993;</span>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="container">
+
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <div class="avatar-ring">
+      <img class="avatar-img" src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="mesa.trails avatar">
+    </div>
+    <div class="profile-info">
+      <div class="profile-username">
+        mesa.trails
+        <span class="verified-badge">&#10003;</span>
+      </div>
+      <div class="profile-actions">
+        <button class="btn-follow">Follow</button>
+        <button class="btn-message">Message</button>
+      </div>
+      <div class="profile-stats">
+        <div class="stat-block">
+          <div class="stat-num">25</div>
+          <div class="stat-lbl">posts</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num">1,247</div>
+          <div class="stat-lbl">followers</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num">847</div>
+          <div class="stat-lbl">following</div>
+        </div>
+      </div>
+      <div class="profile-name">Mesa Trail Guide 🏜️</div>
+      <div class="profile-bio">
+        🏜️ Mesa, AZ &nbsp;|&nbsp; 5 epic trails<br>
+        📍 Superstition Wilderness &amp; Beyond<br>
+        Hiking routes, trail tips &amp; desert views ✨<br>
+        <a href="#">🔗 mesatrails.az.gov</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story Circles -->
+  <div class="stories-row">
+    <div class="story-circle" onclick="openStory(0)">
+      <div class="story-ring">
+        <div class="story-ring-inner">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="">
+        </div>
+      </div>
+      <div class="story-label">Wind Cave</div>
+    </div>
+    <div class="story-circle" onclick="openStory(1)">
+      <div class="story-ring">
+        <div class="story-ring-inner">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="">
+        </div>
+      </div>
+      <div class="story-label">Siphon Draw</div>
+    </div>
+    <div class="story-circle" onclick="openStory(2)">
+      <div class="story-ring">
+        <div class="story-ring-inner">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="">
+        </div>
+      </div>
+      <div class="story-label">Peralta</div>
+    </div>
+    <div class="story-circle" onclick="openStory(3)">
+      <div class="story-ring">
+        <div class="story-ring-inner">
+          <img src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="">
+        </div>
+      </div>
+      <div class="story-label">Hieroglyphic</div>
+    </div>
+    <div class="story-circle" onclick="openStory(4)">
+      <div class="story-ring">
+        <div class="story-ring-inner">
+          <img src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="">
+        </div>
+      </div>
+      <div class="story-label">Red Mountain</div>
+    </div>
+  </div>
+
+  <!-- Grid Nav -->
+  <div class="grid-nav">
+    <div class="grid-nav-tab active">&#9638; Posts</div>
+    <div class="grid-nav-tab">&#9654; Reels</div>
+    <div class="grid-nav-tab">&#10022; Tagged</div>
+  </div>
+
+  <!-- Photo Grid -->
+  <div class="photo-grid">
+    <div class="grid-cell" onclick="openStory(0)">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail">
+      <div class="grid-cell-overlay">
+        <span class="like-count">312</span>
+        <span>&#128172; 24</span>
+      </div>
+    </div>
+    <div class="grid-cell" onclick="openStory(1)">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail">
+      <div class="grid-cell-overlay">
+        <span class="like-count">541</span>
+        <span>&#128172; 47</span>
+      </div>
+    </div>
+    <div class="grid-cell" onclick="openStory(2)">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail">
+      <div class="grid-cell-overlay">
+        <span class="like-count">489</span>
+        <span>&#128172; 38</span>
+      </div>
+    </div>
+    <div class="grid-cell" onclick="openStory(3)">
+      <img src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail">
+      <div class="grid-cell-overlay">
+        <span class="like-count">267</span>
+        <span>&#128172; 19</span>
+      </div>
+    </div>
+    <div class="grid-cell" onclick="openStory(4)">
+      <img src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail">
+      <div class="grid-cell-overlay">
+        <span class="like-count">198</span>
+        <span>&#128172; 15</span>
+      </div>
+    </div>
+    <div class="grid-cell" onclick="openStory(0)">
+      <img src="https://www.maricopacountyparks.net/assets/1/15/GalleryMainDimensionId/UM-PassMt.jpg" alt="Wind Cave Trail 2">
+      <div class="grid-cell-overlay">
+        <span class="like-count">223</span>
+        <span>&#128172; 18</span>
+      </div>
+    </div>
+    <div class="grid-cell" onclick="openStory(1)">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/7/77/Siphon_Draw_-_panoramio_-_The3dStudioDotCom_%281%29.jpg" alt="Siphon Draw 2">
+      <div class="grid-cell-overlay">
+        <span class="like-count">374</span>
+        <span>&#128172; 29</span>
+      </div>
+    </div>
+    <div class="grid-cell" onclick="openStory(2)">
+      <img src="https://wildpathsaz.com/wp-content/uploads/2023/03/peralta-trail-weavers-needle-superstition-wilderness-4.jpg" alt="Peralta 2">
+      <div class="grid-cell-overlay">
+        <span class="like-count">316</span>
+        <span>&#128172; 22</span>
+      </div>
+    </div>
+    <div class="grid-cell" onclick="openStory(4)">
+      <img src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk3.jpg" alt="Red Mountain 2">
+      <div class="grid-cell-overlay">
+        <span class="like-count">144</span>
+        <span>&#128172; 11</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- STORY OVERLAY -->
+<div class="story-overlay" id="storyOverlay">
+  <div class="story-modal" id="storyModal">
+
+    <!-- Progress bars -->
+    <div class="story-progress" id="storyProgress"></div>
+
+    <!-- Header -->
+    <div class="story-header">
+      <div class="story-user">
+        <img class="story-avatar" src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="">
+        <div>
+          <div class="story-username">mesa.trails</div>
+          <div class="story-time">Just now</div>
+        </div>
+      </div>
+      <span class="story-close" onclick="closeStory()">&#10005;</span>
+    </div>
+
+    <!-- Story Image -->
+    <img class="story-img" id="storyImg" src="" alt="">
+
+    <!-- Nav areas -->
+    <div class="story-nav-left" onclick="prevStory()"></div>
+    <div class="story-nav-right" onclick="nextStory()"></div>
+
+    <!-- Bottom info -->
+    <div class="story-bottom">
+      <div class="story-trail-name" id="storyName"></div>
+      <div class="story-trail-park" id="storyPark"></div>
+      <div class="story-stats-row" id="storyStats"></div>
+      <div class="story-swipe">
+        <span class="story-swipe-arrow">&#8679;</span>
+        Swipe up to plan your hike
+      </div>
+    </div>
+
+    <!-- Reviews -->
+    <div class="story-reviews" id="storyReviews"></div>
+
+    <!-- Actions -->
+    <div class="story-actions">
+      <div class="story-action-btn" onclick="this.querySelector('.story-action-icon').style.color='#FF3B30'">
+        <span class="story-action-icon">&#9825;</span>
+        <span class="story-action-count" id="storyLikes"></span>
+      </div>
+      <div class="story-action-btn">
+        <span class="story-action-icon">&#128172;</span>
+        <span class="story-action-count" id="storyComments"></span>
+      </div>
+      <div class="story-action-btn">
+        <span class="story-action-icon">&#8674;</span>
+        <span class="story-action-count">Share</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const trails = [
+  {
+    name: "Wind Cave Trail",
+    park: "Usery Mountain Regional Park",
+    img: "https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg",
+    distance: "3.2 mi",
+    time: "1.5–2 hrs",
+    elevation: "+860 ft",
+    difficulty: "Moderate",
+    likes: 312,
+    comments: 24,
+    reviews: [
+      { author: "Jake R.", initials: "JR", text: "Stunning cave views at the top! ⭐⭐⭐⭐⭐" },
+      { author: "Sara M.", initials: "SM", text: "Great morning hike, bring water. ⭐⭐⭐⭐" },
+    ]
+  },
+  {
+    name: "Siphon Draw Trail",
+    park: "Lost Dutchman State Park",
+    img: "https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg",
+    distance: "4.2 mi",
+    time: "3–4 hrs",
+    elevation: "+2,045 ft",
+    difficulty: "Strenuous",
+    likes: 541,
+    comments: 47,
+    reviews: [
+      { author: "Maria L.", initials: "ML", text: "Epic views of the Superstitions! ⭐⭐⭐⭐⭐" },
+      { author: "Tom B.", initials: "TB", text: "Very challenging but worth it. ⭐⭐⭐⭐" },
+    ]
+  },
+  {
+    name: "Peralta Trail",
+    park: "Superstition Wilderness",
+    img: "https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg",
+    distance: "4.6 mi",
+    time: "3–3.5 hrs",
+    elevation: "+1,425 ft",
+    difficulty: "Mod–Strenuous",
+    likes: 489,
+    comments: 38,
+    reviews: [
+      { author: "Dan K.", initials: "DK", text: "Weaver's Needle views are unreal. ⭐⭐⭐⭐⭐" },
+      { author: "Lily W.", initials: "LW", text: "Rocky but beautiful terrain. ⭐⭐⭐⭐" },
+    ]
+  },
+  {
+    name: "Hieroglyphic Trail",
+    park: "Superstition Wilderness",
+    img: "https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg",
+    distance: "3.4 mi",
+    time: "2–2.5 hrs",
+    elevation: "+800 ft",
+    difficulty: "Easy–Moderate",
+    likes: 267,
+    comments: 19,
+    reviews: [
+      { author: "Emma R.", initials: "ER", text: "Ancient petroglyphs are fascinating! ⭐⭐⭐⭐⭐" },
+      { author: "Liam F.", initials: "LF", text: "Perfect for beginners. ⭐⭐⭐⭐" },
+    ]
+  },
+  {
+    name: "Red Mountain Trail",
+    park: "Red Mountain Park",
+    img: "https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg",
+    distance: "3.0 mi",
+    time: "1.5–2 hrs",
+    elevation: "+400 ft",
+    difficulty: "Easy–Moderate",
+    likes: 198,
+    comments: 15,
+    reviews: [
+      { author: "Ben H.", initials: "BH", text: "The red volcanic formations are wild! ⭐⭐⭐⭐⭐" },
+      { author: "Priya N.", initials: "PN", text: "Kids loved it! ⭐⭐⭐⭐" },
+    ]
+  }
+];
+
+let currentStory = 0;
+
+function openStory(index) {
+  currentStory = index;
+  renderStory();
+  document.getElementById('storyOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeStory() {
+  document.getElementById('storyOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function nextStory() {
+  currentStory = (currentStory + 1) % trails.length;
+  renderStory();
+}
+
+function prevStory() {
+  currentStory = (currentStory - 1 + trails.length) % trails.length;
+  renderStory();
+}
+
+function renderStory() {
+  const t = trails[currentStory];
+  document.getElementById('storyImg').src = t.img;
+  document.getElementById('storyName').textContent = t.name;
+  document.getElementById('storyPark').textContent = t.park;
+  document.getElementById('storyLikes').textContent = t.likes;
+  document.getElementById('storyComments').textContent = t.comments;
+
+  const statsEl = document.getElementById('storyStats');
+  statsEl.innerHTML = `
+    <span class="story-stat">📍 ${t.distance}</span>
+    <span class="story-stat">⏱ ${t.time}</span>
+    <span class="story-stat">⬆ ${t.elevation}</span>
+    <span class="story-diff">${t.difficulty}</span>
+  `;
+
+  const reviewsEl = document.getElementById('storyReviews');
+  reviewsEl.innerHTML = t.reviews.map(r => `
+    <div class="story-review-item">
+      <div class="story-review-avatar">${r.initials}</div>
+      <div class="story-review-bubble">
+        <span class="story-review-name">${r.author}</span>${r.text}
+      </div>
+    </div>
+  `).join('');
+
+  // Progress bars
+  const progressEl = document.getElementById('storyProgress');
+  progressEl.innerHTML = trails.map((_, i) => `
+    <div class="progress-seg">
+      <div class="progress-fill ${i < currentStory ? 'done' : i === currentStory ? 'active' : ''}"></div>
+    </div>
+  `).join('');
+}
+
+// Close on overlay click
+document.getElementById('storyOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeStory();
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeStory();
+  if (e.key === 'ArrowRight') nextStory();
+  if (e.key === 'ArrowLeft') prevStory();
+});
+</script>
+
+</body>
+</html>

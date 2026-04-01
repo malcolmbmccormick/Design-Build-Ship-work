@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mesa Trail Guide — Blueprint Edition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-dark:   #0D2352;
+      --blue-mid:    #1A3A7A;
+      --blue-main:   #2255AA;
+      --blue-light:  #1E4FCC;
+      --blue-bright: #3A6FDD;
+      --white:       #FFFFFF;
+      --white-dim:   rgba(255,255,255,0.65);
+      --white-faint: rgba(255,255,255,0.15);
+      --white-ghost: rgba(255,255,255,0.07);
+      --yellow:      #FFD700;
+      --yellow-dim:  rgba(255,215,0,0.25);
+      --mono:        'Share Tech Mono', 'Courier Prime', monospace;
+      --title:       'Oswald', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--blue-dark);
+      color: var(--white);
+      font-family: var(--mono);
+      min-height: 100vh;
+      overflow-x: hidden;
+      /* Blueprint grid background */
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 80px 80px, 80px 80px, 20px 20px, 20px 20px;
+    }
+
+    /* ============================================================
+       NAVIGATION BAR
+    ============================================================ */
+    .nav-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(13, 35, 82, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 52px;
+    }
+
+    .nav-back {
+      color: var(--white);
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 6px 14px;
+      border: 1px solid rgba(255,255,255,0.3);
+      transition: all 0.2s ease;
+    }
+    .nav-back:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--white);
+      color: var(--yellow);
+    }
+    .nav-back svg { flex-shrink: 0; }
+
+    .nav-title {
+      font-family: var(--title);
+      font-size: 1rem;
+      letter-spacing: 0.25em;
+      color: var(--white-dim);
+      text-transform: uppercase;
+    }
+
+    .nav-badge {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--yellow);
+      border: 1px solid var(--yellow);
+      padding: 3px 9px;
+      letter-spacing: 0.1em;
+    }
+
+    /* ============================================================
+       HERO — BLUEPRINT TITLE BLOCK
+    ============================================================ */
+    .hero {
+      padding-top: 52px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Corner crosshair decorations */
+    .hero::before, .hero::after {
+      content: '';
+      position: absolute;
+      width: 120px; height: 120px;
+      border-color: rgba(255,255,255,0.2);
+      border-style: solid;
+    }
+    .hero::before { top: 70px; left: 30px; border-width: 2px 0 0 2px; }
+    .hero::after  { bottom: 30px; right: 30px; border-width: 0 2px 2px 0; }
+
+    /* Title block frame */
+    .hero-frame {
+      border: 2px solid rgba(255,255,255,0.35);
+      padding: 3rem 4rem;
+      position: relative;
+      text-align: center;
+      max-width: 820px;
+      width: 90%;
+    }
+
+    /* Corner brackets on frame */
+    .hero-frame::before, .hero-frame::after {
+      content: '';
+      position: absolute;
+      width: 24px; height: 24px;
+    }
+    .corner-tl, .corner-tr, .corner-bl, .corner-br {
+      position: absolute;
+      width: 24px; height: 24px;
+      border-color: var(--yellow);
+      border-style: solid;
+    }
+    .corner-tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; }
+    .corner-tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; }
+    .corner-bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; }
+    .corner-br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; }
+
+    .hero-sheet-label {
+      position: absolute;
+      top: -12px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--blue-dark);
+      padding: 0 1rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      color: var(--white-dim);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .hero-revision {
+      position: absolute;
+      bottom: -12px; right: 2rem;
+      background: var(--blue-dark);
+      padding: 0 0.8rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--yellow);
+    }
+
+    .hero-sub {
+      font-size: 0.72rem;
+      letter-spacing: 0.35em;
+      color: var(--white-dim);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title {
+      font-family: var(--title);
+      font-size: clamp(3.5rem, 10vw, 7rem);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      line-height: 1;
+      text-transform: uppercase;
+      color: var(--white);
+      text-shadow: 0 0 60px rgba(34,85,170,0.8);
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-title span {
+      color: var(--yellow);
+    }
+
+    .hero-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      margin: 1.4rem 0;
+      position: relative;
+    }
+    .hero-divider::before, .hero-divider::after {
+      content: '+';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,0.4);
+      font-size: 0.9rem;
+    }
+    .hero-divider::before { left: -8px; }
+    .hero-divider::after  { right: -8px; }
+
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta-item {
+      text-align: center;
+    }
+    .hero-meta-item .label {
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      color: var(--white-dim);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .hero-meta-item .value {
+      font-size: 1rem;
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .hero-title-block {
+      margin-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.25);
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr 1px 1fr;
+      gap: 0;
+      font-size: 0.65rem;
+    }
+    .hero-title-block .divider-v {
+      background: rgba(255,255,255,0.2);
+    }
+    .hero-title-block .cell {
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+    }
+    .hero-title-block .cell .label {
+      color: var(--white-dim);
+      letter-spacing: 0.12em;
+      font-size: 0.58rem;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .hero-title-block .cell .value {
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+
+    .hero-scroll {
+      margin-top: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      color: var(--white-dim);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      animation: fadeInUp 1s ease 1s both;
+    }
+    .hero-scroll svg {
+      animation: bounceDown 2s ease-in-out infinite;
+    }
+    @keyframes bounceDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       SECTION HEADER
+    ============================================================ */
+    .section-header {
+      max-width: 1100px;
+      margin: 4rem auto 2rem;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .section-header .line {
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.2);
+    }
+    .section-header h2 {
+      font-family: var(--title);
+      font-size: 1.2rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--white);
+      white-space: nowrap;
+    }
+    .section-header .num {
+      color: var(--yellow);
+      margin-right: 0.4rem;
+    }
+
+    /* Measurement annotation above trail grid */
+    .measurement-bar {
+      max-width: 1100px;
+      margin: 0 auto 1rem;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      color: var(--white-dim);
+    }
+    .measurement-bar .tick { color: var(--yellow); }
+
+    /* ============================================================
+       TRAIL GRID
+    ============================================================ */
+    .trail-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2.5rem;
+    }
+
+    /* ============================================================
+       TRAIL CARD — TECHNICAL SPEC SHEET
+    ============================================================ */
+    .card {
+      background: rgba(26, 58, 122, 0.45);
+      border: 1px solid rgba(255,255,255,0.22);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 30px rgba(34,85,170,0.4);
+    }
+
+    /* Yellow corner brackets */
+    .card-corner {
+      position: absolute;
+      width: 18px; height: 18px;
+      border-color: var(--yellow);
+      border-style: solid;
+      z-index: 4;
+    }
+    .card-corner.tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .card-corner.tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+    .card-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
+    .card-corner.br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+    /* Top label strip */
+    .card-label-strip {
+      background: rgba(255,255,255,0.08);
+      border-bottom: 1px dashed rgba(255,255,255,0.2);
+      padding: 0.45rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      color: var(--white-dim);
+    }
+    .card-label-strip .sheet-num { color: var(--yellow); font-weight: 700; }
+
+    /* Image container */
+    .card-image {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+    }
+    .card-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.3) brightness(0.6);
+      transition: filter 0.4s ease, transform 0.4s ease;
+    }
+    .card:hover .card-image img {
+      filter: saturate(0.5) brightness(0.7);
+      transform: scale(1.03);
+    }
+
+    /* Blue overlay on image */
+    .card-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(13, 35, 82, 0.3) 0%,
+        rgba(26, 58, 122, 0.55) 60%,
+        rgba(13, 35, 82, 0.85) 100%
+      );
+      pointer-events: none;
+    }
+
+    /* Crosshair overlay on image */
+    .card-crosshair {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .card-crosshair svg {
+      width: 100%; height: 100%;
+    }
+
+    /* Trail name callout on image */
+    .card-name-callout {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 3;
+      padding: 1rem;
+    }
+    .card-name-callout .trail-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      color: var(--yellow);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .card-name-callout .trail-name {
+      font-family: var(--title);
+      font-size: 1.45rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    /* Tick-mark dimension annotations on sides */
+    .card-dim-top {
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      height: 22px;
+      border-bottom: 1px dashed rgba(255,255,255,0.15);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.4);
+      gap: 0.4rem;
+    }
+    .card-dim-top .arrow {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: rgba(255,255,255,0.25);
+    }
+    .card-dim-top .arrow::before, .card-dim-top .arrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Spec grid */
+    .card-specs {
+      padding: 1rem 1rem 0.6rem;
+    }
+    .spec-row {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      border-bottom: 1px dashed rgba(255,255,255,0.12);
+    }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-divider-v { background: rgba(255,255,255,0.12); }
+    .spec-cell {
+      padding: 0.55rem 0.7rem;
+    }
+    .spec-cell .key {
+      font-size: 0.56rem;
+      letter-spacing: 0.2em;
+      color: var(--white-dim);
+      display: block;
+      margin-bottom: 0.2rem;
+      text-transform: uppercase;
+    }
+    .spec-cell .val {
+      font-size: 0.92rem;
+      color: var(--white);
+      font-weight: 700;
+    }
+    .spec-cell .val.easy     { color: #7DFFB3; }
+    .spec-cell .val.moderate { color: #FFE066; }
+    .spec-cell .val.strenuous{ color: #FF8C66; }
+
+    /* Park name strip */
+    .card-park {
+      margin: 0 1rem;
+      padding: 0.5rem 0;
+      border-top: 1px dashed rgba(255,255,255,0.15);
+      border-bottom: 1px dashed rgba(255,255,255,0.15);
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      color: var(--blue-bright);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-park::before {
+      content: '◈';
+      color: var(--yellow);
+      font-size: 0.7rem;
+    }
+
+    /* Reviews section */
+    .card-reviews {
+      padding: 0.8rem 1rem 1rem;
+    }
+    .reviews-header {
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      color: var(--white-dim);
+      text-transform: uppercase;
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .reviews-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+    }
+    .review {
+      margin-bottom: 0.7rem;
+      padding-left: 0.7rem;
+      border-left: 2px solid rgba(255,255,255,0.15);
+      font-size: 0.7rem;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.75);
+    }
+    .review:last-child { margin-bottom: 0; }
+    .review .reviewer {
+      display: block;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      color: var(--yellow);
+      margin-bottom: 0.2rem;
+    }
+    .review-stars {
+      color: var(--yellow);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* Bottom status bar */
+    .card-status {
+      background: rgba(255,255,255,0.05);
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding: 0.4rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.35);
+    }
+    .card-status .status-ok {
+      color: #7DFFB3;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .card-status .status-ok::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #7DFFB3;
+      box-shadow: 0 0 6px #7DFFB3;
+    }
+
+    /* ============================================================
+       ELEVATION PROFILE SECTION
+    ============================================================ */
+    .elevation-section {
+      max-width: 1100px;
+      margin: 0 auto 5rem;
+      padding: 0 1.5rem;
+    }
+
+    .elevation-container {
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(26,58,122,0.3);
+      padding: 1.5rem;
+      position: relative;
+    }
+    .elevation-container .corner-tl,
+    .elevation-container .corner-tr,
+    .elevation-container .corner-bl,
+    .elevation-container .corner-br { position: absolute; }
+    .elevation-container .corner-tl { top:-1px; left:-1px; border-width:2px 0 0 2px; border-color:var(--yellow); border-style:solid; width:16px; height:16px; }
+    .elevation-container .corner-tr { top:-1px; right:-1px; border-width:2px 2px 0 0; border-color:var(--yellow); border-style:solid; width:16px; height:16px; }
+    .elevation-container .corner-bl { bottom:-1px; left:-1px; border-width:0 0 2px 2px; border-color:var(--yellow); border-style:solid; width:16px; height:16px; }
+    .elevation-container .corner-br { bottom:-1px; right:-1px; border-width:0 2px 2px 0; border-color:var(--yellow); border-style:solid; width:16px; height:16px; }
+
+    .elevation-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--white-dim);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .elevation-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    .elevation-chart {
+      width: 100%;
+      height: 160px;
+      position: relative;
+    }
+
+    .elevation-chart svg {
+      width: 100%; height: 100%;
+      overflow: visible;
+    }
+
+    /* ============================================================
+       LEGEND / DIFFICULTY KEY
+    ============================================================ */
+    .legend-section {
+      max-width: 1100px;
+      margin: 0 auto 5rem;
+      padding: 0 1.5rem;
+    }
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .legend-item {
+      background: var(--blue-dark);
+      padding: 1rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .legend-item .lg-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: var(--white-dim);
+      text-transform: uppercase;
+    }
+    .legend-item .lg-value {
+      font-family: var(--title);
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+    }
+    .legend-item .lg-bar {
+      height: 3px;
+      border-radius: 2px;
+      margin-top: 0.3rem;
+    }
+    .lg-easy { color: #7DFFB3; }
+    .lg-bar-easy { background: #7DFFB3; width: 30%; }
+    .lg-mod { color: #FFE066; }
+    .lg-bar-mod { background: #FFE066; width: 60%; }
+    .lg-modstr { color: #FFAA44; }
+    .lg-bar-modstr { background: #FFAA44; width: 75%; }
+    .lg-str { color: #FF8C66; }
+    .lg-bar-str { background: #FF8C66; width: 100%; }
+
+    /* ============================================================
+       FOOTER — TITLE BLOCK
+    ============================================================ */
+    .footer {
+      border-top: 2px solid rgba(255,255,255,0.2);
+      background: rgba(13,35,82,0.95);
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr 1px 1fr 1px 2fr;
+      min-height: 80px;
+    }
+    .footer-divider { background: rgba(255,255,255,0.15); }
+    .footer-cell {
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.3rem;
+    }
+    .footer-cell .fc-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.22em;
+      color: var(--white-dim);
+      text-transform: uppercase;
+    }
+    .footer-cell .fc-value {
+      font-size: 0.78rem;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+    .footer-cell .fc-value.yellow { color: var(--yellow); }
+    .footer-brand {
+      font-family: var(--title);
+      font-size: 1.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 700px) {
+      .hero-frame { padding: 2rem 1.5rem; }
+      .hero-title { font-size: 3rem; }
+      .hero-title-block { grid-template-columns: 1fr; }
+      .hero-title-block .divider-v { display: none; }
+      .hero-meta { gap: 1.2rem; }
+      .trail-grid { grid-template-columns: 1fr; gap: 1.8rem; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-divider { display: none; }
+      .nav-title { display: none; }
+    }
+
+    /* ============================================================
+       ANIMATIONS
+    ============================================================ */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card { animation: fadeIn 0.6s ease both; }
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+    .card:nth-child(4) { animation-delay: 0.4s; }
+    .card:nth-child(5) { animation-delay: 0.5s; }
+
+    /* Subtle scanline on hero */
+    .hero-scanline {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.03) 3px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Radial glow behind hero title */
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(34,85,170,0.35) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-frame { z-index: 1; }
+    .hero-scroll { z-index: 1; }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVIGATION
+  ============================================================ -->
+  <nav class="nav-bar">
+    <a href="index.html" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      ← GALLERY
+    </a>
+    <span class="nav-title">MESA TRAIL GUIDE — V21</span>
+    <span class="nav-badge">SHT-021</span>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-scanline"></div>
+
+    <div class="hero-frame">
+      <div class="corner-tl"></div>
+      <div class="corner-tr"></div>
+      <div class="corner-bl"></div>
+      <div class="corner-br"></div>
+      <span class="hero-sheet-label">TECHNICAL SPECIFICATION DOCUMENT — SHEET 01 OF 01</span>
+      <span class="hero-revision">REV. 21 / 2026</span>
+
+      <p class="hero-sub">Arizona Trail Series · Sonoran Desert</p>
+      <h1 class="hero-title">MESA <span>TRAIL</span><br>GUIDE</h1>
+
+      <div class="hero-divider"></div>
+
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="label">TRAILS DOCUMENTED</span>
+          <span class="value">05</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="label">TOTAL DISTANCE</span>
+          <span class="value">18.4 MI</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="label">MAX ELEVATION</span>
+          <span class="value">+2,045 FT</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="label">REGION</span>
+          <span class="value">MESA, AZ</span>
+        </div>
+      </div>
+
+      <div class="hero-title-block">
+        <div class="cell">
+          <span class="label">DRAWN BY</span>
+          <span class="value">MESA TRAILS DEPT.</span>
+        </div>
+        <div class="divider-v"></div>
+        <div class="cell">
+          <span class="label">DATE ISSUED</span>
+          <span class="value">30 MAR 2026</span>
+        </div>
+        <div class="divider-v"></div>
+        <div class="cell">
+          <span class="label">DRAWING NO.</span>
+          <span class="value">MTG-AZ-21</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll" onclick="document.getElementById('trails').scrollIntoView({behavior:'smooth'})">
+      <span>SCROLL TO SPECIFICATIONS</span>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M5 7L10 13L15 7" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION HEADER
+  ============================================================ -->
+  <div class="section-header" id="trails">
+    <div class="line"></div>
+    <h2><span class="num">§01</span> TRAIL SPECIFICATIONS</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="measurement-bar">
+    <span class="tick">├</span>
+    <span>SCALE 1:10,000 &nbsp;·&nbsp; ALL DISTANCES IN MILES &nbsp;·&nbsp; ELEVATION IN FEET &nbsp;·&nbsp; TIME IN HOURS</span>
+    <span class="tick">┤</span>
+  </div>
+
+  <!-- ============================================================
+       TRAIL CARDS
+  ============================================================ -->
+  <main class="trail-grid">
+
+    <!-- CARD 1: Wind Cave Trail -->
+    <article class="card">
+      <div class="card-corner tl"></div>
+      <div class="card-corner tr"></div>
+      <div class="card-corner bl"></div>
+      <div class="card-corner br"></div>
+
+      <div class="card-label-strip">
+        <span>TRAIL SPEC SHEET</span>
+        <span class="sheet-num">SHT-001 / 005</span>
+      </div>
+
+      <div class="card-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail" loading="lazy" />
+        <div class="card-crosshair">
+          <svg viewBox="0 0 640 360" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="360" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="0" y1="180" x2="640" y2="180" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="4,4"/>
+            <circle cx="320" cy="180" r="18" stroke="rgba(255,255,255,0.18)" stroke-width="1" fill="none"/>
+            <circle cx="320" cy="180" r="3" fill="rgba(255,215,0,0.7)"/>
+            <!-- tick marks -->
+            <line x1="0" y1="90" x2="8" y2="90" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="0" y1="270" x2="8" y2="270" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="160" y1="0" x2="160" y2="8" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="480" y1="0" x2="480" y2="8" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="card-name-callout">
+          <span class="trail-label">▸ TRAIL IDENTIFIER</span>
+          <span class="trail-name">Wind Cave Trail</span>
+        </div>
+      </div>
+
+      <div class="card-dim-top">
+        <span>← DIM A →</span>
+        <div class="arrow">3.2 MI ROUND TRIP</div>
+      </div>
+
+      <div class="card-park">Usery Mountain Regional Park</div>
+
+      <div class="card-specs">
+        <div class="spec-row">
+          <div class="spec-cell">
+            <span class="key">DISTANCE</span>
+            <span class="val">3.2 mi</span>
+          </div>
+          <div class="spec-divider-v"></div>
+          <div class="spec-cell">
+            <span class="key">AVG TIME</span>
+            <span class="val">1.5–2 hrs</span>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-cell">
+            <span class="key">ELEV. GAIN</span>
+            <span class="val">+860 ft</span>
+          </div>
+          <div class="spec-divider-v"></div>
+          <div class="spec-cell">
+            <span class="key">DIFFICULTY</span>
+            <span class="val moderate">MODERATE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-reviews">
+        <div class="reviews-header">FIELD NOTES / USER REVIEWS</div>
+        <div class="review">
+          <span class="reviewer">▸ HIKER_AZ_001 &nbsp;<span class="review-stars">★★★★★</span></span>
+          "The cave at the top is incredible — you can see all the way across the valley. Trail is well-marked and the rocky scramble near the end adds real character."
+        </div>
+        <div class="review">
+          <span class="reviewer">▸ DESERT_WALKER &nbsp;<span class="review-stars">★★★★☆</span></span>
+          "Great morning hike. Go early to avoid heat. The saguaros along the lower section are some of the tallest I've seen in the park system."
+        </div>
+      </div>
+
+      <div class="card-status">
+        <span class="status-ok">TRAIL OPEN</span>
+        <span>COORD: 33.4677°N 111.6133°W</span>
+      </div>
+    </article>
+
+    <!-- CARD 2: Siphon Draw Trail -->
+    <article class="card">
+      <div class="card-corner tl"></div>
+      <div class="card-corner tr"></div>
+      <div class="card-corner bl"></div>
+      <div class="card-corner br"></div>
+
+      <div class="card-label-strip">
+        <span>TRAIL SPEC SHEET</span>
+        <span class="sheet-num">SHT-002 / 005</span>
+      </div>
+
+      <div class="card-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail" loading="lazy" />
+        <div class="card-crosshair">
+          <svg viewBox="0 0 640 360" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="360" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="0" y1="180" x2="640" y2="180" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="4,4"/>
+            <circle cx="320" cy="180" r="18" stroke="rgba(255,255,255,0.18)" stroke-width="1" fill="none"/>
+            <circle cx="320" cy="180" r="3" fill="rgba(255,215,0,0.7)"/>
+            <line x1="0" y1="90" x2="8" y2="90" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="0" y1="270" x2="8" y2="270" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="160" y1="0" x2="160" y2="8" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="480" y1="0" x2="480" y2="8" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="card-name-callout">
+          <span class="trail-label">▸ TRAIL IDENTIFIER</span>
+          <span class="trail-name">Siphon Draw Trail</span>
+        </div>
+      </div>
+
+      <div class="card-dim-top">
+        <span>← DIM A →</span>
+        <div class="arrow">4.2 MI ROUND TRIP</div>
+      </div>
+
+      <div class="card-park">Lost Dutchman State Park</div>
+
+      <div class="card-specs">
+        <div class="spec-row">
+          <div class="spec-cell">
+            <span class="key">DISTANCE</span>
+            <span class="val">4.2 mi</span>
+          </div>
+          <div class="spec-divider-v"></div>
+          <div class="spec-cell">
+            <span class="key">AVG TIME</span>
+            <span class="val">3–4 hrs</span>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-cell">
+            <span class="key">ELEV. GAIN</span>
+            <span class="val">+2,045 ft</span>
+          </div>
+          <div class="spec-divider-v"></div>
+          <div class="spec-cell">
+            <span class="key">DIFFICULTY</span>
+            <span class="val strenuous">STRENUOUS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-reviews">
+        <div class="reviews-header">FIELD NOTES / USER REVIEWS</div>
+        <div class="review">
+          <span class="reviewer">▸ SUMMIT_CHASER &nbsp;<span class="review-stars">★★★★★</span></span>
+          "The Flatiron views are worth every brutal step. The upper boulder field is a real challenge but the scramble to the top is pure adrenaline. Bring poles."
+        </div>
+        <div class="review">
+          <span class="reviewer">▸ MESA_HIKES_AZ &nbsp;<span class="review-stars">★★★★☆</span></span>
+          "Absolutely strenuous but spectacularly rewarding. The Superstition backdrop is otherworldly. Start before sunrise if doing the full summit route."
+        </div>
+      </div>
+
+      <div class="card-status">
+        <span class="status-ok">TRAIL OPEN</span>
+        <span>COORD: 33.4596°N 111.4812°W</span>
+      </div>
+    </article>
+
+    <!-- CARD 3: Peralta Trail -->
+    <article class="card">
+      <div class="card-corner tl"></div>
+      <div class="card-corner tr"></div>
+      <div class="card-corner bl"></div>
+      <div class="card-corner br"></div>
+
+      <div class="card-label-strip">
+        <span>TRAIL SPEC SHEET</span>
+        <span class="sheet-num">SHT-003 / 005</span>
+      </div>
+
+      <div class="card-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail" loading="lazy" />
+        <div class="card-crosshair">
+          <svg viewBox="0 0 640 360" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="360" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="0" y1="180" x2="640" y2="180" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="4,4"/>
+            <circle cx="320" cy="180" r="18" stroke="rgba(255,255,255,0.18)" stroke-width="1" fill="none"/>
+            <circle cx="320" cy="180" r="3" fill="rgba(255,215,0,0.7)"/>
+            <line x1="0" y1="90" x2="8" y2="90" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="0" y1="270" x2="8" y2="270" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="160" y1="0" x2="160" y2="8" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="480" y1="0" x2="480" y2="8" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="card-name-callout">
+          <span class="trail-label">▸ TRAIL IDENTIFIER</span>
+          <span class="trail-name">Peralta Trail</span>
+        </div>
+      </div>
+
+      <div class="card-dim-top">
+        <span>← DIM A →</span>
+        <div class="arrow">4.6 MI ROUND TRIP</div>
+      </div>
+
+      <div class="card-park">Superstition Wilderness</div>
+
+      <div class="card-specs">
+        <div class="spec-row">
+          <div class="spec-cell">
+            <span class="key">DISTANCE</span>
+            <span class="val">4.6 mi</span>
+          </div>
+          <div class="spec-divider-v"></div>
+          <div class="spec-cell">
+            <span class="key">AVG TIME</span>
+            <span class="val">3–3.5 hrs</span>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-cell">
+            <span class="key">ELEV. GAIN</span>
+            <span class="val">+1,425 ft</span>
+          </div>
+          <div class="spec-divider-v"></div>
+          <div class="spec-cell">
+            <span class="key">DIFFICULTY</span>
+            <span class="val modstr" style="color:#FFAA44;">MOD–STREN.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-reviews">
+        <div class="reviews-header">FIELD NOTES / USER REVIEWS</div>
+        <div class="review">
+          <span class="reviewer">▸ TRAIL_NERD_PHX &nbsp;<span class="review-stars">★★★★★</span></span>
+          "Fremont Saddle at the top is one of the best viewpoints in all of Arizona. Weavers Needle looks like something from another planet. Iconic hike."
+        </div>
+        <div class="review">
+          <span class="reviewer">▸ WEEKEND_WANDERER &nbsp;<span class="review-stars">★★★★☆</span></span>
+          "The canyon narrows near the top make for dramatic photography. Rocky in spots but overall well-defined. A true bucket-list AZ trail experience."
+        </div>
+      </div>
+
+      <div class="card-status">
+        <span class="status-ok">TRAIL OPEN</span>
+        <span>COORD: 33.3922°N 111.3487°W</span>
+      </div>
+    </article>
+
+    <!-- CARD 4: Hieroglyphic Trail -->
+    <article class="card">
+      <div class="card-corner tl"></div>
+      <div class="card-corner tr"></div>
+      <div class="card-corner bl"></div>
+      <div class="card-corner br"></div>
+
+      <div class="card-label-strip">
+        <span>TRAIL SPEC SHEET</span>
+        <span class="sheet-num">SHT-004 / 005</span>
+      </div>
+
+      <div class="card-image">
+        <img src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail" loading="lazy" />
+        <div class="card-crosshair">
+          <svg viewBox="0 0 640 360" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="360" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="0" y1="180" x2="640" y2="180" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="4,4"/>
+            <circle cx="320" cy="180" r="18" stroke="rgba(255,255,255,0.18)" stroke-width="1" fill="none"/>
+            <circle cx="320" cy="180" r="3" fill="rgba(255,215,0,0.7)"/>
+            <line x1="0" y1="90" x2="8" y2="90" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="0" y1="270" x2="8" y2="270" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="160" y1="0" x2="160" y2="8" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="480" y1="0" x2="480" y2="8" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="card-name-callout">
+          <span class="trail-label">▸ TRAIL IDENTIFIER</span>
+          <span class="trail-name">Hieroglyphic Trail</span>
+        </div>
+      </div>
+
+      <div class="card-dim-top">
+        <span>← DIM A →</span>
+        <div class="arrow">3.4 MI ROUND TRIP</div>
+      </div>
+
+      <div class="card-park">Superstition Wilderness</div>
+
+      <div class="card-specs">
+        <div class="spec-row">
+          <div class="spec-cell">
+            <span class="key">DISTANCE</span>
+            <span class="val">3.4 mi</span>
+          </div>
+          <div class="spec-divider-v"></div>
+          <div class="spec-cell">
+            <span class="key">AVG TIME</span>
+            <span class="val">2–2.5 hrs</span>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-cell">
+            <span class="key">ELEV. GAIN</span>
+            <span class="val">+800 ft</span>
+          </div>
+          <div class="spec-divider-v"></div>
+          <div class="spec-cell">
+            <span class="key">DIFFICULTY</span>
+            <span class="val easy" style="color:#7DFFB3;">EASY–MOD.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-reviews">
+        <div class="reviews-header">FIELD NOTES / USER REVIEWS</div>
+        <div class="review">
+          <span class="reviewer">▸ HISTORY_HIKER &nbsp;<span class="review-stars">★★★★★</span></span>
+          "The petroglyphs at the end are genuinely fascinating — Hohokam artwork preserved thousands of years in the desert. The seasonal pools add a magical element."
+        </div>
+        <div class="review">
+          <span class="reviewer">▸ DESERT_BOTANIST &nbsp;<span class="review-stars">★★★★★</span></span>
+          "Best wildflower season trail in the Superstitions. After rain the canyon comes alive. Easier than most in the range but culturally the richest by far."
+        </div>
+      </div>
+
+      <div class="card-status">
+        <span class="status-ok">TRAIL OPEN</span>
+        <span>COORD: 33.3961°N 111.5017°W</span>
+      </div>
+    </article>
+
+    <!-- CARD 5: Red Mountain Trail -->
+    <article class="card">
+      <div class="card-corner tl"></div>
+      <div class="card-corner tr"></div>
+      <div class="card-corner bl"></div>
+      <div class="card-corner br"></div>
+
+      <div class="card-label-strip">
+        <span>TRAIL SPEC SHEET</span>
+        <span class="sheet-num">SHT-005 / 005</span>
+      </div>
+
+      <div class="card-image">
+        <img src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail" loading="lazy" />
+        <div class="card-crosshair">
+          <svg viewBox="0 0 640 360" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="360" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="4,4"/>
+            <line x1="0" y1="180" x2="640" y2="180" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="4,4"/>
+            <circle cx="320" cy="180" r="18" stroke="rgba(255,255,255,0.18)" stroke-width="1" fill="none"/>
+            <circle cx="320" cy="180" r="3" fill="rgba(255,215,0,0.7)"/>
+            <line x1="0" y1="90" x2="8" y2="90" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="0" y1="270" x2="8" y2="270" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="160" y1="0" x2="160" y2="8" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <line x1="480" y1="0" x2="480" y2="8" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="card-name-callout">
+          <span class="trail-label">▸ TRAIL IDENTIFIER</span>
+          <span class="trail-name">Red Mountain Trail</span>
+        </div>
+      </div>
+
+      <div class="card-dim-top">
+        <span>← DIM A →</span>
+        <div class="arrow">3.0 MI ROUND TRIP</div>
+      </div>
+
+      <div class="card-park">Red Mountain Park</div>
+
+      <div class="card-specs">
+        <div class="spec-row">
+          <div class="spec-cell">
+            <span class="key">DISTANCE</span>
+            <span class="val">3.0 mi</span>
+          </div>
+          <div class="spec-divider-v"></div>
+          <div class="spec-cell">
+            <span class="key">AVG TIME</span>
+            <span class="val">1.5–2 hrs</span>
+          </div>
+        </div>
+        <div class="spec-row">
+          <div class="spec-cell">
+            <span class="key">ELEV. GAIN</span>
+            <span class="val">+400 ft</span>
+          </div>
+          <div class="spec-divider-v"></div>
+          <div class="spec-cell">
+            <span class="key">DIFFICULTY</span>
+            <span class="val easy" style="color:#7DFFB3;">EASY–MOD.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-reviews">
+        <div class="reviews-header">FIELD NOTES / USER REVIEWS</div>
+        <div class="review">
+          <span class="reviewer">▸ GEOLOGY_FAN_AZ &nbsp;<span class="review-stars">★★★★★</span></span>
+          "Walking into the eroded interior of Red Mountain feels like stepping onto Mars. The cinder cone walls tower overhead with hoodoos and spires. Surreal."
+        </div>
+        <div class="review">
+          <span class="reviewer">▸ FAMILY_HIKER_85205 &nbsp;<span class="review-stars">★★★★☆</span></span>
+          "Accessible for most fitness levels. The sandy wash section is easy on the knees. Kids loved the volcanic formations at the end. Very unique landscape."
+        </div>
+      </div>
+
+      <div class="card-status">
+        <span class="status-ok">TRAIL OPEN</span>
+        <span>COORD: 33.6820°N 111.5783°W</span>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- ============================================================
+       ELEVATION PROFILE SECTION
+  ============================================================ -->
+  <div class="section-header">
+    <div class="line"></div>
+    <h2><span class="num">§02</span> COMPARATIVE ELEVATION PROFILES</h2>
+    <div class="line"></div>
+  </div>
+
+  <section class="elevation-section">
+    <div class="elevation-container">
+      <div class="corner-tl"></div>
+      <div class="corner-tr"></div>
+      <div class="corner-bl"></div>
+      <div class="corner-br"></div>
+      <div class="elevation-title">ELEVATION GAIN COMPARISON &nbsp;·&nbsp; ALL TRAILS &nbsp;·&nbsp; UNIT: FEET</div>
+      <div class="elevation-chart">
+        <svg id="elevChart" viewBox="0 0 900 160" preserveAspectRatio="xMidYMid meet">
+          <!-- Grid lines -->
+          <line x1="60" y1="10" x2="60" y2="130" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <line x1="60" y1="130" x2="870" y2="130" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <!-- Y-axis labels -->
+          <text x="54" y="133" fill="rgba(255,255,255,0.4)" font-size="8" text-anchor="end" font-family="'Share Tech Mono', monospace">0</text>
+          <text x="54" y="98" fill="rgba(255,255,255,0.4)" font-size="8" text-anchor="end" font-family="'Share Tech Mono', monospace">500</text>
+          <line x1="58" y1="96" x2="870" y2="96" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="54" y="63" fill="rgba(255,255,255,0.4)" font-size="8" text-anchor="end" font-family="'Share Tech Mono', monospace">1000</text>
+          <line x1="58" y1="61" x2="870" y2="61" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="54" y="28" fill="rgba(255,255,255,0.4)" font-size="8" text-anchor="end" font-family="'Share Tech Mono', monospace">1500</text>
+          <line x1="58" y1="26" x2="870" y2="26" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4,4"/>
+
+          <!-- Bar: Wind Cave +860 ft — maps to 860/2100 * 120 = ~49px -->
+          <rect x="80" y="88" width="100" height="42" fill="rgba(30,79,204,0.7)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <rect x="80" y="88" width="100" height="4" fill="rgba(255,215,0,0.6)"/>
+          <text x="130" y="85" fill="rgba(255,255,255,0.7)" font-size="8" text-anchor="middle" font-family="'Share Tech Mono', monospace">+860 ft</text>
+          <text x="130" y="145" fill="rgba(255,255,255,0.5)" font-size="7.5" text-anchor="middle" font-family="'Share Tech Mono', monospace">WIND CAVE</text>
+
+          <!-- Bar: Siphon Draw +2045 ft — maps to 2045/2100 * 120 = ~117px -->
+          <rect x="240" y="13" width="100" height="117" fill="rgba(30,79,204,0.7)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <rect x="240" y="13" width="100" height="4" fill="rgba(255,100,70,0.8)"/>
+          <text x="290" y="10" fill="rgba(255,255,255,0.7)" font-size="8" text-anchor="middle" font-family="'Share Tech Mono', monospace">+2,045 ft</text>
+          <text x="290" y="145" fill="rgba(255,255,255,0.5)" font-size="7.5" text-anchor="middle" font-family="'Share Tech Mono', monospace">SIPHON DRAW</text>
+
+          <!-- Bar: Peralta +1425 ft — maps to 1425/2100 * 120 = ~81px -->
+          <rect x="400" y="49" width="100" height="81" fill="rgba(30,79,204,0.7)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <rect x="400" y="49" width="100" height="4" fill="rgba(255,150,60,0.8)"/>
+          <text x="450" y="46" fill="rgba(255,255,255,0.7)" font-size="8" text-anchor="middle" font-family="'Share Tech Mono', monospace">+1,425 ft</text>
+          <text x="450" y="145" fill="rgba(255,255,255,0.5)" font-size="7.5" text-anchor="middle" font-family="'Share Tech Mono', monospace">PERALTA</text>
+
+          <!-- Bar: Hieroglyphic +800 ft — maps to 800/2100 * 120 = ~46px -->
+          <rect x="560" y="84" width="100" height="46" fill="rgba(30,79,204,0.7)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <rect x="560" y="84" width="100" height="4" fill="rgba(125,255,179,0.8)"/>
+          <text x="610" y="81" fill="rgba(255,255,255,0.7)" font-size="8" text-anchor="middle" font-family="'Share Tech Mono', monospace">+800 ft</text>
+          <text x="610" y="145" fill="rgba(255,255,255,0.5)" font-size="7.5" text-anchor="middle" font-family="'Share Tech Mono', monospace">HIEROGLYPHIC</text>
+
+          <!-- Bar: Red Mountain +400 ft — maps to 400/2100 * 120 = ~23px -->
+          <rect x="720" y="107" width="100" height="23" fill="rgba(30,79,204,0.7)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <rect x="720" y="107" width="100" height="4" fill="rgba(125,255,179,0.8)"/>
+          <text x="770" y="104" fill="rgba(255,255,255,0.7)" font-size="8" text-anchor="middle" font-family="'Share Tech Mono', monospace">+400 ft</text>
+          <text x="770" y="145" fill="rgba(255,255,255,0.5)" font-size="7.5" text-anchor="middle" font-family="'Share Tech Mono', monospace">RED MTN.</text>
+
+          <!-- Dimension arrow across all bars -->
+          <line x1="80" y1="155" x2="820" y2="155" stroke="rgba(255,215,0,0.3)" stroke-width="1"/>
+          <polygon points="80,153 80,157 74,155" fill="rgba(255,215,0,0.5)"/>
+          <polygon points="820,153 820,157 826,155" fill="rgba(255,215,0,0.5)"/>
+          <text x="450" y="162" fill="rgba(255,215,0,0.5)" font-size="7" text-anchor="middle" font-family="'Share Tech Mono', monospace">ALL 5 TRAILS — ELEVATION COMPARISON</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       DIFFICULTY LEGEND
+  ============================================================ -->
+  <div class="section-header">
+    <div class="line"></div>
+    <h2><span class="num">§03</span> DIFFICULTY CLASSIFICATION</h2>
+    <div class="line"></div>
+  </div>
+
+  <section class="legend-section">
+    <div class="legend-grid">
+      <div class="legend-item">
+        <span class="lg-label">CLASS 1 — LEVEL</span>
+        <span class="lg-value lg-easy">EASY–MOD.</span>
+        <span style="font-size:0.62rem; color:rgba(255,255,255,0.5);">Suitable for most hikers. Moderate terrain, limited technical sections.</span>
+        <div class="lg-bar lg-bar-easy"></div>
+      </div>
+      <div class="legend-item">
+        <span class="lg-label">CLASS 2 — LEVEL</span>
+        <span class="lg-value lg-mod">MODERATE</span>
+        <span style="font-size:0.62rem; color:rgba(255,255,255,0.5);">Some elevation gain. Good fitness recommended. Rocky in sections.</span>
+        <div class="lg-bar lg-bar-mod"></div>
+      </div>
+      <div class="legend-item">
+        <span class="lg-label">CLASS 3 — LEVEL</span>
+        <span class="lg-value lg-modstr">MOD–STREN.</span>
+        <span style="font-size:0.62rem; color:rgba(255,255,255,0.5);">Significant gain and rocky terrain. Hiking experience recommended.</span>
+        <div class="lg-bar lg-bar-modstr"></div>
+      </div>
+      <div class="legend-item">
+        <span class="lg-label">CLASS 4 — LEVEL</span>
+        <span class="lg-value lg-str">STRENUOUS</span>
+        <span style="font-size:0.62rem; color:rgba(255,255,255,0.5);">High elevation gain, scrambling required. Experienced hikers only.</span>
+        <div class="lg-bar lg-bar-str"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER — ENGINEERING TITLE BLOCK
+  ============================================================ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-cell">
+        <span class="fc-label">PROJECT</span>
+        <span class="fc-value footer-brand">MESA<br>TRAILS</span>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-cell">
+        <span class="fc-label">DOCUMENT TYPE</span>
+        <span class="fc-value">Trail Specification<br>Field Guide</span>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-cell">
+        <span class="fc-label">DRAWING NO.</span>
+        <span class="fc-value yellow">MTG-AZ-021</span>
+        <span class="fc-label" style="margin-top:0.3rem;">REVISION</span>
+        <span class="fc-value">21 — 30 MAR 2026</span>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-cell">
+        <span class="fc-label">REGION / JURISDICTION</span>
+        <span class="fc-value">Mesa, Arizona · Maricopa County</span>
+        <span class="fc-label" style="margin-top:0.4rem;">DISCLAIMER</span>
+        <span class="fc-value" style="font-size:0.6rem; color:rgba(255,255,255,0.4); line-height:1.4;">Trail conditions subject to change. Always check current status with park authorities before visiting. Carry water, map, and sunscreen.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Intersection Observer for staggered card entrance
+    const cards = document.querySelectorAll('.card');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      cards.forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(24px)';
+        card.style.transition = `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`;
+        observer.observe(card);
+      });
+    }
+
+    // Smooth scroll for nav
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Animate elevation bars on scroll into view
+    const elevSection = document.querySelector('.elevation-container');
+    const bars = document.querySelectorAll('#elevChart rect');
+    if (elevSection && 'IntersectionObserver' in window) {
+      const elevObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          bars.forEach((bar, i) => {
+            const origHeight = bar.getAttribute('height');
+            const origY = bar.getAttribute('y');
+            bar.setAttribute('height', '0');
+            bar.setAttribute('y', String(Number(origY) + Number(origHeight)));
+            setTimeout(() => {
+              bar.style.transition = 'height 0.8s ease, y 0.8s ease';
+              bar.setAttribute('height', origHeight);
+              bar.setAttribute('y', origY);
+            }, i * 80);
+          });
+          elevObserver.unobserve(elevSection);
+        }
+      }, { threshold: 0.3 });
+      elevObserver.observe(elevSection);
+    }
+  </script>
+
+</body>
+</html>

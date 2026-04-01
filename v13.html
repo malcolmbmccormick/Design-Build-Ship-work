@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>80s Retro / Miami Vice — Mesa Trail Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0520;
+    --pink: #FF00FF;
+    --cyan: #00BFFF;
+    --purple: #7B2FBE;
+    --dark-purple: #1A0840;
+    --gold: #FFD700;
+    --text: #E8E0FF;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* VHS SCANLINES */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.07) 2px,
+      rgba(0,0,0,0.07) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* GRID BACKGROUND */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(123,47,190,0.15) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(123,47,190,0.15) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  /* Perspective grid at bottom of hero */
+  .hero-grid {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background-image:
+      linear-gradient(rgba(255,0,255,0.4) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,191,255,0.3) 1px, transparent 1px);
+    background-size: 60px 30px;
+    transform: perspective(400px) rotateX(60deg);
+    transform-origin: bottom;
+    pointer-events: none;
+  }
+
+  /* NAV */
+  .retro-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10,5,32,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,0,255,0.3);
+  }
+  .retro-nav a {
+    color: var(--cyan);
+    text-decoration: none;
+    font-family: 'Audiowide', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    transition: color 0.3s, text-shadow 0.3s;
+  }
+  .retro-nav a:hover {
+    color: var(--pink);
+    text-shadow: 0 0 10px var(--pink);
+  }
+  .nav-brand {
+    font-family: 'Audiowide', sans-serif;
+    font-size: 13px;
+    color: var(--pink);
+    text-shadow: 0 0 20px var(--pink), 0 0 40px var(--pink);
+    letter-spacing: 2px;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 40px 160px;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  /* RETRO SUN */
+  .retro-sun {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(200px);
+    width: 300px;
+    height: 150px;
+    animation: sunRise 2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    z-index: 1;
+  }
+  @keyframes sunRise {
+    to { transform: translateX(-50%) translateY(0); }
+  }
+  .sun-circle {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: linear-gradient(to bottom, #FFD700 0%, #FF6B00 50%, #FF00AA 100%);
+    position: absolute;
+    bottom: 0;
+    overflow: hidden;
+  }
+  .sun-stripes {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+  }
+  .sun-stripe {
+    height: 9px;
+    margin-bottom: 6px;
+    background: var(--bg);
+  }
+
+  /* PALM TREES */
+  .palm-left, .palm-right {
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+  }
+  .palm-left { left: 60px; }
+  .palm-right { right: 60px; transform: scaleX(-1); }
+
+  /* HERO TEXT */
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .hero-eyebrow {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-shadow: 0 0 10px var(--cyan);
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: 'Audiowide', sans-serif;
+    font-size: clamp(32px, 5vw, 64px);
+    background: linear-gradient(90deg, var(--pink), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.15;
+    letter-spacing: 2px;
+    animation: neonPulse 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(255,0,255,0.5));
+    margin-bottom: 16px;
+  }
+  @keyframes neonPulse {
+    0%, 100% { filter: drop-shadow(0 0 20px rgba(255,0,255,0.5)) drop-shadow(0 0 40px rgba(0,191,255,0.3)); }
+    50% { filter: drop-shadow(0 0 30px rgba(255,0,255,0.8)) drop-shadow(0 0 60px rgba(0,191,255,0.6)); }
+  }
+  .hero-subtitle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--text);
+    opacity: 0.7;
+  }
+  .hero-grid { }
+
+  /* TRAIL CARDS SECTION */
+  .trails-section {
+    position: relative;
+    z-index: 1;
+    padding: 60px 40px 80px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .trails-section-title {
+    font-family: 'Audiowide', sans-serif;
+    font-size: 13px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-shadow: 0 0 10px var(--cyan);
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  .trails-section-title::before,
+  .trails-section-title::after {
+    content: ' // ';
+    color: var(--pink);
+  }
+
+  /* NEON CARDS */
+  .trail-card-retro {
+    border: 1px solid;
+    border-radius: 4px;
+    margin-bottom: 32px;
+    overflow: hidden;
+    background: rgba(10,5,32,0.8);
+    backdrop-filter: blur(4px);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+  }
+  .trail-card-retro:hover {
+    transform: translateY(-4px);
+  }
+  .trail-card-retro:nth-child(odd) {
+    border-color: var(--pink);
+    box-shadow: 0 0 20px rgba(255,0,255,0.15), inset 0 0 20px rgba(255,0,255,0.03);
+  }
+  .trail-card-retro:nth-child(odd):hover {
+    box-shadow: 0 0 40px rgba(255,0,255,0.3), inset 0 0 30px rgba(255,0,255,0.05);
+  }
+  .trail-card-retro:nth-child(even) {
+    border-color: var(--cyan);
+    box-shadow: 0 0 20px rgba(0,191,255,0.15), inset 0 0 20px rgba(0,191,255,0.03);
+  }
+  .trail-card-retro:nth-child(even):hover {
+    box-shadow: 0 0 40px rgba(0,191,255,0.3), inset 0 0 30px rgba(0,191,255,0.05);
+  }
+
+  .card-retro-image {
+    position: relative;
+    overflow: hidden;
+  }
+  .card-retro-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(1.3) contrast(1.1);
+    opacity: 0.85;
+  }
+  .card-retro-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,0,255,0.2) 0%, transparent 60%);
+  }
+  .card-retro-num {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-family: 'Audiowide', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    z-index: 2;
+  }
+  .trail-card-retro:nth-child(odd) .card-retro-num { color: var(--pink); text-shadow: 0 0 15px var(--pink); }
+  .trail-card-retro:nth-child(even) .card-retro-num { color: var(--cyan); text-shadow: 0 0 15px var(--cyan); }
+
+  .card-retro-body {
+    padding: 28px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .card-retro-name {
+    font-family: 'Audiowide', sans-serif;
+    font-size: clamp(16px, 2vw, 22px);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .trail-card-retro:nth-child(odd) .card-retro-name { color: var(--pink); text-shadow: 0 0 10px rgba(255,0,255,0.5); }
+  .trail-card-retro:nth-child(even) .card-retro-name { color: var(--cyan); text-shadow: 0 0 10px rgba(0,191,255,0.5); }
+
+  .card-retro-park {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(232,224,255,0.5);
+    margin-bottom: 20px;
+  }
+
+  .card-retro-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 16px;
+    border: 1px solid rgba(123,47,190,0.4);
+    background: rgba(26,8,64,0.6);
+  }
+  .retro-stat {
+    font-size: 13px;
+    color: var(--text);
+  }
+  .retro-stat label {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+    color: rgba(232,224,255,0.5);
+  }
+  .retro-stat span {
+    font-family: 'Audiowide', sans-serif;
+    font-size: 13px;
+  }
+  .trail-card-retro:nth-child(odd) .retro-stat span { color: var(--pink); }
+  .trail-card-retro:nth-child(even) .retro-stat span { color: var(--cyan); }
+
+  .card-retro-reviews {
+    border-top: 1px solid rgba(123,47,190,0.3);
+    padding-top: 14px;
+  }
+  .retro-review-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(232,224,255,0.4);
+    margin-bottom: 10px;
+  }
+  .retro-review-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+  .retro-review-stars { color: var(--gold); font-size: 10px; line-height: 1.7; white-space: nowrap; }
+  .retro-review-text { color: rgba(232,224,255,0.75); line-height: 1.5; font-size: 12px; }
+  .retro-review-author { color: rgba(232,224,255,0.4); font-size: 11px; white-space: nowrap; letter-spacing: 1px; }
+
+  /* CHROME HEADING */
+  .chrome-text {
+    font-family: 'Audiowide', sans-serif;
+    background: linear-gradient(to bottom, #fff 0%, #ccc 40%, #fff 60%, #999 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* FOOTER */
+  .retro-footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 48px 40px;
+    border-top: 1px solid rgba(255,0,255,0.3);
+    background: rgba(10,5,32,0.9);
+  }
+  .retro-footer-title {
+    font-family: 'Audiowide', sans-serif;
+    font-size: 20px;
+    background: linear-gradient(90deg, var(--pink), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .retro-footer-sub {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(232,224,255,0.4);
+  }
+
+  @media (max-width: 700px) {
+    .trail-card-retro { grid-template-columns: 1fr; }
+    .card-retro-image { height: 200px; }
+    .palm-left, .palm-right { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<nav class="retro-nav">
+  <a href="index.html">← All Designs</a>
+  <span class="nav-brand">MESA TRAIL EXPLORER</span>
+  <span style="color:var(--purple);font-family:'Audiowide',sans-serif;font-size:10px;">2026</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+  <!-- Retro Sun -->
+  <div class="retro-sun">
+    <div class="sun-circle">
+      <div class="sun-stripes">
+        <div class="sun-stripe"></div>
+        <div class="sun-stripe"></div>
+        <div class="sun-stripe"></div>
+        <div class="sun-stripe"></div>
+        <div class="sun-stripe" style="height:7px"></div>
+        <div class="sun-stripe" style="height:5px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Palm Trees SVG -->
+  <div class="palm-left">
+    <svg width="100" height="200" viewBox="0 0 100 200" fill="none" opacity="0.6">
+      <line x1="50" y1="200" x2="50" y2="80" stroke="#FF00AA" stroke-width="4"/>
+      <ellipse cx="50" cy="80" rx="40" ry="20" fill="#FF00AA" opacity="0.6" transform="rotate(-20 50 80)"/>
+      <ellipse cx="50" cy="80" rx="40" ry="18" fill="#CC0088" opacity="0.5" transform="rotate(20 50 80)"/>
+      <ellipse cx="50" cy="80" rx="35" ry="15" fill="#FF00AA" opacity="0.5" transform="rotate(-60 50 80)"/>
+      <ellipse cx="50" cy="80" rx="35" ry="15" fill="#CC0088" opacity="0.5" transform="rotate(60 50 80)"/>
+      <ellipse cx="50" cy="80" rx="30" ry="12" fill="#FF00AA" opacity="0.5" transform="rotate(0 50 80)"/>
+    </svg>
+  </div>
+  <div class="palm-right">
+    <svg width="100" height="200" viewBox="0 0 100 200" fill="none" opacity="0.6">
+      <line x1="50" y1="200" x2="50" y2="80" stroke="#00BFFF" stroke-width="4"/>
+      <ellipse cx="50" cy="80" rx="40" ry="20" fill="#00BFFF" opacity="0.6" transform="rotate(-20 50 80)"/>
+      <ellipse cx="50" cy="80" rx="40" ry="18" fill="#0088CC" opacity="0.5" transform="rotate(20 50 80)"/>
+      <ellipse cx="50" cy="80" rx="35" ry="15" fill="#00BFFF" opacity="0.5" transform="rotate(-60 50 80)"/>
+      <ellipse cx="50" cy="80" rx="35" ry="15" fill="#0088CC" opacity="0.5" transform="rotate(60 50 80)"/>
+      <ellipse cx="50" cy="80" rx="30" ry="12" fill="#00BFFF" opacity="0.5" transform="rotate(0 50 80)"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">// Mesa, Arizona &nbsp;·&nbsp; Trail System &nbsp;·&nbsp; 2026 //</div>
+    <h1 class="hero-title">MESA TRAIL<br>EXPLORER</h1>
+    <p class="hero-subtitle">Five Routes &nbsp;·&nbsp; Infinite Adventure</p>
+  </div>
+
+  <div class="hero-grid"></div>
+</section>
+
+<!-- TRAILS -->
+<div class="trails-section">
+  <h2 class="trails-section-title"><span class="chrome-text">SELECT YOUR ROUTE</span></h2>
+
+  <!-- Card 1 -->
+  <div class="trail-card-retro">
+    <div class="card-retro-image">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail">
+      <span class="card-retro-num">01</span>
+    </div>
+    <div class="card-retro-body">
+      <div>
+        <h2 class="card-retro-name">Wind Cave Trail</h2>
+        <p class="card-retro-park">Usery Mountain Regional Park</p>
+        <div class="card-retro-stats">
+          <div class="retro-stat"><label>Distance</label><span>3.2 mi</span></div>
+          <div class="retro-stat"><label>Duration</label><span>1.5–2 hrs</span></div>
+          <div class="retro-stat"><label>Elevation</label><span>+860 ft</span></div>
+          <div class="retro-stat"><label>Difficulty</label><span>Moderate</span></div>
+        </div>
+      </div>
+      <div class="card-retro-reviews">
+        <div class="retro-review-label">// User Reviews //</div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★★</span><span class="retro-review-text">"Stunning cave views at the top!"</span><span class="retro-review-author">Jake R.</span></div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★☆</span><span class="retro-review-text">"Great morning hike, bring water."</span><span class="retro-review-author">Sara M.</span></div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★★</span><span class="retro-review-text">"Well-marked and rewarding."</span><span class="retro-review-author">Chris T.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="trail-card-retro">
+    <div class="card-retro-image">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail">
+      <span class="card-retro-num">02</span>
+    </div>
+    <div class="card-retro-body">
+      <div>
+        <h2 class="card-retro-name">Siphon Draw Trail</h2>
+        <p class="card-retro-park">Lost Dutchman State Park</p>
+        <div class="card-retro-stats">
+          <div class="retro-stat"><label>Distance</label><span>4.2 mi</span></div>
+          <div class="retro-stat"><label>Duration</label><span>3–4 hrs</span></div>
+          <div class="retro-stat"><label>Elevation</label><span>+2,045 ft</span></div>
+          <div class="retro-stat"><label>Difficulty</label><span>Strenuous</span></div>
+        </div>
+      </div>
+      <div class="card-retro-reviews">
+        <div class="retro-review-label">// User Reviews //</div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★★</span><span class="retro-review-text">"Epic views of the Superstitions!"</span><span class="retro-review-author">Maria L.</span></div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★☆</span><span class="retro-review-text">"Very challenging but worth it."</span><span class="retro-review-author">Tom B.</span></div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★★</span><span class="retro-review-text">"Best hike in the East Valley."</span><span class="retro-review-author">Ava S.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="trail-card-retro">
+    <div class="card-retro-image">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail">
+      <span class="card-retro-num">03</span>
+    </div>
+    <div class="card-retro-body">
+      <div>
+        <h2 class="card-retro-name">Peralta Trail</h2>
+        <p class="card-retro-park">Superstition Wilderness</p>
+        <div class="card-retro-stats">
+          <div class="retro-stat"><label>Distance</label><span>4.6 mi</span></div>
+          <div class="retro-stat"><label>Duration</label><span>3–3.5 hrs</span></div>
+          <div class="retro-stat"><label>Elevation</label><span>+1,425 ft</span></div>
+          <div class="retro-stat"><label>Difficulty</label><span>Mod–Strenuous</span></div>
+        </div>
+      </div>
+      <div class="card-retro-reviews">
+        <div class="retro-review-label">// User Reviews //</div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★★</span><span class="retro-review-text">"Weaver's Needle views are unreal."</span><span class="retro-review-author">Dan K.</span></div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★☆</span><span class="retro-review-text">"Rocky but beautiful terrain."</span><span class="retro-review-author">Lily W.</span></div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★★</span><span class="retro-review-text">"A must-do in Arizona."</span><span class="retro-review-author">Noah P.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="trail-card-retro">
+    <div class="card-retro-image">
+      <img src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail">
+      <span class="card-retro-num">04</span>
+    </div>
+    <div class="card-retro-body">
+      <div>
+        <h2 class="card-retro-name">Hieroglyphic Trail</h2>
+        <p class="card-retro-park">Superstition Wilderness</p>
+        <div class="card-retro-stats">
+          <div class="retro-stat"><label>Distance</label><span>3.4 mi</span></div>
+          <div class="retro-stat"><label>Duration</label><span>2–2.5 hrs</span></div>
+          <div class="retro-stat"><label>Elevation</label><span>+800 ft</span></div>
+          <div class="retro-stat"><label>Difficulty</label><span>Easy–Moderate</span></div>
+        </div>
+      </div>
+      <div class="card-retro-reviews">
+        <div class="retro-review-label">// User Reviews //</div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★★</span><span class="retro-review-text">"Ancient petroglyphs are fascinating."</span><span class="retro-review-author">Emma R.</span></div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★☆</span><span class="retro-review-text">"Perfect for beginners."</span><span class="retro-review-author">Liam F.</span></div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★★</span><span class="retro-review-text">"Hidden gem near Mesa."</span><span class="retro-review-author">Zoe C.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 5 -->
+  <div class="trail-card-retro">
+    <div class="card-retro-image">
+      <img src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail">
+      <span class="card-retro-num">05</span>
+    </div>
+    <div class="card-retro-body">
+      <div>
+        <h2 class="card-retro-name">Red Mountain Trail</h2>
+        <p class="card-retro-park">Red Mountain Recreation Area</p>
+        <div class="card-retro-stats">
+          <div class="retro-stat"><label>Distance</label><span>3.0 mi</span></div>
+          <div class="retro-stat"><label>Duration</label><span>1.5–2 hrs</span></div>
+          <div class="retro-stat"><label>Elevation</label><span>+400 ft</span></div>
+          <div class="retro-stat"><label>Difficulty</label><span>Easy–Moderate</span></div>
+        </div>
+      </div>
+      <div class="card-retro-reviews">
+        <div class="retro-review-label">// User Reviews //</div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★★</span><span class="retro-review-text">"The red volcanic formations are wild."</span><span class="retro-review-author">Ben H.</span></div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★☆</span><span class="retro-review-text">"Kids loved it!"</span><span class="retro-review-author">Priya N.</span></div>
+        <div class="retro-review-item"><span class="retro-review-stars">★★★★★</span><span class="retro-review-text">"Short but scenic, great for all levels."</span><span class="retro-review-author">Sam T.</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="retro-footer">
+  <div class="retro-footer-title">MESA TRAIL EXPLORER</div>
+  <div class="retro-footer-sub">// Arizona · 2026 · Five Routes //</div>
+</footer>
+
+</body>
+</html>

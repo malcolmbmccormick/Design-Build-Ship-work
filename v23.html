@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mesa — Arizona Trail Collection</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0A0A0A;
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --white: #FFFFFF;
+    --warm-gray: #8B8375;
+    --off-white: #F8F6F2;
+    --dark-overlay: rgba(10,10,10,0.72);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--off-white);
+    color: var(--black);
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── NAVIGATION ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 56px;
+    mix-blend-mode: normal;
+    background: transparent;
+    transition: background 0.4s;
+  }
+  nav.scrolled {
+    background: var(--black);
+  }
+  .nav-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: hero-bg-fade 2s 1.2s ease forwards;
+    transform: scale(1.04);
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--dark-overlay);
+  }
+
+  @keyframes hero-bg-fade {
+    to { opacity: 1; }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-est {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 0.65rem;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: slide-up 0.8s 0.2s ease forwards;
+  }
+
+  .gold-line {
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 36px;
+    animation: line-expand 1s 0.4s ease forwards;
+  }
+  @keyframes line-expand {
+    to { width: 180px; }
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(6rem, 15vw, 14rem);
+    font-weight: 400;
+    color: var(--white);
+    letter-spacing: 20px;
+    line-height: 1;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: slide-up 1s 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .hero-subtitle {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 0.65rem;
+    letter-spacing: 10px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-top: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slide-up 0.8s 1s ease forwards;
+  }
+
+  .gold-line-bottom {
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    margin: 32px auto 0;
+    animation: line-expand 1s 1.2s ease forwards;
+  }
+
+  @keyframes slide-up {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: slide-up 0.8s 2s ease forwards;
+  }
+  .scroll-indicator span {
+    font-size: 0.55rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scroll-pulse 2s 2.5s ease infinite;
+  }
+  @keyframes scroll-pulse {
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50%       { opacity: 0.4; transform: scaleY(0.7); }
+  }
+
+  /* ── INTRO SECTION ── */
+  .intro {
+    max-width: 640px;
+    margin: 120px auto;
+    text-align: center;
+    padding: 0 40px;
+  }
+  .intro-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+  .intro-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--black);
+    margin-bottom: 28px;
+  }
+  .intro-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 28px;
+  }
+  .intro-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--warm-gray);
+  }
+
+  /* ── TRAILS ── */
+  .trails-section {
+    padding: 0 0 160px;
+  }
+
+  .section-header {
+    text-align: center;
+    padding: 0 40px 80px;
+  }
+  .section-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--black);
+  }
+
+  /* Trail entry — full-width luxury layout */
+  .trail-entry {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 600px;
+    margin-bottom: 2px;
+  }
+  .trail-entry:nth-child(even) { direction: rtl; }
+  .trail-entry:nth-child(even) .trail-info { direction: ltr; }
+  .trail-entry:nth-child(even) .trail-photo { direction: ltr; }
+
+  .trail-photo {
+    position: relative;
+    overflow: hidden;
+  }
+  .trail-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 1.2s cubic-bezier(0.25,0.46,0.45,0.94);
+    filter: saturate(0.85);
+  }
+  .trail-photo:hover img {
+    transform: scale(1.04);
+  }
+
+  .trail-info {
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 72px 80px;
+  }
+
+  .trail-number {
+    font-size: 0.55rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .trail-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: var(--black);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .trail-park {
+    font-size: 0.65rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 32px;
+  }
+
+  .gold-rule {
+    width: 48px;
+    height: 1px;
+    background: var(--gold);
+    margin-bottom: 32px;
+  }
+
+  .trail-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 40px;
+    margin-bottom: 40px;
+  }
+  .stat-item {}
+  .stat-label {
+    font-size: 0.55rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--black);
+  }
+
+  .trail-difficulty {
+    display: inline-block;
+    font-size: 0.6rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 6px 18px;
+    margin-bottom: 40px;
+  }
+
+  /* Pull-quote reviews */
+  .reviews-header {
+    font-size: 0.55rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 20px;
+  }
+
+  .pull-quote {
+    border-left: 1px solid var(--gold);
+    padding: 2px 0 2px 20px;
+    margin-bottom: 20px;
+  }
+  .pull-quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--black);
+  }
+  .pull-quote-attr {
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-top: 8px;
+  }
+  .pull-stars {
+    color: var(--gold);
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+
+  /* ── QUOTE INTERLUDE ── */
+  .quote-interlude {
+    background: var(--black);
+    padding: 120px 40px;
+    text-align: center;
+  }
+  .big-quote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+    color: var(--white);
+    line-height: 1.5;
+    max-width: 860px;
+    margin: 0 auto 32px;
+    font-weight: 400;
+  }
+  .big-quote-attr {
+    font-size: 0.6rem;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    padding: 80px 56px 48px;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 48px;
+    align-items: start;
+    border-top: 1px solid rgba(201,168,76,0.3);
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--white);
+    letter-spacing: 4px;
+  }
+  .footer-brand-sub {
+    font-size: 0.55rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 8px;
+  }
+  .footer-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 40px;
+    list-style: none;
+  }
+  .footer-links a {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-est {
+    text-align: right;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.3);
+    font-style: italic;
+  }
+  .footer-bottom {
+    grid-column: 1 / -1;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 28px;
+    text-align: center;
+    font-size: 0.55rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+  }
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <div class="nav-brand">Mesa</div>
+  <ul class="nav-links">
+    <li><a href="index.html">Gallery</a></li>
+    <li><a href="#">Trails</a></li>
+    <li><a href="#">Journal</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-est">Est. 2024 &nbsp;&mdash;&nbsp; Arizona</div>
+    <div class="gold-line"></div>
+    <h1 class="hero-title">MESA</h1>
+    <p class="hero-subtitle">Arizona Trail Collection</p>
+    <div class="gold-line-bottom"></div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="intro-eyebrow">The Collection</div>
+  <h2 class="intro-title">Five trails of rare and quiet distinction</h2>
+  <div class="intro-divider"></div>
+  <p class="intro-text">
+    In the long shadows of the Superstition Mountains, where saguaro stand sentinel
+    against a perpetual desert sky, Mesa offers the discerning traveller an experience
+    unlike any other. These are not merely trails. They are passages.
+  </p>
+</section>
+
+<!-- TRAILS -->
+<section class="trails-section">
+  <div class="section-header">
+    <div class="section-eyebrow">Curated Selection</div>
+    <h2 class="section-title">The Five Routes</h2>
+  </div>
+
+  <!-- Trail 1 -->
+  <div class="trail-entry">
+    <div class="trail-photo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail">
+    </div>
+    <div class="trail-info">
+      <div class="trail-number">Route No. 01</div>
+      <h3 class="trail-name">Wind Cave Trail</h3>
+      <div class="trail-park">Usery Mountain Regional Park</div>
+      <div class="gold-rule"></div>
+      <div class="trail-difficulty">Moderate</div>
+      <div class="trail-stats">
+        <div class="stat-item">
+          <div class="stat-label">Distance</div>
+          <div class="stat-value">3.2 mi</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Duration</div>
+          <div class="stat-value">1.5 – 2 hrs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Elevation</div>
+          <div class="stat-value">+860 ft</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Type</div>
+          <div class="stat-value">Roundtrip</div>
+        </div>
+      </div>
+      <div class="reviews-header">Guest Impressions</div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Stunning cave views at the top!"</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Jake R.</div>
+      </div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Great morning hike, bring water."</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Sara M.</div>
+      </div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Trail is well-marked and rewarding."</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Chris T.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trail 2 -->
+  <div class="trail-entry">
+    <div class="trail-photo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail">
+    </div>
+    <div class="trail-info">
+      <div class="trail-number">Route No. 02</div>
+      <h3 class="trail-name">Siphon Draw Trail</h3>
+      <div class="trail-park">Lost Dutchman State Park</div>
+      <div class="gold-rule"></div>
+      <div class="trail-difficulty">Strenuous</div>
+      <div class="trail-stats">
+        <div class="stat-item">
+          <div class="stat-label">Distance</div>
+          <div class="stat-value">4.2 mi</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Duration</div>
+          <div class="stat-value">3 – 4 hrs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Elevation</div>
+          <div class="stat-value">+2,045 ft</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Type</div>
+          <div class="stat-value">Roundtrip</div>
+        </div>
+      </div>
+      <div class="reviews-header">Guest Impressions</div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Epic views of the Superstitions!"</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Maria L.</div>
+      </div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Very challenging but worth it."</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Tom B.</div>
+      </div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Best hike in the East Valley."</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Ava S.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trail 3 -->
+  <div class="trail-entry">
+    <div class="trail-photo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail">
+    </div>
+    <div class="trail-info">
+      <div class="trail-number">Route No. 03</div>
+      <h3 class="trail-name">Peralta Trail</h3>
+      <div class="trail-park">Superstition Wilderness</div>
+      <div class="gold-rule"></div>
+      <div class="trail-difficulty">Moderate – Strenuous</div>
+      <div class="trail-stats">
+        <div class="stat-item">
+          <div class="stat-label">Distance</div>
+          <div class="stat-value">4.6 mi</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Duration</div>
+          <div class="stat-value">3 – 3.5 hrs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Elevation</div>
+          <div class="stat-value">+1,425 ft</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Type</div>
+          <div class="stat-value">Roundtrip</div>
+        </div>
+      </div>
+      <div class="reviews-header">Guest Impressions</div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Weaver's Needle views are unreal."</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Dan K.</div>
+      </div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Rocky but beautiful terrain."</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Lily W.</div>
+      </div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"A must-do in Arizona."</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Noah P.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trail 4 -->
+  <div class="trail-entry">
+    <div class="trail-photo">
+      <img src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail">
+    </div>
+    <div class="trail-info">
+      <div class="trail-number">Route No. 04</div>
+      <h3 class="trail-name">Hieroglyphic Trail</h3>
+      <div class="trail-park">Superstition Wilderness</div>
+      <div class="gold-rule"></div>
+      <div class="trail-difficulty">Easy – Moderate</div>
+      <div class="trail-stats">
+        <div class="stat-item">
+          <div class="stat-label">Distance</div>
+          <div class="stat-value">3.4 mi</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Duration</div>
+          <div class="stat-value">2 – 2.5 hrs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Elevation</div>
+          <div class="stat-value">+800 ft</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Type</div>
+          <div class="stat-value">Roundtrip</div>
+        </div>
+      </div>
+      <div class="reviews-header">Guest Impressions</div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Ancient petroglyphs are fascinating."</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Emma R.</div>
+      </div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Perfect for beginners."</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Liam F.</div>
+      </div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Hidden gem near Mesa."</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Zoe C.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trail 5 -->
+  <div class="trail-entry">
+    <div class="trail-photo">
+      <img src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail">
+    </div>
+    <div class="trail-info">
+      <div class="trail-number">Route No. 05</div>
+      <h3 class="trail-name">Red Mountain Trail</h3>
+      <div class="trail-park">Red Mountain Park, Mesa</div>
+      <div class="gold-rule"></div>
+      <div class="trail-difficulty">Easy – Moderate</div>
+      <div class="trail-stats">
+        <div class="stat-item">
+          <div class="stat-label">Distance</div>
+          <div class="stat-value">3.0 mi</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Duration</div>
+          <div class="stat-value">1.5 – 2 hrs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Elevation</div>
+          <div class="stat-value">+400 ft</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Type</div>
+          <div class="stat-value">Roundtrip</div>
+        </div>
+      </div>
+      <div class="reviews-header">Guest Impressions</div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"The red volcanic formations are wild."</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Ben H.</div>
+      </div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Kids loved it!"</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Priya N.</div>
+      </div>
+      <div class="pull-quote">
+        <div class="pull-quote-text">"Short but scenic, great for all levels."</div>
+        <div class="pull-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="pull-quote-attr">Sam T.</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- QUOTE INTERLUDE -->
+<div class="quote-interlude">
+  <p class="big-quote">"The desert does not merely surround you — it enters you, rearranges something fundamental, and returns you changed."</p>
+  <div class="big-quote-attr">Mesa, Arizona &nbsp;&mdash;&nbsp; Est. 2024</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">Mesa</div>
+    <div class="footer-brand-sub">Arizona Trail Collection</div>
+  </div>
+  <ul class="footer-links">
+    <li><a href="index.html">Design Gallery</a></li>
+    <li><a href="#">Trail Journal</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Photography</a></li>
+    <li><a href="#">Seasonal Guide</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="footer-est">Est. 2024</div>
+  <div class="footer-bottom">
+    &copy; 2024 Mesa, Arizona &nbsp;&mdash;&nbsp; All rights reserved &nbsp;&mdash;&nbsp; Design v23
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 80);
+  });
+</script>
+</body>
+</html>

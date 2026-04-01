@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile App UI — Mesa Trail Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #007AFF;
+    --bg: #F2F2F7;
+    --card: #FFFFFF;
+    --text: #1C1C1E;
+    --secondary: #8E8E93;
+    --tertiary: #C7C7CC;
+    --green: #34C759;
+    --orange: #FF9500;
+    --red: #FF3B30;
+    --yellow: #FFD60A;
+    --separator: rgba(60,60,67,0.12);
+  }
+
+  body {
+    background: #E5E5EA;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+  }
+
+  /* OUTER NAV (desktop browser bar feel) */
+  .browser-bar {
+    width: 100%;
+    background: #3A3A3C;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: fixed;
+    top: 0;
+    z-index: 300;
+  }
+  .browser-bar a {
+    color: #EBEBF5;
+    text-decoration: none;
+    font-size: 12px;
+    opacity: 0.7;
+    font-family: 'Inter', sans-serif;
+    transition: opacity 0.2s;
+  }
+  .browser-bar a:hover { opacity: 1; }
+  .browser-url {
+    flex: 1;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 5px 12px;
+    color: #EBEBF5;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  /* PHONE FRAME */
+  .phone-wrapper {
+    width: 390px;
+    min-height: 844px;
+    background: var(--bg);
+    margin: 60px auto 40px;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 2px #1C1C1E,
+      0 0 0 8px #2C2C2E,
+      0 30px 80px rgba(0,0,0,0.4),
+      0 10px 30px rgba(0,0,0,0.3);
+    position: relative;
+    border: 1px solid #4C4C4E;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    background: var(--bg);
+    padding: 14px 24px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .status-time { font-size: 15px; font-weight: 700; }
+  .status-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+  }
+  .battery-icon {
+    width: 25px;
+    height: 12px;
+    border: 1.5px solid var(--text);
+    border-radius: 2px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 1px;
+  }
+  .battery-icon::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 5px;
+    background: var(--text);
+    border-radius: 0 1px 1px 0;
+  }
+  .battery-fill {
+    width: 80%;
+    height: 100%;
+    background: var(--text);
+    border-radius: 1px;
+  }
+
+  /* DYNAMIC ISLAND */
+  .dynamic-island {
+    width: 120px;
+    height: 34px;
+    background: #1C1C1E;
+    border-radius: 20px;
+    margin: 0 auto 12px;
+  }
+
+  /* APP CONTENT */
+  .app-content {
+    padding-bottom: 90px;
+    overflow-y: auto;
+    max-height: calc(844px - 180px);
+  }
+
+  /* HEADER */
+  .app-header {
+    background: var(--bg);
+    padding: 0 20px 16px;
+    border-bottom: 1px solid var(--separator);
+  }
+  .app-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .location-pin {
+    width: 14px;
+    height: 14px;
+    fill: var(--blue);
+  }
+  .app-location-text {
+    font-size: 13px;
+    color: var(--blue);
+    font-weight: 500;
+  }
+  .app-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+  }
+  .search-bar {
+    background: rgba(118,118,128,0.12);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--secondary);
+    font-size: 15px;
+  }
+  .search-icon {
+    font-size: 16px;
+    opacity: 0.6;
+  }
+
+  /* SECTION LABEL */
+  .section-label-app {
+    padding: 20px 20px 10px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+
+  /* TRAIL CARDS */
+  .trail-card-app {
+    background: var(--card);
+    margin: 0 16px 12px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 0.5px rgba(0,0,0,0.05);
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .trail-card-app.visible {
+    animation: cardSlideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes cardSlideUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+  .card-body {
+    padding: 14px 16px;
+  }
+  .card-top-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .card-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.2px;
+    flex: 1;
+    padding-right: 8px;
+  }
+  .card-chevron {
+    color: var(--tertiary);
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 1px;
+  }
+  .card-park {
+    font-size: 13px;
+    color: var(--secondary);
+    margin-bottom: 10px;
+  }
+  .card-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .pill {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .pill-blue { background: rgba(0,122,255,0.12); color: var(--blue); }
+  .pill-green { background: rgba(52,199,89,0.12); color: var(--green); }
+  .pill-orange { background: rgba(255,149,0,0.12); color: var(--orange); }
+  .pill-red { background: rgba(255,59,48,0.12); color: var(--red); }
+
+  .card-stats-row {
+    display: flex;
+    gap: 0;
+    border-top: 1px solid var(--separator);
+    padding-top: 12px;
+    margin-bottom: 12px;
+  }
+  .card-stat {
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid var(--separator);
+    padding: 0 4px;
+  }
+  .card-stat:last-child { border-right: none; }
+  .card-stat-val {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.2px;
+  }
+  .card-stat-label {
+    display: block;
+    font-size: 10px;
+    color: var(--secondary);
+    margin-top: 1px;
+  }
+
+  .card-reviews {
+    border-top: 1px solid var(--separator);
+    padding-top: 10px;
+  }
+  .card-review-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--secondary);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .review-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 6px;
+    font-size: 13px;
+  }
+  .review-stars-app {
+    color: var(--yellow);
+    font-size: 11px;
+    white-space: nowrap;
+    line-height: 1.6;
+  }
+  .review-text-app {
+    color: var(--text);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .review-author-app {
+    color: var(--secondary);
+    font-size: 11px;
+    white-space: nowrap;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(248,248,250,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--separator);
+    padding: 8px 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 50;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    flex: 1;
+  }
+  .nav-icon {
+    font-size: 22px;
+    line-height: 1;
+  }
+  .nav-label {
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .nav-item.active .nav-icon,
+  .nav-item.active .nav-label { color: var(--blue); }
+  .nav-item:not(.active) .nav-icon,
+  .nav-item:not(.active) .nav-label { color: var(--secondary); }
+
+  /* NOTCH */
+  .home-indicator {
+    width: 134px;
+    height: 5px;
+    background: var(--text);
+    border-radius: 3px;
+    margin: 8px auto 0;
+    opacity: 0.18;
+  }
+</style>
+</head>
+<body>
+
+<div class="browser-bar">
+  <a href="index.html">← All Designs</a>
+  <div class="browser-url">mesa-trails.app · Mobile App UI</div>
+</div>
+
+<div class="phone-wrapper">
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="dynamic-island" style="width:120px;height:34px;background:#000;border-radius:20px;margin:0;position:relative;top:0;"></div>
+    <div class="status-icons">
+      <span>●●●</span>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.4C5.6 2.4 3.4 3.4 1.8 5L0 3.2C2.2 1.2 5 0 8 0s5.8 1.2 8 3.2L14.2 5C12.6 3.4 10.4 2.4 8 2.4z"/><path d="M8 5.6c-1.5 0-2.8.6-3.8 1.5L2.4 5.3C3.8 4 5.8 3.2 8 3.2s4.2.8 5.6 2.1L11.8 7.1C10.8 6.2 9.5 5.6 8 5.6z"/><circle cx="8" cy="10" r="2"/></svg>
+      <div class="battery-icon"><div class="battery-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- App Content -->
+  <div class="app-content" id="appContent">
+    <div class="app-header">
+      <div class="app-location">
+        <svg class="location-pin" viewBox="0 0 14 20" fill="#007AFF"><path d="M7 0C3.13 0 0 3.13 0 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5C5.62 9.5 4.5 8.38 4.5 7S5.62 4.5 7 4.5 9.5 5.62 9.5 7 8.38 9.5 7 9.5z"/></svg>
+        <span class="app-location-text">Mesa, AZ</span>
+      </div>
+      <h1 class="app-title">Hiking Trails</h1>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <span>Search trails...</span>
+      </div>
+    </div>
+
+    <div class="section-label-app">Nearby Trails</div>
+
+    <!-- Card 1 -->
+    <div class="trail-card-app" id="card1">
+      <img class="card-image" src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail">
+      <div class="card-body">
+        <div class="card-top-row">
+          <span class="card-name">Wind Cave Trail</span>
+          <span class="card-chevron">›</span>
+        </div>
+        <div class="card-park">Usery Mountain Regional Park</div>
+        <div class="card-pills">
+          <span class="pill pill-orange">Moderate</span>
+          <span class="pill pill-blue">3.2 mi</span>
+          <span class="pill pill-green">+860 ft</span>
+        </div>
+        <div class="card-stats-row">
+          <div class="card-stat"><span class="card-stat-val">3.2 mi</span><span class="card-stat-label">Distance</span></div>
+          <div class="card-stat"><span class="card-stat-val">1.5–2h</span><span class="card-stat-label">Duration</span></div>
+          <div class="card-stat"><span class="card-stat-val">860 ft</span><span class="card-stat-label">Elevation</span></div>
+          <div class="card-stat"><span class="card-stat-val">⭐ 4.8</span><span class="card-stat-label">Rating</span></div>
+        </div>
+        <div class="card-reviews">
+          <div class="card-review-label">Reviews</div>
+          <div class="review-row"><span class="review-stars-app">★★★★★</span><span class="review-text-app">"Stunning cave views at the top!"</span><span class="review-author-app">Jake R.</span></div>
+          <div class="review-row"><span class="review-stars-app">★★★★☆</span><span class="review-text-app">"Great morning hike, bring water."</span><span class="review-author-app">Sara M.</span></div>
+          <div class="review-row"><span class="review-stars-app">★★★★★</span><span class="review-text-app">"Well-marked and rewarding."</span><span class="review-author-app">Chris T.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="trail-card-app" id="card2">
+      <img class="card-image" src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail">
+      <div class="card-body">
+        <div class="card-top-row">
+          <span class="card-name">Siphon Draw Trail</span>
+          <span class="card-chevron">›</span>
+        </div>
+        <div class="card-park">Lost Dutchman State Park</div>
+        <div class="card-pills">
+          <span class="pill pill-red">Strenuous</span>
+          <span class="pill pill-blue">4.2 mi</span>
+          <span class="pill pill-green">+2,045 ft</span>
+        </div>
+        <div class="card-stats-row">
+          <div class="card-stat"><span class="card-stat-val">4.2 mi</span><span class="card-stat-label">Distance</span></div>
+          <div class="card-stat"><span class="card-stat-val">3–4h</span><span class="card-stat-label">Duration</span></div>
+          <div class="card-stat"><span class="card-stat-val">2,045 ft</span><span class="card-stat-label">Elevation</span></div>
+          <div class="card-stat"><span class="card-stat-val">⭐ 4.7</span><span class="card-stat-label">Rating</span></div>
+        </div>
+        <div class="card-reviews">
+          <div class="card-review-label">Reviews</div>
+          <div class="review-row"><span class="review-stars-app">★★★★★</span><span class="review-text-app">"Epic views of the Superstitions!"</span><span class="review-author-app">Maria L.</span></div>
+          <div class="review-row"><span class="review-stars-app">★★★★☆</span><span class="review-text-app">"Very challenging but worth it."</span><span class="review-author-app">Tom B.</span></div>
+          <div class="review-row"><span class="review-stars-app">★★★★★</span><span class="review-text-app">"Best hike in the East Valley."</span><span class="review-author-app">Ava S.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="trail-card-app" id="card3">
+      <img class="card-image" src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail">
+      <div class="card-body">
+        <div class="card-top-row">
+          <span class="card-name">Peralta Trail</span>
+          <span class="card-chevron">›</span>
+        </div>
+        <div class="card-park">Superstition Wilderness</div>
+        <div class="card-pills">
+          <span class="pill pill-orange">Mod–Strenuous</span>
+          <span class="pill pill-blue">4.6 mi</span>
+          <span class="pill pill-green">+1,425 ft</span>
+        </div>
+        <div class="card-stats-row">
+          <div class="card-stat"><span class="card-stat-val">4.6 mi</span><span class="card-stat-label">Distance</span></div>
+          <div class="card-stat"><span class="card-stat-val">3–3.5h</span><span class="card-stat-label">Duration</span></div>
+          <div class="card-stat"><span class="card-stat-val">1,425 ft</span><span class="card-stat-label">Elevation</span></div>
+          <div class="card-stat"><span class="card-stat-val">⭐ 4.8</span><span class="card-stat-label">Rating</span></div>
+        </div>
+        <div class="card-reviews">
+          <div class="card-review-label">Reviews</div>
+          <div class="review-row"><span class="review-stars-app">★★★★★</span><span class="review-text-app">"Weaver's Needle views are unreal."</span><span class="review-author-app">Dan K.</span></div>
+          <div class="review-row"><span class="review-stars-app">★★★★☆</span><span class="review-text-app">"Rocky but beautiful terrain."</span><span class="review-author-app">Lily W.</span></div>
+          <div class="review-row"><span class="review-stars-app">★★★★★</span><span class="review-text-app">"A must-do in Arizona."</span><span class="review-author-app">Noah P.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="trail-card-app" id="card4">
+      <img class="card-image" src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail">
+      <div class="card-body">
+        <div class="card-top-row">
+          <span class="card-name">Hieroglyphic Trail</span>
+          <span class="card-chevron">›</span>
+        </div>
+        <div class="card-park">Superstition Wilderness</div>
+        <div class="card-pills">
+          <span class="pill pill-green">Easy–Moderate</span>
+          <span class="pill pill-blue">3.4 mi</span>
+          <span class="pill pill-green">+800 ft</span>
+        </div>
+        <div class="card-stats-row">
+          <div class="card-stat"><span class="card-stat-val">3.4 mi</span><span class="card-stat-label">Distance</span></div>
+          <div class="card-stat"><span class="card-stat-val">2–2.5h</span><span class="card-stat-label">Duration</span></div>
+          <div class="card-stat"><span class="card-stat-val">800 ft</span><span class="card-stat-label">Elevation</span></div>
+          <div class="card-stat"><span class="card-stat-val">⭐ 4.7</span><span class="card-stat-label">Rating</span></div>
+        </div>
+        <div class="card-reviews">
+          <div class="card-review-label">Reviews</div>
+          <div class="review-row"><span class="review-stars-app">★★★★★</span><span class="review-text-app">"Ancient petroglyphs are fascinating."</span><span class="review-author-app">Emma R.</span></div>
+          <div class="review-row"><span class="review-stars-app">★★★★☆</span><span class="review-text-app">"Perfect for beginners."</span><span class="review-author-app">Liam F.</span></div>
+          <div class="review-row"><span class="review-stars-app">★★★★★</span><span class="review-text-app">"Hidden gem near Mesa."</span><span class="review-author-app">Zoe C.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="trail-card-app" id="card5">
+      <img class="card-image" src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail">
+      <div class="card-body">
+        <div class="card-top-row">
+          <span class="card-name">Red Mountain Trail</span>
+          <span class="card-chevron">›</span>
+        </div>
+        <div class="card-park">Red Mountain Recreation Area</div>
+        <div class="card-pills">
+          <span class="pill pill-green">Easy–Moderate</span>
+          <span class="pill pill-blue">3.0 mi</span>
+          <span class="pill pill-green">+400 ft</span>
+        </div>
+        <div class="card-stats-row">
+          <div class="card-stat"><span class="card-stat-val">3.0 mi</span><span class="card-stat-label">Distance</span></div>
+          <div class="card-stat"><span class="card-stat-val">1.5–2h</span><span class="card-stat-label">Duration</span></div>
+          <div class="card-stat"><span class="card-stat-val">400 ft</span><span class="card-stat-label">Elevation</span></div>
+          <div class="card-stat"><span class="card-stat-val">⭐ 4.7</span><span class="card-stat-label">Rating</span></div>
+        </div>
+        <div class="card-reviews">
+          <div class="card-review-label">Reviews</div>
+          <div class="review-row"><span class="review-stars-app">★★★★★</span><span class="review-text-app">"The red volcanic formations are wild."</span><span class="review-author-app">Ben H.</span></div>
+          <div class="review-row"><span class="review-stars-app">★★★★☆</span><span class="review-text-app">"Kids loved it!"</span><span class="review-author-app">Priya N.</span></div>
+          <div class="review-row"><span class="review-stars-app">★★★★★</span><span class="review-text-app">"Short but scenic, great for all levels."</span><span class="review-author-app">Sam T.</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end app-content -->
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <span class="nav-icon">🏔</span>
+      <span class="nav-label">Trails</span>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">🗺</span>
+      <span class="nav-label">Map</span>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">🔖</span>
+      <span class="nav-label">Saved</span>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">Profile</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const cards = ['card1','card2','card3','card4','card5'];
+  cards.forEach((id, i) => {
+    const el = document.getElementById(id);
+    setTimeout(() => {
+      el.classList.add('visible');
+    }, 200 + i * 150);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newspaper Broadsheet — Mesa Trail Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --newsprint: #F9F5E7;
+    --ink: #1A1A1A;
+    --mid: #555;
+    --light: #999;
+    --rule: #1A1A1A;
+    --gold: #8B6914;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #D4C9A8;
+    font-family: 'Libre Baskerville', Georgia, serif;
+    color: var(--ink);
+    opacity: 0;
+    animation: pageLoad 0.8s ease forwards 0.2s;
+  }
+  @keyframes pageLoad {
+    0% { opacity: 0; filter: brightness(3); }
+    20% { opacity: 1; filter: brightness(3); }
+    100% { opacity: 1; filter: brightness(1); }
+  }
+
+  .newspaper {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: var(--newsprint);
+    min-height: 100vh;
+    box-shadow: 0 0 40px rgba(0,0,0,0.3);
+    padding: 0 0 60px;
+  }
+
+  /* NAV */
+  .top-bar {
+    background: var(--ink);
+    padding: 10px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .top-bar a {
+    color: var(--newsprint);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-family: 'Libre Baskerville', serif;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+  .top-bar a:hover { opacity: 1; }
+  .top-bar-motto {
+    color: rgba(249,245,231,0.6);
+    font-size: 10px;
+    font-style: italic;
+  }
+
+  /* MASTHEAD */
+  .masthead {
+    border-bottom: 4px double var(--ink);
+    padding: 20px 32px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .masthead-top-rule {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .masthead-top-rule hr {
+    flex: 1;
+    border: none;
+    border-top: 1px solid var(--ink);
+  }
+  .masthead-top-text {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--mid);
+    white-space: nowrap;
+  }
+  .masthead-title {
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: clamp(40px, 7vw, 80px);
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 8px;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+  }
+  .masthead-tagline {
+    font-style: italic;
+    font-size: 13px;
+    color: var(--mid);
+    margin-bottom: 12px;
+  }
+  .masthead-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    font-size: 11px;
+    color: var(--mid);
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 6px 0;
+    margin-top: 8px;
+  }
+  .masthead-info-sep { color: var(--ink); font-weight: 700; }
+
+  /* WEATHER BOX */
+  .top-section {
+    display: grid;
+    grid-template-columns: 1fr 80px;
+    gap: 0;
+    border-bottom: 3px double var(--ink);
+  }
+  .weather-box {
+    border-left: 1px solid var(--ink);
+    padding: 16px 12px;
+    font-size: 11px;
+    text-align: center;
+  }
+  .weather-box-title {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+  }
+  .weather-temp { font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+  .weather-cond { font-style: italic; font-size: 10px; color: var(--mid); margin-bottom: 6px; }
+  .weather-detail { font-size: 9px; color: var(--mid); line-height: 1.6; }
+
+  /* HERO HEADLINE */
+  .headline-section {
+    padding: 24px 32px 20px;
+  }
+  .headline-kicker {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 10px;
+  }
+  .headline-main {
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+  }
+  .headline-deck {
+    font-style: italic;
+    font-size: 16px;
+    color: var(--mid);
+    line-height: 1.6;
+  }
+
+  /* 3-COL INTRO */
+  .intro-columns {
+    padding: 16px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 3px double var(--ink);
+  }
+  .intro-col {
+    padding: 0 20px 0 0;
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--mid);
+    border-right: 1px solid var(--ink);
+    padding-right: 20px;
+    margin-right: 0;
+  }
+  .intro-col:first-child { padding-left: 0; }
+  .intro-col:last-child { border-right: none; padding-left: 20px; padding-right: 0; }
+  .intro-col:nth-child(2) { padding-left: 20px; }
+
+  /* SECTION HEADER */
+  .section-header-np {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 24px 32px 0;
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 6px 0;
+  }
+  .section-header-np h2 {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .section-header-np-line {
+    flex: 1;
+    height: 1px;
+    background: var(--ink);
+    margin-left: 12px;
+  }
+
+  /* TRAIL ARTICLES */
+  .trails-grid {
+    padding: 0 32px;
+  }
+  .trail-article {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 24px 0;
+    border-bottom: 2px double var(--ink);
+  }
+  .trail-article:last-child { border-bottom: none; }
+  .trail-article-left {}
+  .trail-article-right {}
+
+  .article-number {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--light);
+    margin-bottom: 4px;
+  }
+  .article-headline {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+  .article-byline {
+    font-size: 10px;
+    color: var(--mid);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--light);
+    padding-bottom: 8px;
+  }
+  .article-byline span {
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .article-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    margin-bottom: 12px;
+    filter: grayscale(20%) contrast(1.05);
+  }
+  .article-body {
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--mid);
+  }
+  .article-body::first-letter {
+    font-size: 3em;
+    float: left;
+    line-height: 0.75;
+    margin-right: 6px;
+    margin-top: 6px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* CLASSIFIED AD STYLE STATS */
+  .classified-box {
+    border: 2px solid var(--ink);
+    padding: 12px;
+    margin: 12px 0;
+    font-size: 11px;
+    position: relative;
+  }
+  .classified-box-header {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .classified-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 12px;
+  }
+  .classified-item {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .classified-item strong {
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .classified-item em {
+    color: var(--mid);
+    font-style: normal;
+  }
+
+  /* CROSSWORD DECORATION */
+  .crossword-deco {
+    display: grid;
+    grid-template-columns: repeat(6, 14px);
+    grid-template-rows: repeat(4, 14px);
+    gap: 1px;
+    margin: 8px 0;
+  }
+  .cw-cell {
+    width: 14px;
+    height: 14px;
+    border: 0.5px solid var(--light);
+    background: var(--newsprint);
+  }
+  .cw-cell.filled { background: var(--ink); }
+
+  /* REVIEWS */
+  .article-reviews {
+    margin-top: 12px;
+    border-top: 1px solid var(--light);
+    padding-top: 10px;
+  }
+  .article-review-title {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--mid);
+  }
+  .article-review-item {
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 6px;
+    color: var(--mid);
+  }
+  .article-review-item strong {
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  .newspaper-footer {
+    margin: 0 32px;
+    padding-top: 20px;
+    border-top: 3px double var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .footer-left { font-size: 11px; color: var(--mid); }
+  .footer-masthead {
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: 24px;
+    color: var(--ink);
+    text-align: center;
+  }
+  .footer-right { font-size: 11px; color: var(--mid); text-align: right; }
+
+  @media (max-width: 700px) {
+    .trail-article { grid-template-columns: 1fr; }
+    .intro-columns { grid-template-columns: 1fr; }
+    .top-section { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="newspaper">
+
+  <div class="top-bar">
+    <a href="index.html">← All Designs</a>
+    <span class="top-bar-motto">"All the trails fit to hike"</span>
+    <span style="color:rgba(249,245,231,0.5);font-size:10px;">Established 2026</span>
+  </div>
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="masthead-top-rule">
+      <hr>
+      <span class="masthead-top-text">Mesa, Arizona's Premier Outdoor Journal</span>
+      <hr>
+    </div>
+    <div class="masthead-title">The Mesa Trail Gazette</div>
+    <div class="masthead-tagline">"From Peak to Valley — Every Trail, Every Time"</div>
+    <div class="masthead-info">
+      <span>VOL. CXLII ... No. 8</span>
+      <span class="masthead-info-sep">✦</span>
+      <span>Monday, March 30, 2026</span>
+      <span class="masthead-info-sep">✦</span>
+      <span>Mesa, Maricopa County, Arizona</span>
+      <span class="masthead-info-sep">✦</span>
+      <span>Price: Free</span>
+    </div>
+  </header>
+
+  <!-- HERO HEADLINE + WEATHER -->
+  <div class="top-section">
+    <div class="headline-section">
+      <div class="headline-kicker">Special Report · Spring Trail Season</div>
+      <h1 class="headline-main">FIVE TRAILS EVERY<br>MESA HIKER MUST<br>EXPLORE</h1>
+      <p class="headline-deck">From the ancient petroglyphs of the Superstitions to the volcanic wonder of Red Mountain, our correspondents chart the essential routes of Arizona's East Valley.</p>
+    </div>
+    <div class="weather-box">
+      <div class="weather-box-title">Today's Weather</div>
+      <div class="weather-temp">78°</div>
+      <div class="weather-cond">Sunny</div>
+      <div class="weather-detail">
+        H: 82° L: 58°<br>
+        Wind: SW 8 mph<br>
+        Humidity: 18%<br>
+        UV Index: High
+      </div>
+    </div>
+  </div>
+
+  <!-- 3-COL INTRO -->
+  <div class="intro-columns">
+    <div class="intro-col">
+      In a desert landscape that stretches from the Valley of the Sun to the rugged Superstition Mountains, the trails near Mesa, Arizona offer some of the most dramatic hiking terrain in the American Southwest. Seasoned adventurers and casual walkers alike find routes to match their ambition.
+    </div>
+    <div class="intro-col">
+      Our correspondents have spent the spring season traversing these paths, documenting elevation profiles, marking trailheads, and collecting testimony from the hikers who know these routes best. The results are presented herein for your edification.
+    </div>
+    <div class="intro-col">
+      From the 860-foot ascent to Wind Cave at Usery Mountain to the punishing 2,045-foot climb of Siphon Draw, these trails test every hiker differently. We present five routes ranked by difficulty, with full data and independent traveler reviews.
+    </div>
+  </div>
+
+  <!-- TRAILS SECTION -->
+  <div class="section-header-np">
+    <h2>Trail Reports</h2>
+    <div class="section-header-np-line"></div>
+  </div>
+
+  <div class="trails-grid">
+
+    <!-- Trail 1 & 2 -->
+    <div class="trail-article">
+      <div class="trail-article-left">
+        <div class="article-number">Trail No. I</div>
+        <div class="article-headline">Wind Cave Trail Rewards Moderate Hikers with Panoramic Views</div>
+        <div class="article-byline">By Our Outdoor Correspondent · <span>Usery Mountain Regional Park</span></div>
+        <img class="article-img" src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail">
+        <p class="article-body">The wind cave formation, carved by centuries of erosion into the volcanic tuff of Usery Mountain, offers a dramatic payoff for the 1.6-mile ascent. At 860 feet of elevation gain, this moderate route rewards those who persevere with sweeping views of the Salt River Valley below.</p>
+        <div class="classified-box">
+          <div class="classified-box-header">Trail Statistics</div>
+          <div class="classified-grid">
+            <div class="classified-item"><strong>Distance:</strong> <em>3.2 mi roundtrip</em></div>
+            <div class="classified-item"><strong>Duration:</strong> <em>1.5–2 hrs</em></div>
+            <div class="classified-item"><strong>Elevation:</strong> <em>+860 ft gain</em></div>
+            <div class="classified-item"><strong>Rating:</strong> <em>■■■□□ Moderate</em></div>
+          </div>
+        </div>
+        <div class="article-reviews">
+          <div class="article-review-title">Reader Correspondence</div>
+          <div class="article-review-item">★★★★★ <strong>"Stunning cave views at the top!"</strong> — Jake R.</div>
+          <div class="article-review-item">★★★★☆ <strong>"Great morning hike, bring water."</strong> — Sara M.</div>
+          <div class="article-review-item">★★★★★ <strong>"Well-marked and rewarding."</strong> — Chris T.</div>
+        </div>
+      </div>
+
+      <div class="trail-article-right">
+        <div class="article-number">Trail No. II</div>
+        <div class="article-headline">Siphon Draw Challenges Experienced Hikers with 2,045-Foot Ascent</div>
+        <div class="article-byline">By Our Outdoor Correspondent · <span>Lost Dutchman State Park</span></div>
+        <img class="article-img" src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail">
+        <p class="article-body">Named for the geological feature that channels seasonal rainwater from the Superstition Mountains, this strenuous route climbs 2,045 feet over 2.1 miles of increasingly technical terrain. The Flatiron formation at the summit offers unparalleled views of the entire East Valley.</p>
+        <div class="classified-box">
+          <div class="classified-box-header">Trail Statistics</div>
+          <div class="classified-grid">
+            <div class="classified-item"><strong>Distance:</strong> <em>4.2 mi roundtrip</em></div>
+            <div class="classified-item"><strong>Duration:</strong> <em>3–4 hrs</em></div>
+            <div class="classified-item"><strong>Elevation:</strong> <em>+2,045 ft gain</em></div>
+            <div class="classified-item"><strong>Rating:</strong> <em>■■■■■ Strenuous</em></div>
+          </div>
+        </div>
+        <div class="article-reviews">
+          <div class="article-review-title">Reader Correspondence</div>
+          <div class="article-review-item">★★★★★ <strong>"Epic views of the Superstitions!"</strong> — Maria L.</div>
+          <div class="article-review-item">★★★★☆ <strong>"Very challenging but worth it."</strong> — Tom B.</div>
+          <div class="article-review-item">★★★★★ <strong>"Best hike in the East Valley."</strong> — Ava S.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trail 3 & 4 -->
+    <div class="trail-article">
+      <div class="trail-article-left">
+        <div class="article-number">Trail No. III</div>
+        <div class="article-headline">Peralta Trail Offers Iconic Weaver's Needle Vistas</div>
+        <div class="article-byline">By Our Outdoor Correspondent · <span>Superstition Wilderness</span></div>
+        <img class="article-img" src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail">
+        <p class="article-body">The Peralta Trail winds through classic Sonoran Desert terrain — saguaro cacti, palo verde trees, and volcanic boulder fields — before presenting the hiker with a dramatic view of Weaver's Needle, the iconic spire that has defined the Superstitions for centuries of travelers.</p>
+        <div class="classified-box">
+          <div class="classified-box-header">Trail Statistics</div>
+          <div class="classified-grid">
+            <div class="classified-item"><strong>Distance:</strong> <em>4.6 mi roundtrip</em></div>
+            <div class="classified-item"><strong>Duration:</strong> <em>3–3.5 hrs</em></div>
+            <div class="classified-item"><strong>Elevation:</strong> <em>+1,425 ft gain</em></div>
+            <div class="classified-item"><strong>Rating:</strong> <em>■■■■□ Mod–Stren.</em></div>
+          </div>
+        </div>
+        <div class="article-reviews">
+          <div class="article-review-title">Reader Correspondence</div>
+          <div class="article-review-item">★★★★★ <strong>"Weaver's Needle views are unreal."</strong> — Dan K.</div>
+          <div class="article-review-item">★★★★☆ <strong>"Rocky but beautiful terrain."</strong> — Lily W.</div>
+          <div class="article-review-item">★★★★★ <strong>"A must-do in Arizona."</strong> — Noah P.</div>
+        </div>
+      </div>
+
+      <div class="trail-article-right">
+        <div class="article-number">Trail No. IV</div>
+        <div class="article-headline">Hieroglyphic Trail Draws History Enthusiasts to Ancient Rock Art</div>
+        <div class="article-byline">By Our Outdoor Correspondent · <span>Superstition Wilderness</span></div>
+        <img class="article-img" src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail">
+        <p class="article-body">At the end of this accessible trail lies one of the most remarkable cultural artifacts in the East Valley: a collection of Hohokam petroglyphs, carved into dark basalt boulders more than 700 years ago. The route itself is suitable for beginners, making this trail a genuine hidden gem.</p>
+        <div class="classified-box">
+          <div class="classified-box-header">Trail Statistics</div>
+          <div class="classified-grid">
+            <div class="classified-item"><strong>Distance:</strong> <em>3.4 mi roundtrip</em></div>
+            <div class="classified-item"><strong>Duration:</strong> <em>2–2.5 hrs</em></div>
+            <div class="classified-item"><strong>Elevation:</strong> <em>+800 ft gain</em></div>
+            <div class="classified-item"><strong>Rating:</strong> <em>■■□□□ Easy–Mod.</em></div>
+          </div>
+        </div>
+        <div class="article-reviews">
+          <div class="article-review-title">Reader Correspondence</div>
+          <div class="article-review-item">★★★★★ <strong>"Ancient petroglyphs are fascinating."</strong> — Emma R.</div>
+          <div class="article-review-item">★★★★☆ <strong>"Perfect for beginners."</strong> — Liam F.</div>
+          <div class="article-review-item">★★★★★ <strong>"Hidden gem near Mesa."</strong> — Zoe C.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trail 5 - full width -->
+    <div class="trail-article" style="grid-template-columns:280px 1fr;gap:32px;">
+      <div>
+        <img class="article-img" src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail" style="height:220px;">
+        <div class="classified-box" style="margin-top:0;">
+          <div class="classified-box-header">Trail Statistics</div>
+          <div class="classified-grid">
+            <div class="classified-item"><strong>Distance:</strong> <em>3.0 mi roundtrip</em></div>
+            <div class="classified-item"><strong>Duration:</strong> <em>1.5–2 hrs</em></div>
+            <div class="classified-item"><strong>Elevation:</strong> <em>+400 ft gain</em></div>
+            <div class="classified-item"><strong>Rating:</strong> <em>■■□□□ Easy–Mod.</em></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="article-number">Trail No. V</div>
+        <div class="article-headline">Red Mountain's Volcanic Interior Astonishes All Who Enter</div>
+        <div class="article-byline">By Our Outdoor Correspondent · <span>Red Mountain Recreation Area, Tonto National Forest</span></div>
+        <p class="article-body">Perhaps no trail in the East Valley delivers such immediate visual drama as Red Mountain. Within yards of the trailhead, hikers enter a landscape of ochre and crimson — volcanic cinders and basalt columns that form a natural amphitheater inside an ancient cinder cone. Children and seniors alike have reported this as among the most memorable outdoor experiences of their lives.</p>
+        <p class="article-body" style="margin-top:12px;">The 400-foot elevation gain is modest by East Valley standards, but the experiential reward is outsized. Columns of red rock tower overhead as the trail winds into the interior of the mountain, creating a sense of discovery that belies the route's accessible difficulty rating.</p>
+        <div class="article-reviews">
+          <div class="article-review-title">Reader Correspondence</div>
+          <div class="article-review-item">★★★★★ <strong>"The red volcanic formations are wild."</strong> — Ben H.</div>
+          <div class="article-review-item">★★★★☆ <strong>"Kids loved it!"</strong> — Priya N.</div>
+          <div class="article-review-item">★★★★★ <strong>"Short but scenic, great for all levels."</strong> — Sam T.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end trails-grid -->
+
+  <!-- FOOTER -->
+  <div class="newspaper-footer">
+    <div class="footer-left">
+      © 2026 The Mesa Trail Gazette<br>
+      All Rights Reserved
+    </div>
+    <div class="footer-masthead">The Mesa Trail Gazette</div>
+    <div class="footer-right">
+      Vol. CXLII, No. 8<br>
+      Mesa, Arizona
+    </div>
+  </div>
+
+</div><!-- end newspaper -->
+</body>
+</html>

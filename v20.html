@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mesa Trail Guide — Southwestern Art Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== DESIGN TOKENS ===== */
+  :root {
+    --turquoise-deep:  #1A6B7A;
+    --turquoise-light: #40B4C4;
+    --terra-deep:      #CC5533;
+    --terra-light:     #E8724A;
+    --cream:           #F5EDD4;
+    --cream-dark:      #EADfBB;
+    --brown:           #2A1A0A;
+    --brown-mid:       #5C3A1E;
+    --brown-light:     #8B5E34;
+    --gold:            #C8961A;
+    --sand:            #D4B896;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background-color: var(--cream);
+    color: var(--brown);
+    overflow-x: hidden;
+  }
+
+  /* ===== SOUTHWESTERN PATTERN HELPERS ===== */
+
+  /* Zigzag SVG border — reusable via background-image */
+  .zz-border-top {
+    width: 100%;
+    height: 24px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='24'%3E%3Cpolyline points='0,24 20,0 40,24' fill='none' stroke='%231A6B7A' stroke-width='3'/%3E%3C/svg%3E")
+      repeat-x left top;
+  }
+  .zz-border-bottom {
+    width: 100%;
+    height: 24px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='24'%3E%3Cpolyline points='0,0 20,24 40,0' fill='none' stroke='%231A6B7A' stroke-width='3'/%3E%3C/svg%3E")
+      repeat-x left top;
+  }
+  .zz-terra-top {
+    width: 100%;
+    height: 20px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20'%3E%3Cpolyline points='0,20 20,0 40,20' fill='none' stroke='%23CC5533' stroke-width='2.5'/%3E%3C/svg%3E")
+      repeat-x left top;
+  }
+  .zz-terra-bottom {
+    width: 100%;
+    height: 20px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2020/svg' width='40' height='20'%3E%3Cpolyline points='0,0 20,20 40,0' fill='none' stroke='%23CC5533' stroke-width='2.5'/%3E%3C/svg%3E")
+      repeat-x left top;
+  }
+
+  /* Diamond stripe divider */
+  .diamond-divider {
+    width: 100%;
+    height: 28px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpolygon points='14,2 26,14 14,26 2,14' fill='%23CC5533' opacity='0.85'/%3E%3C/svg%3E")
+      repeat-x center center;
+    margin: 0;
+  }
+
+  /* ===== NAVIGATION ===== */
+  .topnav {
+    background: var(--brown);
+    padding: 12px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    border-bottom: 4px solid var(--terra-deep);
+  }
+  .topnav::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6'%3E%3Cpolygon points='6,0 12,6 0,6' fill='%23CC5533'/%3E%3C/svg%3E")
+      repeat-x left top;
+    pointer-events: none;
+  }
+  .topnav a.back-link {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--turquoise-light);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .topnav a.back-link:hover { color: var(--cream); }
+  .topnav a.back-link svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .topnav .site-name-small {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--cream);
+    letter-spacing: 0.04em;
+  }
+  .topnav .nav-links {
+    display: flex;
+    gap: 22px;
+  }
+  .topnav .nav-links a {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--sand);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .topnav .nav-links a:hover { color: var(--turquoise-light); }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: var(--brown);
+  }
+  /* Hero background: layered sunset gradient + geometric pattern overlay */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(160deg, #1A2030 0%, #3D1A0A 40%, #6B2E10 65%, #1A4A55 100%);
+  }
+  /* Southwestern diamond/step pattern overlay */
+  .hero-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.12;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect x='0' y='0' width='60' height='60' fill='none'/%3E%3Cpolygon points='30,5 55,30 30,55 5,30' fill='none' stroke='%23F5EDD4' stroke-width='1.5'/%3E%3Cpolygon points='30,15 45,30 30,45 15,30' fill='none' stroke='%2340B4C4' stroke-width='1'/%3E%3Crect x='27' y='27' width='6' height='6' fill='%23CC5533'/%3E%3C/svg%3E");
+    background-size: 60px 60px;
+  }
+  /* Silhouette mountains */
+  .hero-mountains {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 60px 24px 80px;
+  }
+  .hero-eyebrow {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--turquoise-light);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 2px;
+    background: var(--turquoise-light);
+    opacity: 0.7;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 8vw, 80px);
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    margin-bottom: 8px;
+  }
+  .hero-title span {
+    color: var(--terra-light);
+    font-style: italic;
+  }
+  .hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(16px, 3vw, 22px);
+    font-style: italic;
+    color: var(--sand);
+    margin-bottom: 28px;
+    letter-spacing: 0.02em;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(26,107,122,0.35);
+    border: 1px solid rgba(64,180,196,0.45);
+    color: var(--turquoise-light);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 9px 22px;
+    border-radius: 2px;
+  }
+
+  /* ===== PATTERN BAND (between hero and cards) ===== */
+  .pattern-band {
+    background: var(--turquoise-deep);
+    padding: 14px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .pattern-band-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    width: 100%;
+  }
+  /* SVG inline row of Southwestern step-fret pattern */
+
+  /* ===== INTRO SECTION ===== */
+  .intro-section {
+    background: var(--cream);
+    padding: 56px 24px 40px;
+    text-align: center;
+    position: relative;
+  }
+  .intro-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 18px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='18'%3E%3Cpolyline points='0,18 20,0 40,18' fill='%231A6B7A'/%3E%3C/svg%3E")
+      repeat-x left top;
+  }
+  .intro-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--terra-deep);
+    margin-bottom: 12px;
+  }
+  .intro-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 700;
+    color: var(--brown);
+    margin-bottom: 16px;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .intro-body {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--brown-mid);
+    max-width: 620px;
+    margin: 0 auto 28px;
+  }
+  .intro-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .stat-item {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--turquoise-deep);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-top: 4px;
+  }
+
+  /* ===== SECTION HEADER ===== */
+  .section-header {
+    text-align: center;
+    padding: 40px 24px 12px;
+    background: var(--cream);
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 700;
+    color: var(--brown);
+    position: relative;
+    display: inline-block;
+  }
+  .section-header h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--terra-deep);
+  }
+  .section-header p {
+    margin-top: 20px;
+    font-size: 15px;
+    color: var(--brown-mid);
+    letter-spacing: 0.02em;
+  }
+
+  /* ===== TRAIL CARDS GRID ===== */
+  .trails-section {
+    background: var(--cream);
+    padding: 32px 24px 60px;
+  }
+  .trails-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ===== TRAIL CARD ===== */
+  .trail-card {
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow:
+      0 2px 8px rgba(42,26,10,0.12),
+      0 8px 24px rgba(42,26,10,0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    border-top: 5px solid var(--terra-deep);
+  }
+  .trail-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      0 6px 16px rgba(42,26,10,0.16),
+      0 16px 40px rgba(42,26,10,0.12);
+  }
+  /* Alternating accent colors */
+  .trail-card:nth-child(2) { border-top-color: var(--turquoise-deep); }
+  .trail-card:nth-child(3) { border-top-color: var(--gold); }
+  .trail-card:nth-child(4) { border-top-color: var(--turquoise-deep); }
+  .trail-card:nth-child(5) { border-top-color: var(--terra-light); }
+
+  .card-img-wrap {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+  }
+  .card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .trail-card:hover .card-img-wrap img {
+    transform: scale(1.05);
+  }
+  /* Difficulty badge on image */
+  .difficulty-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 5px 12px;
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(4px);
+  }
+  .diff-easy     { background: rgba(64,180,196,0.85); color: #fff; }
+  .diff-moderate { background: rgba(200,150,26,0.9);  color: #fff; }
+  .diff-strenuous { background: rgba(204,85,51,0.9);  color: #fff; }
+  .diff-mod-str  { background: rgba(140,70,30,0.9);   color: #fff; }
+
+  /* Geometric strip below image */
+  .card-geo-strip {
+    height: 10px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10'%3E%3Cpolygon points='10,0 20,10 0,10' fill='%231A6B7A'/%3E%3C/svg%3E")
+      repeat-x left top;
+  }
+  .trail-card:nth-child(odd) .card-geo-strip {
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10'%3E%3Cpolygon points='10,0 20,10 0,10' fill='%23CC5533'/%3E%3C/svg%3E");
+  }
+
+  .card-body {
+    padding: 20px 22px 18px;
+  }
+  .card-park {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--terra-deep);
+    margin-bottom: 5px;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--brown);
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+
+  /* Stats row */
+  .card-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .card-stat {
+    background: var(--cream);
+    border-radius: 3px;
+    padding: 8px 6px;
+    text-align: center;
+  }
+  .card-stat-icon {
+    font-size: 16px;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+  .card-stat-val {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brown);
+    line-height: 1.15;
+  }
+  .card-stat-key {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-top: 2px;
+  }
+
+  /* Separator */
+  .card-sep {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--sand), var(--sand), transparent);
+    margin: 14px 0;
+    position: relative;
+  }
+  .card-sep::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -5px;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background: var(--terra-deep);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  }
+
+  /* Reviews */
+  .reviews-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-bottom: 10px;
+  }
+  .review {
+    background: var(--cream);
+    border-left: 3px solid var(--turquoise-deep);
+    border-radius: 0 3px 3px 0;
+    padding: 10px 12px;
+    margin-bottom: 9px;
+  }
+  .trail-card:nth-child(even) .review {
+    border-left-color: var(--terra-deep);
+  }
+  .review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  .review-author {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--brown);
+  }
+  .stars {
+    display: flex;
+    gap: 2px;
+  }
+  .stars svg {
+    width: 12px;
+    height: 12px;
+  }
+  .review-text {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--brown-mid);
+    font-style: italic;
+  }
+
+  /* ===== SECTION DIVIDER ===== */
+  .full-divider {
+    background: var(--brown);
+    padding: 0;
+    position: relative;
+  }
+  .full-divider-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ===== TIPS SECTION ===== */
+  .tips-section {
+    background: var(--turquoise-deep);
+    padding: 60px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .tips-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpolygon points='20,2 38,20 20,38 2,20' fill='none' stroke='%23F5EDD4' stroke-width='1.5'/%3E%3Crect x='17' y='17' width='6' height='6' fill='%23F5EDD4'/%3E%3C/svg%3E");
+    background-size: 40px 40px;
+  }
+  .tips-section .zz-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20'%3E%3Cpolygon points='0,20 20,0 40,20' fill='%23CC5533'/%3E%3C/svg%3E")
+      repeat-x left top;
+  }
+  .tips-section .zz-bot {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20'%3E%3Cpolygon points='0,0 20,20 40,0' fill='%23CC5533'/%3E%3C/svg%3E")
+      repeat-x left top;
+  }
+  .tips-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 960px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .tips-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--terra-light);
+    margin-bottom: 10px;
+  }
+  .tips-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 36px;
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    text-align: left;
+  }
+  .tip-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(245,237,212,0.2);
+    border-radius: 4px;
+    padding: 22px 20px;
+  }
+  .tip-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+  .tip-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 7px;
+  }
+  .tip-text {
+    font-size: 13px;
+    line-height: 1.65;
+    color: rgba(245,237,212,0.8);
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    background: var(--brown);
+    color: var(--sand);
+    padding: 44px 24px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 16px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='16'%3E%3Cpolygon points='0,16 20,0 40,16' fill='%231A6B7A'/%3E%3C/svg%3E")
+      repeat-x left top;
+  }
+  .footer-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 36px;
+  }
+  .footer-brand .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--cream);
+    margin-bottom: 10px;
+  }
+  .footer-brand .footer-logo span {
+    color: var(--terra-light);
+    font-style: italic;
+  }
+  .footer-brand p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--sand);
+    opacity: 0.85;
+  }
+  .footer-col h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(200,150,80,0.3);
+  }
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .footer-col ul li a {
+    font-size: 13px;
+    color: var(--sand);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s, color 0.2s;
+  }
+  .footer-col ul li a:hover { opacity: 1; color: var(--turquoise-light); }
+  .footer-bottom {
+    max-width: 960px;
+    margin: 32px auto 0;
+    padding-top: 18px;
+    border-top: 1px solid rgba(200,150,80,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .footer-bottom p {
+    font-size: 12px;
+    color: var(--sand);
+    opacity: 0.6;
+  }
+  .footer-geo {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .footer-geo span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: var(--terra-deep);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  }
+  .footer-geo span:nth-child(2) { background: var(--turquoise-deep); }
+  .footer-geo span:nth-child(3) { background: var(--gold); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+    .footer-brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 600px) {
+    .topnav .nav-links { display: none; }
+    .trails-grid { grid-template-columns: 1fr; }
+    .card-stats { grid-template-columns: repeat(2, 1fr); }
+    .footer-inner { grid-template-columns: 1fr; }
+    .hero-content { padding: 50px 20px 70px; }
+    .intro-stats { gap: 24px; }
+  }
+  @media (max-width: 380px) {
+    .hero-title { font-size: 34px; }
+  }
+
+  /* ===== SCROLL ANIMATIONS ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="topnav">
+  <a href="index.html" class="back-link">
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Gallery
+  </a>
+  <span class="site-name-small">Mesa Trail Guide</span>
+  <div class="nav-links">
+    <a href="#trails">Trails</a>
+    <a href="#tips">Trail Tips</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+
+  <!-- SVG mountain silhouette -->
+  <svg class="hero-mountains" viewBox="0 0 1440 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background range -->
+    <path d="M0,200 L0,140 L120,60 L260,110 L380,40 L500,90 L620,30 L740,85 L860,50 L980,100 L1100,55 L1220,95 L1340,45 L1440,80 L1440,200 Z"
+          fill="rgba(26,26,40,0.6)"/>
+    <!-- Mid range -->
+    <path d="M0,200 L0,160 L90,100 L200,140 L320,80 L440,130 L560,70 L680,120 L800,90 L920,140 L1040,85 L1160,130 L1300,95 L1440,115 L1440,200 Z"
+          fill="rgba(42,26,10,0.7)"/>
+    <!-- Foreground -->
+    <path d="M0,200 L0,175 L80,145 L180,170 L280,130 L380,165 L480,125 L600,158 L720,135 L840,160 L960,130 L1080,165 L1200,140 L1320,170 L1440,150 L1440,200 Z"
+          fill="#2A1A0A"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Mesa, Arizona</div>
+    <h1 class="hero-title">Mesa<br><span>Trail Guide</span></h1>
+    <p class="hero-subtitle">Five iconic desert hikes — charted &amp; curated</p>
+    <div class="hero-badge">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 5v3.5l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      All Seasons · 5 Trails · Desert Southwest
+    </div>
+  </div>
+</section>
+
+<!-- Turquoise pattern band -->
+<div class="pattern-band">
+  <div class="pattern-band-inner">
+    <svg width="100%" height="44" viewBox="0 0 1440 44" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <!-- Repeating step-fret pattern row -->
+      <defs>
+        <pattern id="stepFret" x="0" y="0" width="72" height="44" patternUnits="userSpaceOnUse">
+          <!-- Diamond center -->
+          <polygon points="36,6 50,20 36,34 22,20" fill="none" stroke="#F5EDD4" stroke-width="1.5"/>
+          <rect x="33" y="17" width="6" height="6" fill="#CC5533"/>
+          <!-- Corner step brackets -->
+          <polyline points="0,0 12,0 12,10 0,10" fill="none" stroke="#F5EDD4" stroke-width="1.2" opacity="0.5"/>
+          <polyline points="60,0 72,0 72,10 60,10" fill="none" stroke="#F5EDD4" stroke-width="1.2" opacity="0.5"/>
+          <polyline points="0,34 12,34 12,44 0,44" fill="none" stroke="#F5EDD4" stroke-width="1.2" opacity="0.5"/>
+          <polyline points="60,34 72,34 72,44 60,44" fill="none" stroke="#F5EDD4" stroke-width="1.2" opacity="0.5"/>
+        </pattern>
+      </defs>
+      <rect width="1440" height="44" fill="url(#stepFret)"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ===== INTRO ===== -->
+<section class="intro-section">
+  <p class="intro-kicker">Desert Southwest · Maricopa County</p>
+  <h2 class="intro-heading">Where Ancient Trails Meet Open Sky</h2>
+  <p class="intro-body">
+    The Superstition Wilderness and the parks surrounding Mesa offer some of Arizona's most
+    dramatic hiking — volcanic ridgelines, spring wildflowers, petroglyphs etched by the
+    Hohokam, and distant views of the Valley of the Sun. These five trails span a range
+    of difficulties so every desert wanderer finds their path.
+  </p>
+  <div class="intro-stats">
+    <div class="stat-item">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Curated Trails</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">18.4</div>
+      <div class="stat-label">Total Miles</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">5,530</div>
+      <div class="stat-label">Ft of Climbing</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Wilderness Areas</div>
+    </div>
+  </div>
+</section>
+
+<!-- Terracotta diamond row divider -->
+<div style="background:var(--cream); padding: 4px 0 0;">
+  <div class="diamond-divider"></div>
+</div>
+
+<!-- ===== TRAILS SECTION ===== -->
+<section class="trails-section" id="trails">
+  <div class="section-header">
+    <h2>The Trails</h2>
+    <p>Click any card to learn more — or just lace up and go.</p>
+  </div>
+
+  <div class="trails-grid">
+
+    <!-- ===== CARD 1: Wind Cave ===== -->
+    <article class="trail-card reveal">
+      <div class="card-img-wrap">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail — rocky desert landscape" loading="lazy">
+        <span class="difficulty-badge diff-moderate">Moderate</span>
+      </div>
+      <div class="card-geo-strip"></div>
+      <div class="card-body">
+        <p class="card-park">Usery Mountain Regional Park</p>
+        <h3 class="card-title">Wind Cave Trail</h3>
+        <div class="card-stats">
+          <div class="card-stat">
+            <div class="card-stat-icon">📏</div>
+            <div class="card-stat-val">3.2 mi</div>
+            <div class="card-stat-key">Distance</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">⏱</div>
+            <div class="card-stat-val">1.5–2 hr</div>
+            <div class="card-stat-key">Avg Time</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">⛰</div>
+            <div class="card-stat-val">+860 ft</div>
+            <div class="card-stat-key">Elevation</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">🧭</div>
+            <div class="card-stat-val">Out &amp; Back</div>
+            <div class="card-stat-key">Type</div>
+          </div>
+        </div>
+        <div class="card-sep"></div>
+        <p class="reviews-label">Hiker Reviews</p>
+        <div class="review">
+          <div class="review-header">
+            <span class="review-author">Sandra K.</span>
+            <div class="stars">
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </div>
+          </div>
+          <p class="review-text">"The cave alcove at the top is breathtaking — perfect shade after the climb. Saw a cactus wren nest right at eye level."</p>
+        </div>
+        <div class="review">
+          <div class="review-header">
+            <span class="review-author">Marco T.</span>
+            <div class="stars">
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#d0d0d0"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </div>
+          </div>
+          <p class="review-text">"Rocky scramble near the end keeps it interesting. Great morning hike before the heat kicks in. Bring extra water."</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ===== CARD 2: Siphon Draw ===== -->
+    <article class="trail-card reveal">
+      <div class="card-img-wrap">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail — Flat Iron summit" loading="lazy">
+        <span class="difficulty-badge diff-strenuous">Strenuous</span>
+      </div>
+      <div class="card-geo-strip"></div>
+      <div class="card-body">
+        <p class="card-park">Lost Dutchman State Park</p>
+        <h3 class="card-title">Siphon Draw Trail</h3>
+        <div class="card-stats">
+          <div class="card-stat">
+            <div class="card-stat-icon">📏</div>
+            <div class="card-stat-val">4.2 mi</div>
+            <div class="card-stat-key">Distance</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">⏱</div>
+            <div class="card-stat-val">3–4 hr</div>
+            <div class="card-stat-key">Avg Time</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">⛰</div>
+            <div class="card-stat-val">+2,045 ft</div>
+            <div class="card-stat-key">Elevation</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">🧭</div>
+            <div class="card-stat-val">Out &amp; Back</div>
+            <div class="card-stat-key">Type</div>
+          </div>
+        </div>
+        <div class="card-sep"></div>
+        <p class="reviews-label">Hiker Reviews</p>
+        <div class="review">
+          <div class="review-header">
+            <span class="review-author">Priya M.</span>
+            <div class="stars">
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </div>
+          </div>
+          <p class="review-text">"Class 3 scramble to the Flat Iron summit — hands and feet. Views are absolutely otherworldly. Not for the faint of heart."</p>
+        </div>
+        <div class="review">
+          <div class="review-header">
+            <span class="review-author">Dave R.</span>
+            <div class="stars">
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#d0d0d0"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </div>
+          </div>
+          <p class="review-text">"Start before sunrise to beat the heat and the crowds. The basin in the middle is a beautiful rest stop. Trekking poles highly recommended."</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ===== CARD 3: Peralta ===== -->
+    <article class="trail-card reveal">
+      <div class="card-img-wrap">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail — Weaver's Needle view" loading="lazy">
+        <span class="difficulty-badge diff-mod-str">Mod – Strenuous</span>
+      </div>
+      <div class="card-geo-strip"></div>
+      <div class="card-body">
+        <p class="card-park">Superstition Wilderness</p>
+        <h3 class="card-title">Peralta Trail</h3>
+        <div class="card-stats">
+          <div class="card-stat">
+            <div class="card-stat-icon">📏</div>
+            <div class="card-stat-val">4.6 mi</div>
+            <div class="card-stat-key">Distance</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">⏱</div>
+            <div class="card-stat-val">3–3.5 hr</div>
+            <div class="card-stat-key">Avg Time</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">⛰</div>
+            <div class="card-stat-val">+1,425 ft</div>
+            <div class="card-stat-key">Elevation</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">🧭</div>
+            <div class="card-stat-val">Out &amp; Back</div>
+            <div class="card-stat-key">Type</div>
+          </div>
+        </div>
+        <div class="card-sep"></div>
+        <p class="reviews-label">Hiker Reviews</p>
+        <div class="review">
+          <div class="review-header">
+            <span class="review-author">Alicia V.</span>
+            <div class="stars">
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </div>
+          </div>
+          <p class="review-text">"The view of Weaver's Needle from Fremont Saddle is genuinely one of the most stunning sights in all of Arizona. Worth every step."</p>
+        </div>
+        <div class="review">
+          <div class="review-header">
+            <span class="review-author">Brendan O.</span>
+            <div class="stars">
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#d0d0d0"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </div>
+          </div>
+          <p class="review-text">"Canyon terrain with saguaro and palo verde all around you. It gets busy on weekends — mid-week morning is the sweet spot."</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ===== CARD 4: Hieroglyphic ===== -->
+    <article class="trail-card reveal">
+      <div class="card-img-wrap">
+        <img src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail — petroglyph boulders" loading="lazy">
+        <span class="difficulty-badge diff-easy">Easy – Moderate</span>
+      </div>
+      <div class="card-geo-strip"></div>
+      <div class="card-body">
+        <p class="card-park">Superstition Wilderness</p>
+        <h3 class="card-title">Hieroglyphic Trail</h3>
+        <div class="card-stats">
+          <div class="card-stat">
+            <div class="card-stat-icon">📏</div>
+            <div class="card-stat-val">3.4 mi</div>
+            <div class="card-stat-key">Distance</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">⏱</div>
+            <div class="card-stat-val">2–2.5 hr</div>
+            <div class="card-stat-key">Avg Time</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">⛰</div>
+            <div class="card-stat-val">+800 ft</div>
+            <div class="card-stat-key">Elevation</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">🧭</div>
+            <div class="card-stat-val">Out &amp; Back</div>
+            <div class="card-stat-key">Type</div>
+          </div>
+        </div>
+        <div class="card-sep"></div>
+        <p class="reviews-label">Hiker Reviews</p>
+        <div class="review">
+          <div class="review-header">
+            <span class="review-author">Yuki H.</span>
+            <div class="stars">
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </div>
+          </div>
+          <p class="review-text">"The Hohokam petroglyphs at the end are incredible — spirals, bighorn sheep, geometric shapes. A total sense of living history."</p>
+        </div>
+        <div class="review">
+          <div class="review-header">
+            <span class="review-author">Carlos N.</span>
+            <div class="stars">
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#d0d0d0"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </div>
+          </div>
+          <p class="review-text">"Families and beginners will love this one. The pool near the petroglyphs can have water after rains. Genuinely magical in golden hour."</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- ===== CARD 5: Red Mountain ===== -->
+    <article class="trail-card reveal">
+      <div class="card-img-wrap">
+        <img src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail — volcanic cinder cone" loading="lazy">
+        <span class="difficulty-badge diff-easy">Easy – Moderate</span>
+      </div>
+      <div class="card-geo-strip"></div>
+      <div class="card-body">
+        <p class="card-park">Red Mountain Park</p>
+        <h3 class="card-title">Red Mountain Trail</h3>
+        <div class="card-stats">
+          <div class="card-stat">
+            <div class="card-stat-icon">📏</div>
+            <div class="card-stat-val">3.0 mi</div>
+            <div class="card-stat-key">Distance</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">⏱</div>
+            <div class="card-stat-val">1.5–2 hr</div>
+            <div class="card-stat-key">Avg Time</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">⛰</div>
+            <div class="card-stat-val">+400 ft</div>
+            <div class="card-stat-key">Elevation</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-icon">🧭</div>
+            <div class="card-stat-val">Loop</div>
+            <div class="card-stat-key">Type</div>
+          </div>
+        </div>
+        <div class="card-sep"></div>
+        <p class="reviews-label">Hiker Reviews</p>
+        <div class="review">
+          <div class="review-header">
+            <span class="review-author">Tamara L.</span>
+            <div class="stars">
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </div>
+          </div>
+          <p class="review-text">"Inside the volcanic amphitheater feels like another planet — red cinder walls towering above you with hoodoo-like formations everywhere."</p>
+        </div>
+        <div class="review">
+          <div class="review-header">
+            <span class="review-author">James W.</span>
+            <div class="stars">
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+              <svg viewBox="0 0 12 12" fill="#C8961A"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9,11 6,9.5 3,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            </div>
+          </div>
+          <p class="review-text">"A hidden gem. My kids called it the 'lava cave hike.' Short enough to not be exhausting, but the scenery is totally unique. Worth the early drive."</p>
+        </div>
+      </div>
+    </article>
+
+  </div><!-- /.trails-grid -->
+</section>
+
+<!-- Terracotta wave divider between trails and tips -->
+<div style="background:var(--cream); line-height:0;">
+  <svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" style="display:block; width:100%;">
+    <path d="M0,0 C240,50 480,0 720,0 C960,0 1200,50 1440,0 L1440,50 L0,50 Z" fill="#1A6B7A"/>
+  </svg>
+</div>
+
+<!-- ===== TIPS SECTION ===== -->
+<section class="tips-section" id="tips">
+  <div class="zz-top"></div>
+  <div class="tips-inner">
+    <p class="tips-kicker">Before You Hike</p>
+    <h2 class="tips-heading">Desert Trail Essentials</h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-icon">💧</div>
+        <h3 class="tip-title">Hydrate Generously</h3>
+        <p class="tip-text">Plan for at least 1 liter per hour in summer heat. Arizona sun is unforgiving — electrolytes matter as much as water volume.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🌅</div>
+        <h3 class="tip-title">Start at Dawn</h3>
+        <p class="tip-text">On strenuous trails, aim for the trailhead by 6–7 AM from May through October. Temperatures can exceed 110°F by midday.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🦂</div>
+        <h3 class="tip-title">Watch Your Step</h3>
+        <p class="tip-text">Shake out shoes and check rocky ledges before sitting. Rattlesnakes and scorpions are common but rarely aggressive when left alone.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🗺</div>
+        <h3 class="tip-title">Download Offline Maps</h3>
+        <p class="tip-text">Cell service is unreliable in the Superstition Wilderness. Download AllTrails or Gaia GPS maps before you leave the trailhead.</p>
+      </div>
+    </div>
+  </div>
+  <div class="zz-bot"></div>
+</section>
+
+<!-- Wave back to cream for footer -->
+<div style="background:#2A1A0A; line-height:0;">
+  <svg viewBox="0 0 1440 40" xmlns="http://www.w3.org/2000/svg" style="display:block; width:100%;">
+    <path d="M0,40 C360,0 1080,0 1440,40 L1440,0 L0,0 Z" fill="#1A6B7A"/>
+  </svg>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">Mesa <span>Trail Guide</span></div>
+      <p>Your handcrafted guide to the desert trails of Mesa, Arizona — where red rock, ancient petroglyphs, and infinite sky meet.</p>
+    </div>
+    <div class="footer-col">
+      <h4>The Trails</h4>
+      <ul>
+        <li><a href="#trails">Wind Cave Trail</a></li>
+        <li><a href="#trails">Siphon Draw Trail</a></li>
+        <li><a href="#trails">Peralta Trail</a></li>
+        <li><a href="#trails">Hieroglyphic Trail</a></li>
+        <li><a href="#trails">Red Mountain Trail</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="https://www.maricopa.gov/parks" target="_blank" rel="noopener">Maricopa County Parks</a></li>
+        <li><a href="https://azstateparks.com/lost-dutchman" target="_blank" rel="noopener">Lost Dutchman State Park</a></li>
+        <li><a href="https://www.fs.usda.gov/tonto" target="_blank" rel="noopener">Tonto National Forest</a></li>
+        <li><a href="index.html">← Version Gallery</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Mesa Trail Guide · For educational &amp; design purposes</p>
+    <div class="footer-geo">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ===== SCROLL REVEAL =====
+  (function () {
+    const revealEls = document.querySelectorAll('.reveal');
+    if (!revealEls.length) return;
+
+    const observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    revealEls.forEach(function (el, i) {
+      // Stagger cards slightly
+      el.style.transitionDelay = (i * 80) + 'ms';
+      observer.observe(el);
+    });
+  })();
+
+  // ===== SMOOTH SCROLL for nav anchor links =====
+  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mesa Trails — Data Visualization / Infographic</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #2563EB;
+    --green: #16A34A;
+    --orange: #EA580C;
+    --red: #DC2626;
+    --gray-50: #F8FAFC;
+    --gray-100: #F1F5F9;
+    --gray-200: #E2E8F0;
+    --gray-300: #CBD5E1;
+    --gray-400: #94A3B8;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-900: #0F172A;
+    --font-sans: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-sans);
+    background: #fff;
+    color: var(--gray-900);
+    line-height: 1.5;
+  }
+
+  /* TOP NAV */
+  .topnav {
+    background: var(--gray-900);
+    height: 52px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topnav a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .topnav a:hover { color: #fff; }
+  .topnav-title {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+  .topnav-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    background: var(--blue);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  /* HERO CHART */
+  .hero {
+    background: var(--gray-900);
+    padding: 48px 40px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.03) 39px, rgba(255,255,255,0.03) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.03) 39px, rgba(255,255,255,0.03) 40px);
+  }
+  .hero-header {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 40px;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--blue);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .hero-title {
+    font-size: 40px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .hero-subtitle {
+    font-size: 15px;
+    color: var(--gray-400);
+    font-weight: 300;
+  }
+
+  /* HORIZONTAL BAR CHART */
+  .chart-container {
+    position: relative;
+    z-index: 2;
+  }
+  .chart-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--gray-400);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .bar-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    width: 160px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+  }
+  .bar-fill span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .bar-val {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    width: 50px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* SUMMARY STATS */
+  .summary-stats {
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 24px 40px;
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+  .summary-stat {
+    flex: 1;
+    min-width: 150px;
+    padding: 16px 24px;
+    border-right: 1px solid var(--gray-200);
+    last-child: { border-right: none; }
+  }
+  .summary-stat:last-child { border-right: none; }
+  .ss-num {
+    font-family: var(--font-mono);
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--gray-900);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .ss-label {
+    font-size: 12px;
+    color: var(--gray-600);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+  .ss-sub {
+    font-size: 11px;
+    color: var(--gray-400);
+    font-family: var(--font-mono);
+  }
+
+  /* MAIN CONTENT */
+  .main-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--gray-900);
+  }
+  .section-header h2 {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-900);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .section-header-line { flex: 1; height: 1px; background: var(--gray-200); }
+
+  /* TRAIL CARDS */
+  .trails-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 24px;
+  }
+
+  .trail-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+  .trail-card.visible { opacity: 1; transform: translateX(0); }
+
+  .card-top {
+    display: flex;
+    gap: 0;
+    height: 160px;
+  }
+  .card-img {
+    width: 180px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; }
+
+  .card-header-info {
+    flex: 1;
+    padding: 16px;
+    background: var(--gray-50);
+    border-left: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .card-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--gray-900);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .card-park {
+    font-size: 11px;
+    color: var(--gray-400);
+    font-family: var(--font-mono);
+  }
+  .difficulty-bar {
+    display: flex;
+    gap: 3px;
+    margin-top: 8px;
+  }
+  .diff-seg {
+    height: 6px;
+    flex: 1;
+    border-radius: 1px;
+    background: var(--gray-200);
+  }
+  .diff-seg.on { background: var(--orange); }
+  .diff-seg.on.easy { background: var(--green); }
+  .diff-seg.on.hard { background: var(--red); }
+
+  .diff-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-600);
+    margin-top: 4px;
+  }
+
+  .card-body { padding: 16px; border-top: 1px solid var(--gray-100); }
+
+  /* SVG MOUNTAIN PROFILE */
+  .mountain-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .mountain-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-400);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    align-self: center;
+    white-space: nowrap;
+  }
+  .mountain-svg-wrap {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+  }
+  .mountain-val {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--orange);
+    align-self: center;
+    white-space: nowrap;
+    margin-left: 8px;
+  }
+
+  /* DISTANCE SCALE */
+  .distance-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .dist-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-400);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    width: 72px;
+  }
+  .dist-scale {
+    flex: 1;
+    height: 16px;
+    background: var(--gray-100);
+    border-radius: 2px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .dist-dot-line {
+    position: absolute;
+    left: 0;
+    height: 2px;
+    background: var(--blue);
+    border-radius: 1px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0;
+  }
+  .dist-dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--blue);
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: left 1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .dist-val {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--blue);
+    white-space: nowrap;
+  }
+
+  /* TIME ROW */
+  .time-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .time-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-400);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    width: 72px;
+  }
+  .clock-icon {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--green);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .clock-hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    width: 1.5px;
+    height: 8px;
+    background: var(--green);
+    transform-origin: bottom center;
+    transform: translateX(-50%) rotate(0deg);
+    animation: tickHand 4s linear infinite;
+  }
+  @keyframes tickHand {
+    to { transform: translateX(-50%) rotate(360deg); }
+  }
+  .time-val {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--green);
+  }
+
+  /* REVIEWS */
+  .reviews-divider {
+    height: 1px;
+    background: var(--gray-100);
+    margin: 12px 0;
+  }
+  .reviews-header {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gray-400);
+    margin-bottom: 10px;
+  }
+  .review-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .star-block { display: flex; gap: 1px; flex-shrink: 0; }
+  .star { font-size: 10px; }
+  .review-text {
+    font-size: 12px;
+    color: var(--gray-700);
+    line-height: 1.4;
+  }
+  .review-author {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--gray-400);
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  @media (max-width: 600px) {
+    .trails-grid { grid-template-columns: 1fr; }
+    .card-top { height: auto; flex-direction: column; }
+    .card-img { width: 100%; height: 160px; }
+    .summary-stats { padding: 16px; }
+    .hero { padding: 32px 20px 40px; }
+    .bar-label { width: 100px; font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <a href="index.html">← All Designs</a>
+  <div class="topnav-title">MESA TRAIL DATA — MARICOPA COUNTY, AZ</div>
+  <span class="topnav-tag">v17</span>
+</nav>
+
+<!-- HERO: BAR CHART -->
+<section class="hero" id="heroSection">
+  <div class="hero-header">
+    <div class="hero-eyebrow">// trail_data.visualization</div>
+    <h1 class="hero-title">Mesa Hiking<br>Dashboard</h1>
+    <p class="hero-subtitle">5 trails — distance, elevation, time and difficulty at a glance</p>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">// TRAIL DISTANCE (miles, roundtrip)</div>
+    <div class="bar-chart">
+      <div class="bar-row">
+        <span class="bar-label">Wind Cave</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="background:linear-gradient(90deg,#2563EB,#60A5FA);" data-width="69">
+            <span>Wind Cave Trail</span>
+          </div>
+        </div>
+        <span class="bar-val">3.2 mi</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Siphon Draw</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="background:linear-gradient(90deg,#DC2626,#F87171);" data-width="91">
+            <span>Siphon Draw Trail</span>
+          </div>
+        </div>
+        <span class="bar-val">4.2 mi</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Peralta</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="background:linear-gradient(90deg,#EA580C,#FB923C);" data-width="100">
+            <span>Peralta Trail</span>
+          </div>
+        </div>
+        <span class="bar-val">4.6 mi</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Hieroglyphic</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="background:linear-gradient(90deg,#16A34A,#4ADE80);" data-width="74">
+            <span>Hieroglyphic Trail</span>
+          </div>
+        </div>
+        <span class="bar-val">3.4 mi</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">Red Mountain</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="background:linear-gradient(90deg,#7C3AED,#A78BFA);" data-width="65">
+            <span>Red Mountain Trail</span>
+          </div>
+        </div>
+        <span class="bar-val">3.0 mi</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUMMARY STATS -->
+<div class="summary-stats">
+  <div class="summary-stat">
+    <div class="ss-num">5</div>
+    <div class="ss-label">Total Trails</div>
+    <div class="ss-sub">mesa_az_region</div>
+  </div>
+  <div class="summary-stat">
+    <div class="ss-num">18.4</div>
+    <div class="ss-label">Total Miles</div>
+    <div class="ss-sub">roundtrip_combined</div>
+  </div>
+  <div class="summary-stat">
+    <div class="ss-num">2.5</div>
+    <div class="ss-label">Avg Hours</div>
+    <div class="ss-sub">per_trail_estimate</div>
+  </div>
+  <div class="summary-stat">
+    <div class="ss-num">5,530</div>
+    <div class="ss-label">Total Elevation</div>
+    <div class="ss-sub">combined_feet_gain</div>
+  </div>
+  <div class="summary-stat">
+    <div class="ss-num">4.7</div>
+    <div class="ss-label">Avg Rating</div>
+    <div class="ss-sub">★★★★★ community</div>
+  </div>
+</div>
+
+<!-- TRAILS -->
+<main class="main-content">
+  <div class="section-header">
+    <h2>Trail Profiles</h2>
+    <div class="section-header-line"></div>
+  </div>
+  <div class="trails-grid">
+
+    <!-- Wind Cave -->
+    <article class="trail-card" data-dist-pct="69" data-elev="860">
+      <div class="card-top">
+        <div class="card-img"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave" loading="lazy"></div>
+        <div class="card-header-info">
+          <div>
+            <div class="card-name">Wind Cave Trail</div>
+            <div class="card-park">usery_mountain_regional_park</div>
+          </div>
+          <div>
+            <div class="difficulty-bar">
+              <div class="diff-seg on easy"></div>
+              <div class="diff-seg on easy"></div>
+              <div class="diff-seg on easy"></div>
+              <div class="diff-seg"></div>
+              <div class="diff-seg"></div>
+            </div>
+            <div class="diff-label">MODERATE &nbsp;[3/5]</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="mountain-row">
+          <span class="mountain-label">ELEV</span>
+          <div class="mountain-svg-wrap">
+            <svg width="100%" height="48" viewBox="0 0 200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0,48 L60,48 Q80,48 100,20 Q120,0 130,0 L160,20 Q180,35 200,48 Z" fill="rgba(234,88,12,0.15)" stroke="#EA580C" stroke-width="1.5" fill-opacity="1"/>
+            </svg>
+          </div>
+          <span class="mountain-val">+860 ft</span>
+        </div>
+        <div class="distance-row">
+          <span class="dist-label">DIST</span>
+          <div class="dist-scale">
+            <div class="dist-dot-line" data-pct="69"></div>
+            <div class="dist-dot" data-pct="69"></div>
+          </div>
+          <span class="dist-val">3.2 mi</span>
+        </div>
+        <div class="time-row">
+          <span class="time-label">TIME</span>
+          <div class="clock-icon"><div class="clock-hand"></div></div>
+          <span class="time-val">1.5–2 hrs</span>
+        </div>
+        <div class="reviews-divider"></div>
+        <div class="reviews-header">// reviews</div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★★</span></div>
+          <span class="review-text">"Stunning cave views at the top!"</span>
+          <span class="review-author">Jake R.</span>
+        </div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★☆</span></div>
+          <span class="review-text">"Great morning hike, bring water."</span>
+          <span class="review-author">Sara M.</span>
+        </div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★★</span></div>
+          <span class="review-text">"Trail is well-marked and rewarding."</span>
+          <span class="review-author">Chris T.</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- Siphon Draw -->
+    <article class="trail-card" data-dist-pct="91" data-elev="2045">
+      <div class="card-top">
+        <div class="card-img"><img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw" loading="lazy"></div>
+        <div class="card-header-info">
+          <div>
+            <div class="card-name">Siphon Draw Trail</div>
+            <div class="card-park">lost_dutchman_state_park</div>
+          </div>
+          <div>
+            <div class="difficulty-bar">
+              <div class="diff-seg on hard"></div>
+              <div class="diff-seg on hard"></div>
+              <div class="diff-seg on hard"></div>
+              <div class="diff-seg on hard"></div>
+              <div class="diff-seg on hard"></div>
+            </div>
+            <div class="diff-label">STRENUOUS &nbsp;[5/5]</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="mountain-row">
+          <span class="mountain-label">ELEV</span>
+          <div class="mountain-svg-wrap">
+            <svg width="100%" height="48" viewBox="0 0 200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0,48 L40,48 Q55,48 75,30 Q90,15 105,0 L130,10 Q155,25 180,40 Q190,44 200,48 Z" fill="rgba(220,38,38,0.15)" stroke="#DC2626" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span class="mountain-val" style="color:var(--red)">+2,045 ft</span>
+        </div>
+        <div class="distance-row">
+          <span class="dist-label">DIST</span>
+          <div class="dist-scale">
+            <div class="dist-dot-line" data-pct="91"></div>
+            <div class="dist-dot" data-pct="91"></div>
+          </div>
+          <span class="dist-val">4.2 mi</span>
+        </div>
+        <div class="time-row">
+          <span class="time-label">TIME</span>
+          <div class="clock-icon"><div class="clock-hand"></div></div>
+          <span class="time-val">3–4 hrs</span>
+        </div>
+        <div class="reviews-divider"></div>
+        <div class="reviews-header">// reviews</div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★★</span></div>
+          <span class="review-text">"Epic views of the Superstitions!"</span>
+          <span class="review-author">Maria L.</span>
+        </div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★☆</span></div>
+          <span class="review-text">"Very challenging but worth it."</span>
+          <span class="review-author">Tom B.</span>
+        </div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★★</span></div>
+          <span class="review-text">"Best hike in the East Valley."</span>
+          <span class="review-author">Ava S.</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- Peralta -->
+    <article class="trail-card" data-dist-pct="100" data-elev="1425">
+      <div class="card-top">
+        <div class="card-img"><img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta" loading="lazy"></div>
+        <div class="card-header-info">
+          <div>
+            <div class="card-name">Peralta Trail</div>
+            <div class="card-park">superstition_wilderness</div>
+          </div>
+          <div>
+            <div class="difficulty-bar">
+              <div class="diff-seg on"></div>
+              <div class="diff-seg on"></div>
+              <div class="diff-seg on"></div>
+              <div class="diff-seg on"></div>
+              <div class="diff-seg"></div>
+            </div>
+            <div class="diff-label">MOD-STRENUOUS &nbsp;[4/5]</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="mountain-row">
+          <span class="mountain-label">ELEV</span>
+          <div class="mountain-svg-wrap">
+            <svg width="100%" height="48" viewBox="0 0 200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0,48 L50,48 Q70,48 90,28 Q105,12 115,5 L145,18 Q165,30 185,44 Q192,47 200,48 Z" fill="rgba(234,88,12,0.15)" stroke="#EA580C" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span class="mountain-val">+1,425 ft</span>
+        </div>
+        <div class="distance-row">
+          <span class="dist-label">DIST</span>
+          <div class="dist-scale">
+            <div class="dist-dot-line" data-pct="100"></div>
+            <div class="dist-dot" data-pct="100"></div>
+          </div>
+          <span class="dist-val">4.6 mi</span>
+        </div>
+        <div class="time-row">
+          <span class="time-label">TIME</span>
+          <div class="clock-icon"><div class="clock-hand"></div></div>
+          <span class="time-val">3–3.5 hrs</span>
+        </div>
+        <div class="reviews-divider"></div>
+        <div class="reviews-header">// reviews</div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★★</span></div>
+          <span class="review-text">"Weaver's Needle views are unreal."</span>
+          <span class="review-author">Dan K.</span>
+        </div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★☆</span></div>
+          <span class="review-text">"Rocky but beautiful terrain."</span>
+          <span class="review-author">Lily W.</span>
+        </div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★★</span></div>
+          <span class="review-text">"A must-do in Arizona."</span>
+          <span class="review-author">Noah P.</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- Hieroglyphic -->
+    <article class="trail-card" data-dist-pct="74" data-elev="800">
+      <div class="card-top">
+        <div class="card-img"><img src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic" loading="lazy"></div>
+        <div class="card-header-info">
+          <div>
+            <div class="card-name">Hieroglyphic Trail</div>
+            <div class="card-park">superstition_wilderness</div>
+          </div>
+          <div>
+            <div class="difficulty-bar">
+              <div class="diff-seg on easy"></div>
+              <div class="diff-seg on easy"></div>
+              <div class="diff-seg"></div>
+              <div class="diff-seg"></div>
+              <div class="diff-seg"></div>
+            </div>
+            <div class="diff-label">EASY-MODERATE &nbsp;[2/5]</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="mountain-row">
+          <span class="mountain-label">ELEV</span>
+          <div class="mountain-svg-wrap">
+            <svg width="100%" height="48" viewBox="0 0 200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0,48 L60,48 Q80,48 100,25 Q115,10 125,8 L155,22 Q170,34 200,48 Z" fill="rgba(22,163,74,0.15)" stroke="#16A34A" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span class="mountain-val" style="color:var(--green)">+800 ft</span>
+        </div>
+        <div class="distance-row">
+          <span class="dist-label">DIST</span>
+          <div class="dist-scale">
+            <div class="dist-dot-line" data-pct="74"></div>
+            <div class="dist-dot" data-pct="74"></div>
+          </div>
+          <span class="dist-val">3.4 mi</span>
+        </div>
+        <div class="time-row">
+          <span class="time-label">TIME</span>
+          <div class="clock-icon"><div class="clock-hand"></div></div>
+          <span class="time-val">2–2.5 hrs</span>
+        </div>
+        <div class="reviews-divider"></div>
+        <div class="reviews-header">// reviews</div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★★</span></div>
+          <span class="review-text">"Ancient petroglyphs are fascinating."</span>
+          <span class="review-author">Emma R.</span>
+        </div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★☆</span></div>
+          <span class="review-text">"Perfect for beginners."</span>
+          <span class="review-author">Liam F.</span>
+        </div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★★</span></div>
+          <span class="review-text">"Hidden gem near Mesa."</span>
+          <span class="review-author">Zoe C.</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- Red Mountain -->
+    <article class="trail-card" data-dist-pct="65" data-elev="400">
+      <div class="card-top">
+        <div class="card-img"><img src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain" loading="lazy"></div>
+        <div class="card-header-info">
+          <div>
+            <div class="card-name">Red Mountain Trail</div>
+            <div class="card-park">mesa_arizona</div>
+          </div>
+          <div>
+            <div class="difficulty-bar">
+              <div class="diff-seg on easy"></div>
+              <div class="diff-seg on easy"></div>
+              <div class="diff-seg"></div>
+              <div class="diff-seg"></div>
+              <div class="diff-seg"></div>
+            </div>
+            <div class="diff-label">EASY-MODERATE &nbsp;[2/5]</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="mountain-row">
+          <span class="mountain-label">ELEV</span>
+          <div class="mountain-svg-wrap">
+            <svg width="100%" height="48" viewBox="0 0 200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0,48 L70,48 Q90,48 110,32 Q122,22 128,18 L155,30 Q172,38 200,48 Z" fill="rgba(124,58,237,0.15)" stroke="#7C3AED" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <span class="mountain-val" style="color:#7C3AED">+400 ft</span>
+        </div>
+        <div class="distance-row">
+          <span class="dist-label">DIST</span>
+          <div class="dist-scale">
+            <div class="dist-dot-line" data-pct="65"></div>
+            <div class="dist-dot" data-pct="65"></div>
+          </div>
+          <span class="dist-val">3.0 mi</span>
+        </div>
+        <div class="time-row">
+          <span class="time-label">TIME</span>
+          <div class="clock-icon"><div class="clock-hand"></div></div>
+          <span class="time-val">1.5–2 hrs</span>
+        </div>
+        <div class="reviews-divider"></div>
+        <div class="reviews-header">// reviews</div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★★</span></div>
+          <span class="review-text">"The red volcanic formations are wild."</span>
+          <span class="review-author">Ben H.</span>
+        </div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★☆</span></div>
+          <span class="review-text">"Kids loved it!"</span>
+          <span class="review-author">Priya N.</span>
+        </div>
+        <div class="review-line">
+          <div class="star-block"><span class="star">★★★★★</span></div>
+          <span class="review-text">"Short but scenic, great for all levels."</span>
+          <span class="review-author">Sam T.</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</main>
+
+<script>
+  // Animate hero bars on load
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.querySelectorAll('.bar-fill').forEach((bar, i) => {
+        setTimeout(() => {
+          bar.style.width = bar.dataset.width + '%';
+        }, i * 150);
+      });
+    }, 300);
+  });
+
+  // Animate cards and their inner elements on scroll
+  const cards = document.querySelectorAll('.trail-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, idx) => {
+      if (entry.isIntersecting) {
+        const card = entry.target;
+        const delay = Array.from(cards).indexOf(card) * 100;
+        setTimeout(() => {
+          card.classList.add('visible');
+          // Animate distance lines
+          card.querySelectorAll('.dist-dot-line, .dist-dot').forEach(el => {
+            el.style.left = el.dataset.pct + '%';
+            el.style.width = el.dataset.pct + '%';
+          });
+        }, delay);
+        observer.unobserve(card);
+      }
+    });
+  }, { threshold: 0.1 });
+  cards.forEach(card => observer.observe(card));
+</script>
+</body>
+</html>

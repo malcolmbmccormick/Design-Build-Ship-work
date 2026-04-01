@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parallax Scrolling Showcase — Mesa Trail Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rust: #C0392B;
+    --sage: #27AE60;
+    --sand: #F39C12;
+    --dark: #2C3E50;
+    --cream: #FDF8F0;
+    --mid: rgba(255,255,255,0.75);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Open Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  .main-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 300;
+    padding: 18px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(44,62,80,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .main-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  .main-nav a:hover { opacity: 1; }
+  .nav-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 1 !important;
+  }
+
+  /* SIDE DOTS */
+  .side-dots {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 250;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .side-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    border: 1px solid rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .side-dot.active {
+    background: #fff;
+    transform: scale(1.4);
+  }
+  .side-dot-label {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: #fff;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .side-dot:hover .side-dot-label { opacity: 1; }
+  .dot-wrapper { position: relative; }
+
+  /* HERO SECTION */
+  .hero-parallax {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .parallax-layer {
+    position: absolute;
+    inset: -20%;
+    width: 140%;
+    height: 140%;
+    will-change: transform;
+  }
+  .layer-sky {
+    background: linear-gradient(to bottom, #1a3a5c 0%, #2C3E50 40%, #4a2c1a 80%, #8B4513 100%);
+    z-index: 1;
+  }
+  .layer-mountains {
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .mountain-svg {
+    width: 140%;
+    margin-left: -20%;
+    opacity: 0.6;
+  }
+  .layer-text {
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .hero-text-content {
+    text-align: center;
+    padding: 0 40px;
+  }
+  .hero-eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.3s;
+  }
+  .hero-heading {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(40px, 7vw, 90px);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+  }
+  .hero-heading span { color: var(--rust); }
+  .hero-sub {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    color: rgba(255,255,255,0.7);
+    font-weight: 300;
+    letter-spacing: 1px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.9s;
+  }
+  .hero-scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.5s;
+  }
+  .scroll-hint-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .scroll-hint-arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid rgba(255,255,255,0.4);
+    border-bottom: 2px solid rgba(255,255,255,0.4);
+    transform: rotate(45deg);
+    margin: 0 auto;
+    animation: bounceDown 1.5s ease-in-out infinite;
+  }
+  @keyframes bounceDown {
+    0%, 100% { transform: rotate(45deg) translateY(0); }
+    50% { transform: rotate(45deg) translateY(6px); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* TRAIL SECTIONS */
+  .trail-parallax-section {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+  .trail-parallax-bg {
+    position: absolute;
+    inset: -30%;
+    width: 160%;
+    height: 160%;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.4) saturate(0.9);
+    will-change: transform;
+  }
+  .trail-parallax-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(44,62,80,0.6) 0%,
+      transparent 60%
+    );
+    z-index: 2;
+  }
+  .trail-section-content {
+    position: relative;
+    z-index: 3;
+    max-width: 700px;
+    padding: 80px 60px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .trail-section-content.revealed {
+    animation: revealClip 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes revealClip {
+    from { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); opacity: 0; }
+    to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); opacity: 1; }
+  }
+  .trail-section-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 80px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.08);
+    line-height: 1;
+    position: absolute;
+    top: 60px;
+    right: 40px;
+  }
+  .trail-section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .trail-section-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  }
+  .trail-section-park {
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 32px;
+  }
+
+  /* COUNTER STATS */
+  .counter-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+    padding: 20px;
+    border-left: 3px solid;
+  }
+  .counter-stat {
+    text-align: center;
+  }
+  .counter-val {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .counter-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* REVIEW STRIP */
+  .review-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .review-strip-item {
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(8px);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+  }
+  .rs-stars { color: var(--sand); font-size: 10px; white-space: nowrap; }
+  .rs-text { color: rgba(255,255,255,0.8); font-style: italic; flex: 1; }
+  .rs-author { color: rgba(255,255,255,0.4); font-size: 11px; white-space: nowrap; }
+
+  /* DIFFICULTY BADGE */
+  .diff-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+
+  /* COLORS PER SECTION */
+  .ts-1 .trail-section-label { color: var(--sand); }
+  .ts-1 .counter-stats { border-color: var(--sand); }
+  .ts-1 .diff-badge { background: var(--sand); }
+
+  .ts-2 .trail-section-label { color: var(--rust); }
+  .ts-2 .counter-stats { border-color: var(--rust); }
+  .ts-2 .diff-badge { background: var(--rust); }
+
+  .ts-3 .trail-section-label { color: var(--sage); }
+  .ts-3 .counter-stats { border-color: var(--sage); }
+  .ts-3 .diff-badge { background: var(--sage); }
+
+  .ts-4 .trail-section-label { color: var(--sand); }
+  .ts-4 .counter-stats { border-color: var(--sand); }
+  .ts-4 .diff-badge { background: var(--sand); }
+
+  .ts-5 .trail-section-label { color: var(--rust); }
+  .ts-5 .counter-stats { border-color: var(--rust); }
+  .ts-5 .diff-badge { background: var(--rust); }
+
+  /* FOOTER */
+  .parallax-footer {
+    background: var(--dark);
+    padding: 80px 48px;
+    text-align: center;
+    border-top: 3px solid var(--rust);
+  }
+  .footer-heading {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    color: #fff;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .footer-heading span { color: var(--rust); }
+  .footer-sub {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  @media (max-width: 700px) {
+    .counter-stats { grid-template-columns: 1fr 1fr; }
+    .trail-section-content { padding: 60px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="main-nav">
+  <a href="index.html">← All Designs</a>
+  <span class="nav-logo">Mesa Trails</span>
+  <span style="color:rgba(255,255,255,0.4);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;">Parallax</span>
+</nav>
+
+<!-- SIDE DOTS -->
+<div class="side-dots" id="sideDots">
+  <div class="dot-wrapper"><div class="side-dot active" data-section="0" onclick="scrollToSection(0)"><span class="side-dot-label">Hero</span></div></div>
+  <div class="dot-wrapper"><div class="side-dot" data-section="1" onclick="scrollToSection(1)"><span class="side-dot-label">Wind Cave</span></div></div>
+  <div class="dot-wrapper"><div class="side-dot" data-section="2" onclick="scrollToSection(2)"><span class="side-dot-label">Siphon Draw</span></div></div>
+  <div class="dot-wrapper"><div class="side-dot" data-section="3" onclick="scrollToSection(3)"><span class="side-dot-label">Peralta</span></div></div>
+  <div class="dot-wrapper"><div class="side-dot" data-section="4" onclick="scrollToSection(4)"><span class="side-dot-label">Hieroglyphic</span></div></div>
+  <div class="dot-wrapper"><div class="side-dot" data-section="5" onclick="scrollToSection(5)"><span class="side-dot-label">Red Mountain</span></div></div>
+</div>
+
+<!-- HERO -->
+<section class="hero-parallax" id="section0" data-section="0">
+  <div class="parallax-layer layer-sky" id="layerSky"></div>
+  <div class="parallax-layer layer-mountains" id="layerMountains">
+    <!-- Mountain silhouette SVG -->
+    <svg class="mountain-svg" viewBox="0 0 1400 400" fill="none" preserveAspectRatio="none">
+      <polygon points="0,400 200,120 350,280 500,80 650,220 800,60 950,200 1100,100 1250,250 1400,80 1400,400" fill="#1a2a3a" opacity="0.8"/>
+      <polygon points="0,400 150,180 300,320 450,140 600,260 750,100 900,240 1050,160 1200,290 1400,150 1400,400" fill="#243040" opacity="0.7"/>
+      <polygon points="0,400 100,240 250,350 400,200 550,300 700,160 850,280 1000,200 1150,320 1300,200 1400,260 1400,400" fill="#2C3E50" opacity="0.9"/>
+    </svg>
+  </div>
+  <div class="parallax-layer layer-text" id="layerText">
+    <div class="hero-text-content">
+      <p class="hero-eyebrow">Mesa, Arizona · Trail Guide · 2026</p>
+      <h1 class="hero-heading">DISCOVER<br><span>MESA'S</span><br>BEST HIKES</h1>
+      <p class="hero-sub">Five routes through the Sonoran Desert's most dramatic terrain</p>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span class="scroll-hint-text">Scroll to Explore</span>
+    <div class="scroll-hint-arrow"></div>
+  </div>
+</section>
+
+<!-- TRAIL 1 -->
+<section class="trail-parallax-section ts-1" id="section1" data-section="1">
+  <div class="trail-parallax-bg" id="bg1" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg');"></div>
+  <div class="trail-parallax-overlay"></div>
+  <div class="trail-section-content" id="content1">
+    <div class="trail-section-num">01</div>
+    <span class="trail-section-label">Trail One · Moderate</span>
+    <h2 class="trail-section-name">Wind Cave Trail</h2>
+    <p class="trail-section-park">Usery Mountain Regional Park</p>
+    <span class="diff-badge">Moderate</span>
+    <div class="counter-stats">
+      <div class="counter-stat"><span class="counter-val" data-target="3.2" data-decimals="1">0</span><span class="counter-label">Miles</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="1.75" data-decimals="1" data-suffix="hrs">0</span><span class="counter-label">Duration</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="860" data-prefix="+">0</span><span class="counter-label">Elev. ft</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="4.8" data-decimals="1">0</span><span class="counter-label">Avg Rating</span></div>
+    </div>
+    <div class="review-strip">
+      <div class="review-strip-item"><span class="rs-stars">★★★★★</span><span class="rs-text">"Stunning cave views at the top!"</span><span class="rs-author">Jake R.</span></div>
+      <div class="review-strip-item"><span class="rs-stars">★★★★☆</span><span class="rs-text">"Great morning hike, bring water."</span><span class="rs-author">Sara M.</span></div>
+      <div class="review-strip-item"><span class="rs-stars">★★★★★</span><span class="rs-text">"Trail is well-marked and rewarding."</span><span class="rs-author">Chris T.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAIL 2 -->
+<section class="trail-parallax-section ts-2" id="section2" data-section="2" style="justify-content:flex-end;">
+  <div class="trail-parallax-bg" id="bg2" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg');"></div>
+  <div class="trail-parallax-overlay" style="background:linear-gradient(225deg,rgba(44,62,80,0.6) 0%,transparent 60%);"></div>
+  <div class="trail-section-content" id="content2">
+    <div class="trail-section-num">02</div>
+    <span class="trail-section-label">Trail Two · Strenuous</span>
+    <h2 class="trail-section-name">Siphon Draw Trail</h2>
+    <p class="trail-section-park">Lost Dutchman State Park</p>
+    <span class="diff-badge">Strenuous</span>
+    <div class="counter-stats">
+      <div class="counter-stat"><span class="counter-val" data-target="4.2" data-decimals="1">0</span><span class="counter-label">Miles</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="3.5" data-decimals="1" data-suffix="hrs">0</span><span class="counter-label">Duration</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="2045" data-prefix="+">0</span><span class="counter-label">Elev. ft</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="4.7" data-decimals="1">0</span><span class="counter-label">Avg Rating</span></div>
+    </div>
+    <div class="review-strip">
+      <div class="review-strip-item"><span class="rs-stars">★★★★★</span><span class="rs-text">"Epic views of the Superstitions!"</span><span class="rs-author">Maria L.</span></div>
+      <div class="review-strip-item"><span class="rs-stars">★★★★☆</span><span class="rs-text">"Very challenging but worth it."</span><span class="rs-author">Tom B.</span></div>
+      <div class="review-strip-item"><span class="rs-stars">★★★★★</span><span class="rs-text">"Best hike in the East Valley."</span><span class="rs-author">Ava S.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAIL 3 -->
+<section class="trail-parallax-section ts-3" id="section3" data-section="3">
+  <div class="trail-parallax-bg" id="bg3" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg');"></div>
+  <div class="trail-parallax-overlay"></div>
+  <div class="trail-section-content" id="content3">
+    <div class="trail-section-num">03</div>
+    <span class="trail-section-label">Trail Three · Mod–Strenuous</span>
+    <h2 class="trail-section-name">Peralta Trail</h2>
+    <p class="trail-section-park">Superstition Wilderness</p>
+    <span class="diff-badge">Mod–Strenuous</span>
+    <div class="counter-stats">
+      <div class="counter-stat"><span class="counter-val" data-target="4.6" data-decimals="1">0</span><span class="counter-label">Miles</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="3.25" data-decimals="1" data-suffix="hrs">0</span><span class="counter-label">Duration</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="1425" data-prefix="+">0</span><span class="counter-label">Elev. ft</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="4.8" data-decimals="1">0</span><span class="counter-label">Avg Rating</span></div>
+    </div>
+    <div class="review-strip">
+      <div class="review-strip-item"><span class="rs-stars">★★★★★</span><span class="rs-text">"Weaver's Needle views are unreal."</span><span class="rs-author">Dan K.</span></div>
+      <div class="review-strip-item"><span class="rs-stars">★★★★☆</span><span class="rs-text">"Rocky but beautiful terrain."</span><span class="rs-author">Lily W.</span></div>
+      <div class="review-strip-item"><span class="rs-stars">★★★★★</span><span class="rs-text">"A must-do in Arizona."</span><span class="rs-author">Noah P.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAIL 4 -->
+<section class="trail-parallax-section ts-4" id="section4" data-section="4" style="justify-content:flex-end;">
+  <div class="trail-parallax-bg" id="bg4" style="background-image: url('https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg');"></div>
+  <div class="trail-parallax-overlay" style="background:linear-gradient(225deg,rgba(44,62,80,0.6) 0%,transparent 60%);"></div>
+  <div class="trail-section-content" id="content4">
+    <div class="trail-section-num">04</div>
+    <span class="trail-section-label">Trail Four · Easy–Moderate</span>
+    <h2 class="trail-section-name">Hieroglyphic Trail</h2>
+    <p class="trail-section-park">Superstition Wilderness</p>
+    <span class="diff-badge">Easy–Moderate</span>
+    <div class="counter-stats">
+      <div class="counter-stat"><span class="counter-val" data-target="3.4" data-decimals="1">0</span><span class="counter-label">Miles</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="2.25" data-decimals="1" data-suffix="hrs">0</span><span class="counter-label">Duration</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="800" data-prefix="+">0</span><span class="counter-label">Elev. ft</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="4.7" data-decimals="1">0</span><span class="counter-label">Avg Rating</span></div>
+    </div>
+    <div class="review-strip">
+      <div class="review-strip-item"><span class="rs-stars">★★★★★</span><span class="rs-text">"Ancient petroglyphs are fascinating."</span><span class="rs-author">Emma R.</span></div>
+      <div class="review-strip-item"><span class="rs-stars">★★★★☆</span><span class="rs-text">"Perfect for beginners."</span><span class="rs-author">Liam F.</span></div>
+      <div class="review-strip-item"><span class="rs-stars">★★★★★</span><span class="rs-text">"Hidden gem near Mesa."</span><span class="rs-author">Zoe C.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAIL 5 -->
+<section class="trail-parallax-section ts-5" id="section5" data-section="5">
+  <div class="trail-parallax-bg" id="bg5" style="background-image: url('https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg');"></div>
+  <div class="trail-parallax-overlay"></div>
+  <div class="trail-section-content" id="content5">
+    <div class="trail-section-num">05</div>
+    <span class="trail-section-label">Trail Five · Easy–Moderate</span>
+    <h2 class="trail-section-name">Red Mountain Trail</h2>
+    <p class="trail-section-park">Red Mountain Recreation Area</p>
+    <span class="diff-badge">Easy–Moderate</span>
+    <div class="counter-stats">
+      <div class="counter-stat"><span class="counter-val" data-target="3.0" data-decimals="1">0</span><span class="counter-label">Miles</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="1.75" data-decimals="1" data-suffix="hrs">0</span><span class="counter-label">Duration</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="400" data-prefix="+">0</span><span class="counter-label">Elev. ft</span></div>
+      <div class="counter-stat"><span class="counter-val" data-target="4.7" data-decimals="1">0</span><span class="counter-label">Avg Rating</span></div>
+    </div>
+    <div class="review-strip">
+      <div class="review-strip-item"><span class="rs-stars">★★★★★</span><span class="rs-text">"The red volcanic formations are wild."</span><span class="rs-author">Ben H.</span></div>
+      <div class="review-strip-item"><span class="rs-stars">★★★★☆</span><span class="rs-text">"Kids loved it!"</span><span class="rs-author">Priya N.</span></div>
+      <div class="review-strip-item"><span class="rs-stars">★★★★★</span><span class="rs-text">"Short but scenic, great for all levels."</span><span class="rs-author">Sam T.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="parallax-footer">
+  <h2 class="footer-heading">Mesa <span>Trails</span></h2>
+  <p class="footer-sub">Arizona · Five Routes · Spring 2026</p>
+</footer>
+
+<script>
+  // =================== PARALLAX ===================
+  const layerSky = document.getElementById('layerSky');
+  const layerMountains = document.getElementById('layerMountains');
+  const layerText = document.getElementById('layerText');
+  const bgs = [1,2,3,4,5].map(i => document.getElementById('bg' + i));
+  const sections = [0,1,2,3,4,5].map(i => document.getElementById('section' + i));
+  const dots = document.querySelectorAll('.side-dot');
+
+  function updateParallax() {
+    const scrollY = window.scrollY;
+
+    // Hero parallax layers
+    layerSky.style.transform = `translateY(${scrollY * 0.1}px)`;
+    layerMountains.style.transform = `translateY(${scrollY * 0.25}px)`;
+    layerText.style.transform = `translateY(${scrollY * 0.5}px)`;
+
+    // Trail bg parallax at 50% scroll speed
+    bgs.forEach((bg, i) => {
+      const section = sections[i + 1];
+      const rect = section.getBoundingClientRect();
+      const offset = (rect.top / window.innerHeight) * 0.5;
+      bg.style.transform = `translateY(${offset * 100}%)`;
+    });
+
+    // Update active dot
+    let activeSection = 0;
+    sections.forEach((section, i) => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+        activeSection = i;
+      }
+    });
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === activeSection);
+    });
+  }
+
+  window.addEventListener('scroll', updateParallax, { passive: true });
+  updateParallax();
+
+  // =================== SCROLL TO SECTION ===================
+  function scrollToSection(idx) {
+    sections[idx].scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // =================== COUNTER ANIMATION ===================
+  const counterEls = document.querySelectorAll('.counter-val');
+  const countersAnimated = new Set();
+
+  function animateCounter(el) {
+    const target = parseFloat(el.dataset.target);
+    const decimals = parseInt(el.dataset.decimals || 0);
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix ? ' ' + el.dataset.suffix : '';
+    const duration = 1200;
+    const start = performance.now();
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const val = eased * target;
+      el.textContent = prefix + val.toFixed(decimals) + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !countersAnimated.has(entry.target)) {
+        countersAnimated.add(entry.target);
+        animateCounter(entry.target);
+
+        // Also trigger reveal animation on parent content
+        const section = entry.target.closest('.trail-parallax-section');
+        if (section) {
+          const content = section.querySelector('.trail-section-content');
+          if (content && !content.classList.contains('revealed')) {
+            content.classList.add('revealed');
+          }
+        }
+      }
+    });
+  }, { threshold: 0.3 });
+
+  counterEls.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

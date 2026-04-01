@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japanese Zen Minimalism — Mesa Trail Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Noto+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --white: #FFFFFF;
+    --near-black: #1A1A1A;
+    --red: #C0392B;
+    --gray: #F0F0F0;
+    --mid-gray: #888;
+    --light-red: rgba(192,57,43,0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--near-black);
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  .zen-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 24px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    mix-blend-mode: multiply;
+  }
+  .zen-nav a {
+    color: var(--near-black);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 2px;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight: 300;
+    transition: color 0.3s;
+  }
+  .zen-nav a:hover { color: var(--red); }
+
+  /* SEAL */
+  .zen-seal {
+    width: 44px;
+    height: 44px;
+    background: var(--red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 14px;
+    color: var(--white);
+    letter-spacing: 1px;
+    box-shadow: 0 2px 8px rgba(192,57,43,0.3);
+  }
+
+  /* HERO */
+  .zen-hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 48px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero-japanese {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(80px, 15vw, 180px);
+    font-weight: 700;
+    color: var(--near-black);
+    line-height: 1;
+    display: block;
+    opacity: 0;
+    transform: translateX(60px);
+    animation: brushIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+    letter-spacing: -4px;
+  }
+  @keyframes brushIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .hero-red-line {
+    width: 1px;
+    height: 0;
+    background: var(--red);
+    margin: 32px auto;
+    animation: lineGrow 0.8s ease forwards 1.6s;
+  }
+  @keyframes lineGrow {
+    to { height: 60px; }
+  }
+  .hero-english {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 14px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--mid-gray);
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeInSlow 1s ease forwards 2.2s;
+  }
+  @keyframes fadeInSlow {
+    to { opacity: 1; }
+  }
+  .hero-tagline {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    color: var(--mid-gray);
+    margin-top: 16px;
+    letter-spacing: 3px;
+    opacity: 0;
+    animation: fadeInSlow 1s ease forwards 2.6s;
+  }
+
+  /* RED DIVIDER */
+  .red-rule {
+    width: 100%;
+    height: 1px;
+    background: var(--red);
+    margin: 0;
+  }
+
+  /* TRAIL SECTIONS */
+  .trail-zen {
+    padding: 120px 0;
+    position: relative;
+  }
+  .trail-zen::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 1px;
+    background: var(--red);
+    margin: 0 auto;
+    opacity: 0.3;
+  }
+  .trail-zen:last-child::after { display: none; }
+
+  .trail-zen-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+  .trail-zen-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 32px;
+    margin-bottom: 60px;
+  }
+  .trail-number-jp {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12px;
+    color: var(--red);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .trail-name-zen {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    color: var(--near-black);
+    line-height: 1.15;
+    letter-spacing: -1px;
+  }
+  .trail-kanji {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 40px;
+    color: var(--gray);
+    font-weight: 700;
+    text-align: right;
+    line-height: 1;
+  }
+  .trail-photo-zen {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+    margin-bottom: 60px;
+    display: block;
+  }
+
+  /* HAIKU STATS */
+  .haiku-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    margin-bottom: 60px;
+    border-top: 1px solid var(--gray);
+  }
+  .haiku-stat {
+    padding: 32px 24px;
+    border-right: 1px solid var(--gray);
+    border-bottom: 1px solid var(--gray);
+  }
+  .haiku-stat:last-child { border-right: none; }
+  .haiku-stat label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--mid-gray);
+    margin-bottom: 8px;
+  }
+  .haiku-stat span {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--near-black);
+  }
+  .haiku-stat-diff {
+    padding: 32px 24px;
+    border-bottom: 1px solid var(--gray);
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .diff-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--mid-gray);
+    min-width: 80px;
+  }
+  .diff-bar {
+    flex: 1;
+    height: 2px;
+    background: var(--gray);
+    position: relative;
+  }
+  .diff-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: var(--red);
+  }
+  .diff-value {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 14px;
+    color: var(--near-black);
+    min-width: 100px;
+    text-align: right;
+  }
+
+  /* REVIEWS ZEN */
+  .reviews-zen {
+    margin-bottom: 0;
+  }
+  .review-zen-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--mid-gray);
+    margin-bottom: 32px;
+    display: block;
+  }
+  .review-zen-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--gray);
+  }
+  .review-zen-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .review-zen-stars {
+    color: var(--red);
+    font-size: 11px;
+    padding-top: 2px;
+    letter-spacing: 2px;
+  }
+  .review-zen-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--near-black);
+    font-weight: 400;
+    font-style: italic;
+  }
+  .review-zen-author {
+    font-size: 11px;
+    color: var(--mid-gray);
+    letter-spacing: 2px;
+    text-align: right;
+    white-space: nowrap;
+    padding-top: 2px;
+  }
+
+  /* FOOTER */
+  .zen-footer {
+    padding: 80px 48px;
+    text-align: center;
+    border-top: 1px solid var(--red);
+  }
+  .zen-footer-seal {
+    width: 60px;
+    height: 60px;
+    background: var(--red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px;
+    color: var(--white);
+    margin: 0 auto 24px;
+  }
+  .zen-footer-text {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--mid-gray);
+  }
+
+  @media (max-width: 600px) {
+    .haiku-stats { grid-template-columns: 1fr; }
+    .haiku-stat { border-right: none; }
+    .trail-zen-header { grid-template-columns: 1fr; }
+    .trail-kanji { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="zen-nav">
+  <a href="index.html">← All Designs</a>
+  <div class="zen-seal">山</div>
+</nav>
+
+<!-- HERO -->
+<section class="zen-hero">
+  <span class="hero-japanese">山道</span>
+  <div class="hero-red-line"></div>
+  <p class="hero-english">Mesa, Arizona Trail Guide</p>
+  <p class="hero-tagline">五つの道 · Five Paths · One Desert</p>
+</section>
+
+<div class="red-rule"></div>
+
+<!-- TRAIL 1 -->
+<section class="trail-zen">
+  <div class="trail-zen-inner">
+    <div class="trail-zen-header">
+      <div>
+        <span class="trail-number-jp">Trail 一 · One</span>
+        <h2 class="trail-name-zen">Wind Cave Trail</h2>
+      </div>
+      <div class="trail-kanji">洞</div>
+    </div>
+    <img class="trail-photo-zen" src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail">
+    <div class="haiku-stats">
+      <div class="haiku-stat"><label>Distance</label><span>3.2 mi</span></div>
+      <div class="haiku-stat"><label>Duration</label><span>1.5–2 hrs</span></div>
+      <div class="haiku-stat"><label>Elevation</label><span>+860 ft</span></div>
+      <div class="haiku-stat-diff">
+        <span class="diff-label">Difficulty</span>
+        <div class="diff-bar"><div class="diff-fill" style="width:50%"></div></div>
+        <span class="diff-value">Moderate</span>
+      </div>
+    </div>
+    <div class="reviews-zen">
+      <span class="review-zen-label">Hiker Reflections</span>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★★</span>
+        <p class="review-zen-text">"Stunning cave views at the top!"</p>
+        <span class="review-zen-author">Jake R.</span>
+      </div>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★☆</span>
+        <p class="review-zen-text">"Great morning hike, bring water."</p>
+        <span class="review-zen-author">Sara M.</span>
+      </div>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★★</span>
+        <p class="review-zen-text">"Trail is well-marked and rewarding."</p>
+        <span class="review-zen-author">Chris T.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAIL 2 -->
+<section class="trail-zen">
+  <div class="trail-zen-inner">
+    <div class="trail-zen-header">
+      <div>
+        <span class="trail-number-jp">Trail 二 · Two</span>
+        <h2 class="trail-name-zen">Siphon Draw Trail</h2>
+      </div>
+      <div class="trail-kanji">峰</div>
+    </div>
+    <img class="trail-photo-zen" src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail">
+    <div class="haiku-stats">
+      <div class="haiku-stat"><label>Distance</label><span>4.2 mi</span></div>
+      <div class="haiku-stat"><label>Duration</label><span>3–4 hrs</span></div>
+      <div class="haiku-stat"><label>Elevation</label><span>+2,045 ft</span></div>
+      <div class="haiku-stat-diff">
+        <span class="diff-label">Difficulty</span>
+        <div class="diff-bar"><div class="diff-fill" style="width:95%"></div></div>
+        <span class="diff-value">Strenuous</span>
+      </div>
+    </div>
+    <div class="reviews-zen">
+      <span class="review-zen-label">Hiker Reflections</span>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★★</span>
+        <p class="review-zen-text">"Epic views of the Superstitions!"</p>
+        <span class="review-zen-author">Maria L.</span>
+      </div>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★☆</span>
+        <p class="review-zen-text">"Very challenging but worth it."</p>
+        <span class="review-zen-author">Tom B.</span>
+      </div>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★★</span>
+        <p class="review-zen-text">"Best hike in the East Valley."</p>
+        <span class="review-zen-author">Ava S.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAIL 3 -->
+<section class="trail-zen">
+  <div class="trail-zen-inner">
+    <div class="trail-zen-header">
+      <div>
+        <span class="trail-number-jp">Trail 三 · Three</span>
+        <h2 class="trail-name-zen">Peralta Trail</h2>
+      </div>
+      <div class="trail-kanji">岩</div>
+    </div>
+    <img class="trail-photo-zen" src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail">
+    <div class="haiku-stats">
+      <div class="haiku-stat"><label>Distance</label><span>4.6 mi</span></div>
+      <div class="haiku-stat"><label>Duration</label><span>3–3.5 hrs</span></div>
+      <div class="haiku-stat"><label>Elevation</label><span>+1,425 ft</span></div>
+      <div class="haiku-stat-diff">
+        <span class="diff-label">Difficulty</span>
+        <div class="diff-bar"><div class="diff-fill" style="width:75%"></div></div>
+        <span class="diff-value">Mod–Strenuous</span>
+      </div>
+    </div>
+    <div class="reviews-zen">
+      <span class="review-zen-label">Hiker Reflections</span>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★★</span>
+        <p class="review-zen-text">"Weaver's Needle views are unreal."</p>
+        <span class="review-zen-author">Dan K.</span>
+      </div>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★☆</span>
+        <p class="review-zen-text">"Rocky but beautiful terrain."</p>
+        <span class="review-zen-author">Lily W.</span>
+      </div>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★★</span>
+        <p class="review-zen-text">"A must-do in Arizona."</p>
+        <span class="review-zen-author">Noah P.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAIL 4 -->
+<section class="trail-zen">
+  <div class="trail-zen-inner">
+    <div class="trail-zen-header">
+      <div>
+        <span class="trail-number-jp">Trail 四 · Four</span>
+        <h2 class="trail-name-zen">Hieroglyphic Trail</h2>
+      </div>
+      <div class="trail-kanji">古</div>
+    </div>
+    <img class="trail-photo-zen" src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail">
+    <div class="haiku-stats">
+      <div class="haiku-stat"><label>Distance</label><span>3.4 mi</span></div>
+      <div class="haiku-stat"><label>Duration</label><span>2–2.5 hrs</span></div>
+      <div class="haiku-stat"><label>Elevation</label><span>+800 ft</span></div>
+      <div class="haiku-stat-diff">
+        <span class="diff-label">Difficulty</span>
+        <div class="diff-bar"><div class="diff-fill" style="width:25%"></div></div>
+        <span class="diff-value">Easy–Moderate</span>
+      </div>
+    </div>
+    <div class="reviews-zen">
+      <span class="review-zen-label">Hiker Reflections</span>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★★</span>
+        <p class="review-zen-text">"Ancient petroglyphs are fascinating."</p>
+        <span class="review-zen-author">Emma R.</span>
+      </div>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★☆</span>
+        <p class="review-zen-text">"Perfect for beginners."</p>
+        <span class="review-zen-author">Liam F.</span>
+      </div>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★★</span>
+        <p class="review-zen-text">"Hidden gem near Mesa."</p>
+        <span class="review-zen-author">Zoe C.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAIL 5 -->
+<section class="trail-zen">
+  <div class="trail-zen-inner">
+    <div class="trail-zen-header">
+      <div>
+        <span class="trail-number-jp">Trail 五 · Five</span>
+        <h2 class="trail-name-zen">Red Mountain Trail</h2>
+      </div>
+      <div class="trail-kanji">赤</div>
+    </div>
+    <img class="trail-photo-zen" src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail">
+    <div class="haiku-stats">
+      <div class="haiku-stat"><label>Distance</label><span>3.0 mi</span></div>
+      <div class="haiku-stat"><label>Duration</label><span>1.5–2 hrs</span></div>
+      <div class="haiku-stat"><label>Elevation</label><span>+400 ft</span></div>
+      <div class="haiku-stat-diff">
+        <span class="diff-label">Difficulty</span>
+        <div class="diff-bar"><div class="diff-fill" style="width:20%"></div></div>
+        <span class="diff-value">Easy–Moderate</span>
+      </div>
+    </div>
+    <div class="reviews-zen">
+      <span class="review-zen-label">Hiker Reflections</span>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★★</span>
+        <p class="review-zen-text">"The red volcanic formations are wild."</p>
+        <span class="review-zen-author">Ben H.</span>
+      </div>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★☆</span>
+        <p class="review-zen-text">"Kids loved it!"</p>
+        <span class="review-zen-author">Priya N.</span>
+      </div>
+      <div class="review-zen-item">
+        <span class="review-zen-stars">★★★★★</span>
+        <p class="review-zen-text">"Short but scenic, great for all levels."</p>
+        <span class="review-zen-author">Sam T.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="zen-footer">
+  <div class="zen-footer-seal">山</div>
+  <p class="zen-footer-text">Mesa, Arizona &nbsp;·&nbsp; 五つの道 &nbsp;·&nbsp; Spring 2026</p>
+</footer>
+
+</body>
+</html>

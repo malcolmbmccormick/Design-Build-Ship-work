@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mesa Trail Co. — Outdoor Gear Catalog</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #2D5016;
+    --green-mid: #3D6B20;
+    --green-light: #4A7C25;
+    --orange: #FF6B00;
+    --orange-dark: #E05E00;
+    --white: #FFFFFF;
+    --light-gray: #F5F5F5;
+    --mid-gray: #E0E0E0;
+    --dark-gray: #333333;
+    --text-secondary: #666666;
+  }
+
+  body {
+    background: var(--light-gray);
+    font-family: 'Roboto', sans-serif;
+    color: var(--dark-gray);
+    overflow-x: hidden;
+  }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    background: var(--green);
+    color: rgba(255,255,255,0.8);
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-align: center;
+    padding: 8px;
+    text-transform: uppercase;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--white);
+    border-bottom: 3px solid var(--green);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+  .nav-logo {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+  .nav-logo span { color: var(--orange); }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--dark-gray);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--green); }
+  .nav-cta {
+    background: var(--orange);
+    color: var(--white) !important;
+    padding: 8px 20px;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--orange-dark) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    height: 78vh;
+    min-height: 520px;
+    overflow: hidden;
+  }
+
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg');
+    background-size: cover;
+    background-position: center;
+    animation: hero-zoom-out 8s ease forwards;
+    transform-origin: center;
+  }
+  .hero-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(45,80,22,0.82) 0%,
+      rgba(45,80,22,0.55) 50%,
+      rgba(0,0,0,0.1) 100%
+    );
+  }
+
+  @keyframes hero-zoom-out {
+    0%   { transform: scale(1.12); }
+    100% { transform: scale(1.0); }
+  }
+
+  /* Green header band */
+  .hero-band {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    background: var(--green);
+    padding: 12px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+  }
+  .hero-band-logo {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .hero-band-tagline {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 5;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 48px 48px;
+    max-width: 700px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 400;
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    line-height: 1.0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.8);
+    font-weight: 300;
+    margin-bottom: 32px;
+    max-width: 480px;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    background: var(--orange);
+    color: var(--white);
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 16px 40px;
+    transition: background 0.2s, transform 0.2s;
+    align-self: flex-start;
+  }
+  .hero-cta:hover {
+    background: var(--orange-dark);
+    transform: translateY(-2px);
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    background: var(--white);
+    border-bottom: 2px solid var(--mid-gray);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .filter-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .filter-tag {
+    padding: 6px 16px;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: 1.5px solid var(--mid-gray);
+    background: var(--white);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-tag.active, .filter-tag:hover {
+    background: var(--green);
+    color: var(--white);
+    border-color: var(--green);
+  }
+  .results-count {
+    margin-left: auto;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  /* ── TRAILS SECTION ── */
+  .trails-section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  .trails-section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .section-title {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--green);
+  }
+  .sort-select {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.8rem;
+    border: 1.5px solid var(--mid-gray);
+    padding: 6px 12px;
+    color: var(--dark-gray);
+    background: var(--white);
+    cursor: pointer;
+  }
+
+  .trail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 28px;
+  }
+
+  /* ── TRAIL CARD ── */
+  .trail-card {
+    background: var(--white);
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .trail-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+  }
+
+  .card-img-wrap {
+    position: relative;
+    overflow: hidden;
+    height: 220px;
+  }
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+  .trail-card:hover .card-img {
+    transform: scale(1.05);
+  }
+
+  .img-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: var(--orange);
+    color: var(--white);
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+  }
+
+  /* Green header bar */
+  .card-header {
+    background: var(--green);
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-name {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .card-park-badge {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    text-align: right;
+    max-width: 140px;
+  }
+
+  /* Spec grid */
+  .card-specs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--mid-gray);
+  }
+  .spec-cell {
+    padding: 14px 12px;
+    border-right: 1px solid var(--mid-gray);
+    text-align: center;
+  }
+  .spec-cell:last-child { border-right: none; }
+  .spec-icon {
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .spec-label {
+    font-size: 0.6rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+  }
+  .spec-value {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--dark-gray);
+  }
+
+  /* Difficulty scale */
+  .card-difficulty {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--mid-gray);
+  }
+  .diff-label {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    min-width: 70px;
+  }
+  .diff-scale {
+    display: flex;
+    gap: 4px;
+  }
+  .diff-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--mid-gray);
+  }
+  .diff-dot.filled { background: var(--green); }
+  .diff-dot.half   { background: linear-gradient(90deg, var(--green) 50%, var(--mid-gray) 50%); }
+  .diff-name {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--green);
+  }
+
+  /* Reviews */
+  .card-reviews {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--mid-gray);
+  }
+  .reviews-toggle {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .review-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .verified-icon {
+    color: var(--green);
+    font-size: 0.8rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .review-body {}
+  .review-text {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--dark-gray);
+    font-style: italic;
+    margin-bottom: 3px;
+  }
+  .review-meta {
+    font-size: 0.68rem;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .review-stars { color: var(--orange); font-size: 0.65rem; }
+
+  /* Card footer */
+  .card-footer {
+    padding: 16px 20px;
+    display: flex;
+    gap: 10px;
+  }
+  .btn-primary {
+    flex: 1;
+    background: var(--green);
+    color: var(--white);
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+  }
+  .btn-primary:hover { background: var(--green-light); }
+  .btn-secondary {
+    flex: 1;
+    background: transparent;
+    color: var(--orange);
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 2px solid var(--orange);
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+  }
+  .btn-secondary:hover {
+    background: var(--orange);
+    color: var(--white);
+  }
+
+  /* ── SUSTAINABILITY BANNER ── */
+  .sustain-banner {
+    background: var(--green);
+    color: var(--white);
+    padding: 40px;
+    text-align: center;
+    margin: 0;
+  }
+  .sustain-banner h3 {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .sustain-banner p {
+    font-weight: 300;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.8);
+    max-width: 600px;
+    margin: 0 auto 24px;
+    line-height: 1.7;
+  }
+  .sustain-btn {
+    display: inline-block;
+    background: transparent;
+    color: var(--white);
+    border: 2px solid rgba(255,255,255,0.6);
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 12px 32px;
+    transition: all 0.2s;
+  }
+  .sustain-btn:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: var(--white);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #1A2E0A;
+    color: rgba(255,255,255,0.75);
+    padding: 56px 48px 32px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 40px;
+  }
+  .footer-brand {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+  .footer-brand span { color: var(--orange); }
+  .footer-tagline {
+    font-size: 0.8rem;
+    line-height: 1.7;
+    font-weight: 300;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 20px;
+  }
+  .footer-col h4 {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .footer-col a {
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--orange); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">Free shipping on orders over $75 &nbsp;|&nbsp; Leave No Trace &nbsp;|&nbsp; 1% for the Planet Member</div>
+
+<nav>
+  <div class="nav-logo">Mesa Trail <span>Co.</span></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Design Gallery</a></li>
+    <li><a href="#">Trails</a></li>
+    <li><a href="#">Gear</a></li>
+    <li><a href="#">Community</a></li>
+    <li><a href="#">Sustainability</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Plan Your Hike</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-band">
+    <div class="hero-band-logo">Mesa Trail Co.</div>
+    <div class="hero-band-tagline">Mesa, Arizona &nbsp;&#9656;&nbsp; Est. 2024 &nbsp;&#9656;&nbsp; Explore Responsibly</div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">&#9650; East Valley, Arizona</div>
+    <h1 class="hero-title">The Arizona<br>Trail Catalog</h1>
+    <p class="hero-desc">Five expertly rated hiking routes near Mesa, Arizona. Detailed specs, real gear recommendations, and honest community reviews from people who've done the miles.</p>
+    <a href="#trails" class="hero-cta">Plan Your Hike</a>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">Filter:</span>
+  <div class="filter-tags">
+    <button class="filter-tag active">All Trails</button>
+    <button class="filter-tag">Easy</button>
+    <button class="filter-tag">Moderate</button>
+    <button class="filter-tag">Strenuous</button>
+    <button class="filter-tag">Under 4 mi</button>
+    <button class="filter-tag">Family Friendly</button>
+  </div>
+  <span class="results-count">Showing 5 of 5 trails</span>
+</div>
+
+<!-- TRAILS -->
+<section class="trails-section" id="trails">
+  <div class="trails-section-header">
+    <h2 class="section-title">Trail Routes</h2>
+    <select class="sort-select">
+      <option>Sort: Recommended</option>
+      <option>Sort: Easiest First</option>
+      <option>Sort: Shortest First</option>
+      <option>Sort: Highest Rated</option>
+    </select>
+  </div>
+
+  <div class="trail-grid">
+
+    <!-- Trail 1 -->
+    <div class="trail-card">
+      <div class="card-img-wrap">
+        <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail">
+        <span class="img-badge">Top Rated</span>
+      </div>
+      <div class="card-header">
+        <div class="card-name">Wind Cave Trail</div>
+        <div class="card-park-badge">Usery Mountain Regional Park</div>
+      </div>
+      <div class="card-specs">
+        <div class="spec-cell">
+          <span class="spec-icon">&#128205;</span>
+          <div class="spec-label">Distance</div>
+          <div class="spec-value">3.2 mi</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9201;</span>
+          <div class="spec-label">Time</div>
+          <div class="spec-value">1.5–2 h</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9650;</span>
+          <div class="spec-label">Elevation</div>
+          <div class="spec-value">+860 ft</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9654;</span>
+          <div class="spec-label">Type</div>
+          <div class="spec-value">Loop</div>
+        </div>
+      </div>
+      <div class="card-difficulty">
+        <span class="diff-label">Difficulty</span>
+        <div class="diff-scale">
+          <div class="diff-dot filled"></div>
+          <div class="diff-dot filled"></div>
+          <div class="diff-dot filled"></div>
+          <div class="diff-dot"></div>
+          <div class="diff-dot"></div>
+        </div>
+        <span class="diff-name">Moderate</span>
+      </div>
+      <div class="card-reviews">
+        <div class="reviews-toggle">&#9733; 4.8 &nbsp;(3 Reviews)</div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Stunning cave views at the top!"</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Jake R. &middot; Verified Hiker</div>
+          </div>
+        </div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Great morning hike, bring water."</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;</span> Sara M. &middot; Verified Hiker</div>
+          </div>
+        </div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Trail is well-marked and rewarding."</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Chris T. &middot; Verified Hiker</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="#" class="btn-primary">View Trail Details</a>
+        <a href="#" class="btn-secondary">Shop Gear For This Trail</a>
+      </div>
+    </div>
+
+    <!-- Trail 2 -->
+    <div class="trail-card">
+      <div class="card-img-wrap">
+        <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail">
+        <span class="img-badge">Strenuous</span>
+      </div>
+      <div class="card-header">
+        <div class="card-name">Siphon Draw Trail</div>
+        <div class="card-park-badge">Lost Dutchman State Park</div>
+      </div>
+      <div class="card-specs">
+        <div class="spec-cell">
+          <span class="spec-icon">&#128205;</span>
+          <div class="spec-label">Distance</div>
+          <div class="spec-value">4.2 mi</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9201;</span>
+          <div class="spec-label">Time</div>
+          <div class="spec-value">3–4 h</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9650;</span>
+          <div class="spec-label">Elevation</div>
+          <div class="spec-value">+2,045 ft</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9654;</span>
+          <div class="spec-label">Type</div>
+          <div class="spec-value">Out &amp; Back</div>
+        </div>
+      </div>
+      <div class="card-difficulty">
+        <span class="diff-label">Difficulty</span>
+        <div class="diff-scale">
+          <div class="diff-dot filled"></div>
+          <div class="diff-dot filled"></div>
+          <div class="diff-dot filled"></div>
+          <div class="diff-dot filled"></div>
+          <div class="diff-dot filled"></div>
+        </div>
+        <span class="diff-name">Strenuous</span>
+      </div>
+      <div class="card-reviews">
+        <div class="reviews-toggle">&#9733; 4.7 &nbsp;(3 Reviews)</div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Epic views of the Superstitions!"</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Maria L. &middot; Verified Hiker</div>
+          </div>
+        </div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Very challenging but worth it."</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;</span> Tom B. &middot; Verified Hiker</div>
+          </div>
+        </div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Best hike in the East Valley."</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Ava S. &middot; Verified Hiker</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="#" class="btn-primary">View Trail Details</a>
+        <a href="#" class="btn-secondary">Shop Gear For This Trail</a>
+      </div>
+    </div>
+
+    <!-- Trail 3 -->
+    <div class="trail-card">
+      <div class="card-img-wrap">
+        <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail">
+        <span class="img-badge">Staff Pick</span>
+      </div>
+      <div class="card-header">
+        <div class="card-name">Peralta Trail</div>
+        <div class="card-park-badge">Superstition Wilderness</div>
+      </div>
+      <div class="card-specs">
+        <div class="spec-cell">
+          <span class="spec-icon">&#128205;</span>
+          <div class="spec-label">Distance</div>
+          <div class="spec-value">4.6 mi</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9201;</span>
+          <div class="spec-label">Time</div>
+          <div class="spec-value">3–3.5 h</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9650;</span>
+          <div class="spec-label">Elevation</div>
+          <div class="spec-value">+1,425 ft</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9654;</span>
+          <div class="spec-label">Type</div>
+          <div class="spec-value">Out &amp; Back</div>
+        </div>
+      </div>
+      <div class="card-difficulty">
+        <span class="diff-label">Difficulty</span>
+        <div class="diff-scale">
+          <div class="diff-dot filled"></div>
+          <div class="diff-dot filled"></div>
+          <div class="diff-dot filled"></div>
+          <div class="diff-dot half"></div>
+          <div class="diff-dot"></div>
+        </div>
+        <span class="diff-name">Mod–Strenuous</span>
+      </div>
+      <div class="card-reviews">
+        <div class="reviews-toggle">&#9733; 4.8 &nbsp;(3 Reviews)</div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Weaver's Needle views are unreal."</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Dan K. &middot; Verified Hiker</div>
+          </div>
+        </div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Rocky but beautiful terrain."</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;</span> Lily W. &middot; Verified Hiker</div>
+          </div>
+        </div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"A must-do in Arizona."</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Noah P. &middot; Verified Hiker</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="#" class="btn-primary">View Trail Details</a>
+        <a href="#" class="btn-secondary">Shop Gear For This Trail</a>
+      </div>
+    </div>
+
+    <!-- Trail 4 -->
+    <div class="trail-card">
+      <div class="card-img-wrap">
+        <img class="card-img" src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail">
+        <span class="img-badge">Family Friendly</span>
+      </div>
+      <div class="card-header">
+        <div class="card-name">Hieroglyphic Trail</div>
+        <div class="card-park-badge">Superstition Wilderness</div>
+      </div>
+      <div class="card-specs">
+        <div class="spec-cell">
+          <span class="spec-icon">&#128205;</span>
+          <div class="spec-label">Distance</div>
+          <div class="spec-value">3.4 mi</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9201;</span>
+          <div class="spec-label">Time</div>
+          <div class="spec-value">2–2.5 h</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9650;</span>
+          <div class="spec-label">Elevation</div>
+          <div class="spec-value">+800 ft</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9654;</span>
+          <div class="spec-label">Type</div>
+          <div class="spec-value">Out &amp; Back</div>
+        </div>
+      </div>
+      <div class="card-difficulty">
+        <span class="diff-label">Difficulty</span>
+        <div class="diff-scale">
+          <div class="diff-dot filled"></div>
+          <div class="diff-dot half"></div>
+          <div class="diff-dot"></div>
+          <div class="diff-dot"></div>
+          <div class="diff-dot"></div>
+        </div>
+        <span class="diff-name">Easy–Moderate</span>
+      </div>
+      <div class="card-reviews">
+        <div class="reviews-toggle">&#9733; 4.8 &nbsp;(3 Reviews)</div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Ancient petroglyphs are fascinating."</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Emma R. &middot; Verified Hiker</div>
+          </div>
+        </div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Perfect for beginners."</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;</span> Liam F. &middot; Verified Hiker</div>
+          </div>
+        </div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Hidden gem near Mesa."</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Zoe C. &middot; Verified Hiker</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="#" class="btn-primary">View Trail Details</a>
+        <a href="#" class="btn-secondary">Shop Gear For This Trail</a>
+      </div>
+    </div>
+
+    <!-- Trail 5 -->
+    <div class="trail-card">
+      <div class="card-img-wrap">
+        <img class="card-img" src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail">
+        <span class="img-badge">Beginner</span>
+      </div>
+      <div class="card-header">
+        <div class="card-name">Red Mountain Trail</div>
+        <div class="card-park-badge">Red Mountain Park</div>
+      </div>
+      <div class="card-specs">
+        <div class="spec-cell">
+          <span class="spec-icon">&#128205;</span>
+          <div class="spec-label">Distance</div>
+          <div class="spec-value">3.0 mi</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9201;</span>
+          <div class="spec-label">Time</div>
+          <div class="spec-value">1.5–2 h</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9650;</span>
+          <div class="spec-label">Elevation</div>
+          <div class="spec-value">+400 ft</div>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-icon">&#9654;</span>
+          <div class="spec-label">Type</div>
+          <div class="spec-value">Out &amp; Back</div>
+        </div>
+      </div>
+      <div class="card-difficulty">
+        <span class="diff-label">Difficulty</span>
+        <div class="diff-scale">
+          <div class="diff-dot filled"></div>
+          <div class="diff-dot half"></div>
+          <div class="diff-dot"></div>
+          <div class="diff-dot"></div>
+          <div class="diff-dot"></div>
+        </div>
+        <span class="diff-name">Easy–Moderate</span>
+      </div>
+      <div class="card-reviews">
+        <div class="reviews-toggle">&#9733; 4.8 &nbsp;(3 Reviews)</div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"The red volcanic formations are wild."</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Ben H. &middot; Verified Hiker</div>
+          </div>
+        </div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Kids loved it!"</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;</span> Priya N. &middot; Verified Hiker</div>
+          </div>
+        </div>
+        <div class="review-item">
+          <span class="verified-icon">&#10003;</span>
+          <div class="review-body">
+            <div class="review-text">"Short but scenic, great for all levels."</div>
+            <div class="review-meta"><span class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> Sam T. &middot; Verified Hiker</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="#" class="btn-primary">View Trail Details</a>
+        <a href="#" class="btn-secondary">Shop Gear For This Trail</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="sustain-banner">
+  <h3>Leave No Trace</h3>
+  <p>We're committed to protecting Arizona's desert wilderness. 1% of every purchase goes directly to local trail maintenance and conservation efforts.</p>
+  <a href="#" class="sustain-btn">Our Sustainability Pledge</a>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">Mesa Trail <span>Co.</span></div>
+      <div class="footer-tagline">Outfitting desert adventurers since 2024. We make gear built for the Arizona heat and the people who love it.</div>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#">Trail Map</a></li>
+        <li><a href="#">Gear Guide</a></li>
+        <li><a href="#">Trip Planner</a></li>
+        <li><a href="#">Community</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="index.html">Design Gallery</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Trail Conditions</a></li>
+        <li><a href="#">Safety Tips</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2024 Mesa Trail Co. &mdash; Mesa, Arizona</span>
+    <span>Design v24 &nbsp;|&nbsp; 1% for the Planet &nbsp;|&nbsp; Leave No Trace Partner</span>
+  </div>
+</footer>
+
+</body>
+</html>

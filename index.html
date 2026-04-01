@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mesa Trail Designs — 25 Design Explorations</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #FAFAFA;
+    --text: #1A1A1A;
+    --text-secondary: #6B6B6B;
+    --text-muted: #A0A0A0;
+    --accent: #E8602C;
+    --accent-light: #F0845A;
+    --border: #E8E8E8;
+    --white: #FFFFFF;
+    --card-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    --card-shadow-hover: 0 16px 48px rgba(0,0,0,0.14);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(250,250,250,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 48px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+  .header-logo span { color: var(--accent); }
+  .header-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 48px 64px;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .hero-text { max-width: 640px; }
+
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: hero-slide-up 0.7s 0.1s ease forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: hero-slide-up 0.8s 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-subtitle {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: 540px;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: hero-slide-up 0.7s 0.4s ease forwards;
+  }
+
+  @keyframes hero-slide-up {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Desert sun SVG art */
+  .hero-art {
+    opacity: 0;
+    animation: hero-slide-up 1s 0.6s ease forwards;
+    flex-shrink: 0;
+  }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 48px 56px;
+    display: flex;
+    gap: 48px;
+  }
+  .stat-item { }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-num span { color: var(--accent); }
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+  .stat-divider {
+    width: 1px;
+    background: var(--border);
+    align-self: stretch;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 48px 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-right: 4px;
+  }
+  .filter-btn {
+    padding: 8px 18px;
+    border-radius: 24px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(232,96,44,0.3);
+  }
+  .filter-count {
+    margin-left: auto;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  /* ── GALLERY GRID ── */
+  .gallery {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 48px 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 1100px) {
+    .gallery { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 820px) {
+    .gallery { grid-template-columns: repeat(2, 1fr); padding: 0 20px 40px; }
+    .hero, .stats-row, .filter-section { padding-left: 20px; padding-right: 20px; }
+    header { padding: 0 20px; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-art { display: none; }
+  }
+  @media (max-width: 520px) {
+    .gallery { grid-template-columns: 1fr; }
+  }
+
+  /* Design Card */
+  .design-card {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94),
+                box-shadow 0.3s ease,
+                opacity 0.3s ease;
+    position: relative;
+  }
+  .design-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--card-shadow-hover);
+  }
+  .design-card.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.96) translateY(8px);
+  }
+
+  /* Thumbnail */
+  .card-thumb {
+    height: 160px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Overlay on hover */
+  .card-thumb-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .design-card:hover .card-thumb-overlay { opacity: 1; }
+  .open-label {
+    background: var(--white);
+    color: var(--text);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 10px 22px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateY(8px);
+    transition: transform 0.25s ease;
+  }
+  .design-card:hover .open-label { transform: translateY(0); }
+
+  /* Card body */
+  .card-body {
+    padding: 16px 18px 18px;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .card-number {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .card-tag {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 12px;
+    background: var(--bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .card-name {
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 5px;
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* ── Palette gradients for each design ── */
+  /* 1 */ .thumb-v01 { background: linear-gradient(135deg, #F5EDD4 0%, #D4B896 50%, #E8E0D0 100%); }
+  /* 2 */ .thumb-v02 { background: linear-gradient(135deg, #0B1A3E 0%, #1B2E5C 50%, #4A6FA5 100%); }
+  /* 3 */ .thumb-v03 { background: linear-gradient(135deg, #D4C9A0 0%, #8B6914 50%, #2D4A1E 100%); }
+  /* 4 */ .thumb-v04 { background: linear-gradient(135deg, #111111 0%, #1A1A1A 50%, #FFE000 100%); }
+  /* 5 */ .thumb-v05 { background: linear-gradient(135deg, #7B2FBE 0%, #E8602C 100%); }
+  /* 6 */ .thumb-v06 { background: linear-gradient(135deg, #050505 0%, #1A0020 60%, #FF00AA 100%); }
+  /* 7 */ .thumb-v07 { background: linear-gradient(135deg, #F4D0CB 0%, #C8D5BB 100%); }
+  /* 8 */ .thumb-v08 { background: linear-gradient(135deg, #1A2744 0%, #2C3E6B 60%, #C9A84C 100%); }
+  /* 9 */ .thumb-v09 { background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 60%, #D4A96A 100%); }
+  /* 10 */ .thumb-v10 { background: linear-gradient(135deg, #F7F7F7 0%, #FFFFFF 50%, #007AFF 100%); }
+  /* 11 */ .thumb-v11 { background: linear-gradient(135deg, #E8DEC8 0%, #C4B896 50%, #1A1A1A 100%); }
+  /* 12 */ .thumb-v12 { background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 60%, #CC0000 100%); }
+  /* 13 */ .thumb-v13 { background: linear-gradient(135deg, #2D0050 0%, #6B0080 50%, #FF00CC 100%); }
+  /* 14 */ .thumb-v14 { background: linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #5D7A3A 100%); }
+  /* 15 */ .thumb-v15 { background: linear-gradient(135deg, #6750A4 0%, #B5838D 100%); }
+  /* 16 */ .thumb-v16 { background: linear-gradient(135deg, #050505 0%, #111111 60%, #C9A84C 100%); }
+  /* 17 */ .thumb-v17 { background: linear-gradient(135deg, #FFFFFF 0%, #F0F4FF 50%, #1E40AF 100%); }
+  /* 18 */ .thumb-v18 { background: linear-gradient(135deg, #0A0A0A 0%, #0F1A0F 60%, #00FF41 100%); }
+  /* 19 */ .thumb-v19 { background: linear-gradient(135deg, #C4A882 0%, #D4B896 50%, #E8DEC8 100%); }
+  /* 20 */ .thumb-v20 { background: linear-gradient(135deg, #1A6B7A 0%, #40B4C4 50%, #CC5533 100%); }
+  /* 21 */ .thumb-v21 { background: linear-gradient(135deg, #1A3A7A 0%, #2255AA 60%, #FFFFFF 100%); }
+  /* 22 */ .thumb-v22 { background: linear-gradient(135deg, #E8001E 0%, #FFE000 50%, #0047AB 100%); }
+  /* 23 */ .thumb-v23 { background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 60%, #C9A84C 100%); }
+  /* 24 */ .thumb-v24 { background: linear-gradient(135deg, #2D5016 0%, #3D6B20 60%, #FF6B00 100%); }
+  /* 25 */ .thumb-v25 { background: linear-gradient(135deg, #FFFFFF 0%, #F7F7F7 40%, #F09433 60%, #DC2743 80%, #BC1888 100%); }
+
+  /* Thumb decorative elements */
+  .card-thumb::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: inherit;
+  }
+  .thumb-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .thumb-num {
+    font-size: 2.8rem;
+    font-weight: 700;
+    opacity: 0.18;
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+  }
+  .thumb-bars {
+    display: flex;
+    gap: 3px;
+    opacity: 0.35;
+  }
+  .thumb-bar {
+    width: 3px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    max-width: 1400px;
+    margin: 0 auto 40px;
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-text {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    max-width: 1400px;
+    margin: 80px auto 0;
+    padding: 32px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--text);
+  }
+  .footer-brand span { color: var(--accent); font-style: italic; }
+  .footer-meta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+  .footer-links {
+    display: flex;
+    gap: 20px;
+  }
+  .footer-links a {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-logo">Mesa Trail <span>Designs</span></div>
+  <div class="header-meta">25 design explorations &nbsp;·&nbsp; Mesa, Arizona</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow">Design Exploration Series</div>
+    <h1 class="hero-title">Mesa Trail<br><em>Designs</em></h1>
+    <p class="hero-subtitle">25 unique design explorations for Mesa, Arizona's best hiking routes. Each version interprets the same five trails through a distinct visual language — from luxury editorial to comic book panels.</p>
+  </div>
+  <div class="hero-art">
+    <svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Desert horizon scene -->
+      <!-- Sky gradient bg -->
+      <defs>
+        <radialGradient id="sunGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#FFD166"/>
+          <stop offset="60%" stop-color="#E8602C" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#E8602C" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#FFE4CC"/>
+          <stop offset="100%" stop-color="#FFF8F4"/>
+        </linearGradient>
+        <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#D4956A"/>
+          <stop offset="100%" stop-color="#B07044"/>
+        </linearGradient>
+      </defs>
+      <!-- Sky -->
+      <circle cx="110" cy="110" r="110" fill="url(#skyGrad)"/>
+      <!-- Sun glow -->
+      <circle cx="110" cy="95" r="50" fill="url(#sunGrad)" opacity="0.8">
+        <animateTransform attributeName="transform" type="scale" values="0.95;1.05;0.95" dur="4s" repeatCount="indefinite" additive="sum" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"/>
+      </circle>
+      <!-- Sun core -->
+      <circle cx="110" cy="95" r="22" fill="#FFD166"/>
+      <circle cx="110" cy="95" r="18" fill="#FFE566"/>
+      <!-- Sun rays -->
+      <g stroke="#FFB830" stroke-width="1.5" opacity="0.6">
+        <line x1="110" y1="64" x2="110" y2="54"/>
+        <line x1="131" y1="74" x2="138" y2="67"/>
+        <line x1="141" y1="95" x2="151" y2="95"/>
+        <line x1="131" y1="116" x2="138" y2="123"/>
+        <line x1="110" y1="126" x2="110" y2="136"/>
+        <line x1="89" y1="116" x2="82" y2="123"/>
+        <line x1="79" y1="95" x2="69" y2="95"/>
+        <line x1="89" y1="74" x2="82" y2="67"/>
+      </g>
+      <!-- Ground / mesa -->
+      <path d="M0 148 L55 130 L80 148 L110 118 L140 148 L165 130 L220 148 L220 220 L0 220 Z" fill="url(#groundGrad)"/>
+      <!-- Mesa plateau -->
+      <path d="M55 130 L80 115 L140 115 L165 130 Z" fill="#C07850"/>
+      <!-- Saguaro left -->
+      <rect x="44" y="140" width="5" height="36" rx="2.5" fill="#8B6B3A"/>
+      <rect x="36" y="148" width="5" height="20" rx="2.5" fill="#8B6B3A"/>
+      <line x1="41" y1="155" x2="44" y2="150" stroke="#8B6B3A" stroke-width="4" stroke-linecap="round"/>
+      <!-- Saguaro right -->
+      <rect x="170" y="138" width="5" height="38" rx="2.5" fill="#8B6B3A"/>
+      <rect x="178" y="146" width="5" height="22" rx="2.5" fill="#8B6B3A"/>
+      <line x1="183" y1="152" x2="175" y2="148" stroke="#8B6B3A" stroke-width="4" stroke-linecap="round"/>
+      <!-- Mountains silhouette -->
+      <path d="M0 170 L30 145 L60 165 L90 140 L110 160 L130 142 L160 165 L190 147 L220 168 L220 220 L0 220 Z" fill="#B86844" opacity="0.5"/>
+      <!-- Border circle -->
+      <circle cx="110" cy="110" r="108" stroke="#E8602C" stroke-width="1.5" stroke-dasharray="4 6" fill="none" opacity="0.4"/>
+    </svg>
+  </div>
+</section>
+
+<!-- STATS ROW -->
+<div class="stats-row">
+  <div class="stat-item">
+    <div class="stat-num">25<span>.</span></div>
+    <div class="stat-label">Design Iterations</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">5<span>.</span></div>
+    <div class="stat-label">Hiking Trails</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">5<span>.</span></div>
+    <div class="stat-label">Style Categories</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">1<span>.</span></div>
+    <div class="stat-label">Desert Location</div>
+  </div>
+</div>
+
+<!-- FILTER -->
+<div class="filter-section">
+  <span class="filter-label">Filter by style:</span>
+  <button class="filter-btn active" data-filter="all" onclick="filterCards('all', this)">All</button>
+  <button class="filter-btn" data-filter="dark" onclick="filterCards('dark', this)">Dark</button>
+  <button class="filter-btn" data-filter="minimal" onclick="filterCards('minimal', this)">Minimal</button>
+  <button class="filter-btn" data-filter="retro" onclick="filterCards('retro', this)">Retro</button>
+  <button class="filter-btn" data-filter="experimental" onclick="filterCards('experimental', this)">Experimental</button>
+  <span class="filter-count" id="filterCount">Showing 25 of 25</span>
+</div>
+
+<!-- GALLERY GRID -->
+<div class="gallery" id="gallery">
+
+  <!-- v01 -->
+  <a class="design-card" href="v1.html" data-category="minimal">
+    <div class="card-thumb thumb-v01">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#8B6914">01</span>
+        <div class="thumb-bars" style="color:#8B6914">
+          <div class="thumb-bar" style="height:28px"></div>
+          <div class="thumb-bar" style="height:40px"></div>
+          <div class="thumb-bar" style="height:22px"></div>
+          <div class="thumb-bar" style="height:36px"></div>
+          <div class="thumb-bar" style="height:18px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v01</span><span class="card-tag">Minimal</span></div>
+      <div class="card-name">Desert Minimalist</div>
+      <div class="card-desc">Clean sand-toned layouts with generous white space and serif typography.</div>
+    </div>
+  </a>
+
+  <!-- v02 -->
+  <a class="design-card" href="v2.html" data-category="dark">
+    <div class="card-thumb thumb-v02">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#7A9FD4">02</span>
+        <div class="thumb-bars" style="color:#4A6FA5">
+          <div class="thumb-bar" style="height:36px"></div>
+          <div class="thumb-bar" style="height:20px"></div>
+          <div class="thumb-bar" style="height:44px"></div>
+          <div class="thumb-bar" style="height:28px"></div>
+          <div class="thumb-bar" style="height:32px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v02</span><span class="card-tag">Dark</span></div>
+      <div class="card-name">Night Sky</div>
+      <div class="card-desc">Deep navy backgrounds with star fields and luminous trail imagery.</div>
+    </div>
+  </a>
+
+  <!-- v03 -->
+  <a class="design-card" href="v3.html" data-category="retro">
+    <div class="card-thumb thumb-v03">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#5C4A1A">03</span>
+        <div class="thumb-bars" style="color:#5C4A1A">
+          <div class="thumb-bar" style="height:30px"></div>
+          <div class="thumb-bar" style="height:42px"></div>
+          <div class="thumb-bar" style="height:24px"></div>
+          <div class="thumb-bar" style="height:38px"></div>
+          <div class="thumb-bar" style="height:20px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v03</span><span class="card-tag">Retro</span></div>
+      <div class="card-name">Retro Vintage</div>
+      <div class="card-desc">Parchment textures and forest green evoke classic national park posters.</div>
+    </div>
+  </a>
+
+  <!-- v04 -->
+  <a class="design-card" href="v4.html" data-category="experimental">
+    <div class="card-thumb thumb-v04">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#FFE000">04</span>
+        <div class="thumb-bars" style="color:#FFE000">
+          <div class="thumb-bar" style="height:48px"></div>
+          <div class="thumb-bar" style="height:20px"></div>
+          <div class="thumb-bar" style="height:40px"></div>
+          <div class="thumb-bar" style="height:32px"></div>
+          <div class="thumb-bar" style="height:48px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v04</span><span class="card-tag">Experimental</span></div>
+      <div class="card-name">Brutalist</div>
+      <div class="card-desc">Raw black-and-yellow brutalism that ignores convention entirely.</div>
+    </div>
+  </a>
+
+  <!-- v05 -->
+  <a class="design-card" href="v5.html" data-category="experimental">
+    <div class="card-thumb thumb-v05">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:rgba(255,255,255,0.6)">05</span>
+        <div class="thumb-bars" style="color:rgba(255,255,255,0.5)">
+          <div class="thumb-bar" style="height:34px"></div>
+          <div class="thumb-bar" style="height:44px"></div>
+          <div class="thumb-bar" style="height:26px"></div>
+          <div class="thumb-bar" style="height:40px"></div>
+          <div class="thumb-bar" style="height:32px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v05</span><span class="card-tag">Experimental</span></div>
+      <div class="card-name">Glassmorphism</div>
+      <div class="card-desc">Frosted glass panels float over vivid purple-to-orange gradient backgrounds.</div>
+    </div>
+  </a>
+
+  <!-- v06 -->
+  <a class="design-card" href="v6.html" data-category="dark">
+    <div class="card-thumb thumb-v06">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#FF00AA">06</span>
+        <div class="thumb-bars" style="color:#FF00AA">
+          <div class="thumb-bar" style="height:42px"></div>
+          <div class="thumb-bar" style="height:26px"></div>
+          <div class="thumb-bar" style="height:48px"></div>
+          <div class="thumb-bar" style="height:34px"></div>
+          <div class="thumb-bar" style="height:20px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v06</span><span class="card-tag">Dark</span></div>
+      <div class="card-name">Neon Cyberpunk</div>
+      <div class="card-desc">Black backgrounds electrified with hot pink neon glows and grid lines.</div>
+    </div>
+  </a>
+
+  <!-- v07 -->
+  <a class="design-card" href="v7.html" data-category="minimal">
+    <div class="card-thumb thumb-v07">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#9B7B85">07</span>
+        <div class="thumb-bars" style="color:#A08878">
+          <div class="thumb-bar" style="height:28px"></div>
+          <div class="thumb-bar" style="height:38px"></div>
+          <div class="thumb-bar" style="height:22px"></div>
+          <div class="thumb-bar" style="height:44px"></div>
+          <div class="thumb-bar" style="height:30px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v07</span><span class="card-tag">Minimal</span></div>
+      <div class="card-name">Watercolor</div>
+      <div class="card-desc">Soft rose and sage watercolor washes with delicate organic compositions.</div>
+    </div>
+  </a>
+
+  <!-- v08 -->
+  <a class="design-card" href="v8.html" data-category="minimal">
+    <div class="card-thumb thumb-v08">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#C9A84C">08</span>
+        <div class="thumb-bars" style="color:#C9A84C">
+          <div class="thumb-bar" style="height:38px"></div>
+          <div class="thumb-bar" style="height:24px"></div>
+          <div class="thumb-bar" style="height:42px"></div>
+          <div class="thumb-bar" style="height:32px"></div>
+          <div class="thumb-bar" style="height:48px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v08</span><span class="card-tag">Minimal</span></div>
+      <div class="card-name">Magazine Editorial</div>
+      <div class="card-desc">Navy and gold editorial design inspired by high-end travel publications.</div>
+    </div>
+  </a>
+
+  <!-- v09 -->
+  <a class="design-card" href="v9.html" data-category="dark">
+    <div class="card-thumb thumb-v09">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#D4A96A">09</span>
+        <div class="thumb-bars" style="color:#8A7A64">
+          <div class="thumb-bar" style="height:44px"></div>
+          <div class="thumb-bar" style="height:30px"></div>
+          <div class="thumb-bar" style="height:38px"></div>
+          <div class="thumb-bar" style="height:22px"></div>
+          <div class="thumb-bar" style="height:40px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v09</span><span class="card-tag">Dark</span></div>
+      <div class="card-name">Nature Documentary</div>
+      <div class="card-desc">Cinematic dark design with dramatic typography and film-like aesthetics.</div>
+    </div>
+  </a>
+
+  <!-- v10 -->
+  <a class="design-card" href="v10.html" data-category="minimal">
+    <div class="card-thumb thumb-v10">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#007AFF">10</span>
+        <div class="thumb-bars" style="color:#007AFF">
+          <div class="thumb-bar" style="height:30px"></div>
+          <div class="thumb-bar" style="height:42px"></div>
+          <div class="thumb-bar" style="height:26px"></div>
+          <div class="thumb-bar" style="height:38px"></div>
+          <div class="thumb-bar" style="height:34px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v10</span><span class="card-tag">Minimal</span></div>
+      <div class="card-name">Mobile App UI</div>
+      <div class="card-desc">iOS-inspired clean white interface with system blue accents and SF-style type.</div>
+    </div>
+  </a>
+
+  <!-- v11 -->
+  <a class="design-card" href="v11.html" data-category="retro">
+    <div class="card-thumb thumb-v11">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#1A1A1A">11</span>
+        <div class="thumb-bars" style="color:#4A3E28">
+          <div class="thumb-bar" style="height:36px"></div>
+          <div class="thumb-bar" style="height:48px"></div>
+          <div class="thumb-bar" style="height:24px"></div>
+          <div class="thumb-bar" style="height:40px"></div>
+          <div class="thumb-bar" style="height:28px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v11</span><span class="card-tag">Retro</span></div>
+      <div class="card-name">Newspaper</div>
+      <div class="card-desc">Newsprint-textured layout with broadsheet columns and print-press typography.</div>
+    </div>
+  </a>
+
+  <!-- v12 -->
+  <a class="design-card" href="v12.html" data-category="minimal">
+    <div class="card-thumb thumb-v12">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#CC0000">12</span>
+        <div class="thumb-bars" style="color:#CC0000">
+          <div class="thumb-bar" style="height:32px"></div>
+          <div class="thumb-bar" style="height:20px"></div>
+          <div class="thumb-bar" style="height:44px"></div>
+          <div class="thumb-bar" style="height:28px"></div>
+          <div class="thumb-bar" style="height:36px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v12</span><span class="card-tag">Minimal</span></div>
+      <div class="card-name">Japanese Zen</div>
+      <div class="card-desc">White space, red accents, and Zen-inspired minimalism drawn from wabi-sabi.</div>
+    </div>
+  </a>
+
+  <!-- v13 -->
+  <a class="design-card" href="v13.html" data-category="retro">
+    <div class="card-thumb thumb-v13">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#FF00CC">13</span>
+        <div class="thumb-bars" style="color:#CC44FF">
+          <div class="thumb-bar" style="height:40px"></div>
+          <div class="thumb-bar" style="height:28px"></div>
+          <div class="thumb-bar" style="height:48px"></div>
+          <div class="thumb-bar" style="height:22px"></div>
+          <div class="thumb-bar" style="height:36px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v13</span><span class="card-tag">Retro</span></div>
+      <div class="card-name">80s Retro</div>
+      <div class="card-desc">Purple-drenched nostalgia with neon pink and VHS-era graphic excess.</div>
+    </div>
+  </a>
+
+  <!-- v14 -->
+  <a class="design-card" href="v14.html" data-category="experimental">
+    <div class="card-thumb thumb-v14">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#D4A070">14</span>
+        <div class="thumb-bars" style="color:#7A9A5A">
+          <div class="thumb-bar" style="height:46px"></div>
+          <div class="thumb-bar" style="height:30px"></div>
+          <div class="thumb-bar" style="height:38px"></div>
+          <div class="thumb-bar" style="height:24px"></div>
+          <div class="thumb-bar" style="height:42px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v14</span><span class="card-tag">Experimental</span></div>
+      <div class="card-name">Parallax Scrolling</div>
+      <div class="card-desc">Layered depth effects with earthy rust and sage tones creating spatial illusion.</div>
+    </div>
+  </a>
+
+  <!-- v15 -->
+  <a class="design-card" href="v15.html" data-category="minimal">
+    <div class="card-thumb thumb-v15">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:rgba(255,255,255,0.7)">15</span>
+        <div class="thumb-bars" style="color:rgba(255,255,255,0.5)">
+          <div class="thumb-bar" style="height:34px"></div>
+          <div class="thumb-bar" style="height:44px"></div>
+          <div class="thumb-bar" style="height:28px"></div>
+          <div class="thumb-bar" style="height:40px"></div>
+          <div class="thumb-bar" style="height:22px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v15</span><span class="card-tag">Minimal</span></div>
+      <div class="card-name">Material Design 3</div>
+      <div class="card-desc">Google's M3 system with dynamic color theming in purple and terracotta.</div>
+    </div>
+  </a>
+
+  <!-- v16 -->
+  <a class="design-card" href="v16.html" data-category="dark">
+    <div class="card-thumb thumb-v16">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#C9A84C">16</span>
+        <div class="thumb-bars" style="color:#C9A84C">
+          <div class="thumb-bar" style="height:40px"></div>
+          <div class="thumb-bar" style="height:26px"></div>
+          <div class="thumb-bar" style="height:46px"></div>
+          <div class="thumb-bar" style="height:32px"></div>
+          <div class="thumb-bar" style="height:20px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v16</span><span class="card-tag">Dark</span></div>
+      <div class="card-name">Immersive Storytelling</div>
+      <div class="card-desc">Full-screen cinematic black canvas with gold narrative typography.</div>
+    </div>
+  </a>
+
+  <!-- v17 -->
+  <a class="design-card" href="v17.html" data-category="minimal">
+    <div class="card-thumb thumb-v17">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#1E40AF">17</span>
+        <div class="thumb-bars" style="color:#3B82F6">
+          <div class="thumb-bar" style="height:32px"></div>
+          <div class="thumb-bar" style="height:44px"></div>
+          <div class="thumb-bar" style="height:24px"></div>
+          <div class="thumb-bar" style="height:36px"></div>
+          <div class="thumb-bar" style="height:48px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v17</span><span class="card-tag">Minimal</span></div>
+      <div class="card-name">Data Visualization</div>
+      <div class="card-desc">Trail data transformed into clean charts, graphs, and infographic layouts.</div>
+    </div>
+  </a>
+
+  <!-- v18 -->
+  <a class="design-card" href="v18.html" data-category="dark">
+    <div class="card-thumb thumb-v18">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#00FF41">18</span>
+        <div class="thumb-bars" style="color:#00CC33">
+          <div class="thumb-bar" style="height:44px"></div>
+          <div class="thumb-bar" style="height:28px"></div>
+          <div class="thumb-bar" style="height:40px"></div>
+          <div class="thumb-bar" style="height:22px"></div>
+          <div class="thumb-bar" style="height:36px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v18</span><span class="card-tag">Dark</span></div>
+      <div class="card-name">Terminal / CLI</div>
+      <div class="card-desc">Monospace green-on-black terminal aesthetic with command-line interface style.</div>
+    </div>
+  </a>
+
+  <!-- v19 -->
+  <a class="design-card" href="v19.html" data-category="retro">
+    <div class="card-thumb thumb-v19">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#6B4A2A">19</span>
+        <div class="thumb-bars" style="color:#8B6A3A">
+          <div class="thumb-bar" style="height:36px"></div>
+          <div class="thumb-bar" style="height:48px"></div>
+          <div class="thumb-bar" style="height:26px"></div>
+          <div class="thumb-bar" style="height:40px"></div>
+          <div class="thumb-bar" style="height:30px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v19</span><span class="card-tag">Retro</span></div>
+      <div class="card-name">Polaroid Scrapbook</div>
+      <div class="card-desc">Cork board and warm tan scrapbook with hand-placed polaroid photos.</div>
+    </div>
+  </a>
+
+  <!-- v20 -->
+  <a class="design-card" href="v20.html" data-category="retro">
+    <div class="card-thumb thumb-v20">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:rgba(255,255,255,0.8)">20</span>
+        <div class="thumb-bars" style="color:rgba(255,255,255,0.5)">
+          <div class="thumb-bar" style="height:40px"></div>
+          <div class="thumb-bar" style="height:26px"></div>
+          <div class="thumb-bar" style="height:44px"></div>
+          <div class="thumb-bar" style="height:32px"></div>
+          <div class="thumb-bar" style="height:38px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v20</span><span class="card-tag">Retro</span></div>
+      <div class="card-name">Southwestern Art</div>
+      <div class="card-desc">Turquoise and terracotta with Native Southwestern geometric pattern influences.</div>
+    </div>
+  </a>
+
+  <!-- v21 -->
+  <a class="design-card" href="v21.html" data-category="experimental">
+    <div class="card-thumb thumb-v21">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:rgba(255,255,255,0.7)">21</span>
+        <div class="thumb-bars" style="color:rgba(255,255,255,0.45)">
+          <div class="thumb-bar" style="height:38px"></div>
+          <div class="thumb-bar" style="height:46px"></div>
+          <div class="thumb-bar" style="height:28px"></div>
+          <div class="thumb-bar" style="height:42px"></div>
+          <div class="thumb-bar" style="height:24px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v21</span><span class="card-tag">Experimental</span></div>
+      <div class="card-name">Blueprint</div>
+      <div class="card-desc">Architectural blueprint aesthetic with technical drawing overlays in white-on-blue.</div>
+    </div>
+  </a>
+
+  <!-- v22 -->
+  <a class="design-card" href="v22.html" data-category="experimental">
+    <div class="card-thumb thumb-v22">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:rgba(255,255,255,0.9)">22</span>
+        <div class="thumb-bars" style="color:rgba(255,255,255,0.6)">
+          <div class="thumb-bar" style="height:42px"></div>
+          <div class="thumb-bar" style="height:26px"></div>
+          <div class="thumb-bar" style="height:48px"></div>
+          <div class="thumb-bar" style="height:30px"></div>
+          <div class="thumb-bar" style="height:38px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v22</span><span class="card-tag">Experimental</span></div>
+      <div class="card-name">Comic Book</div>
+      <div class="card-desc">Bold primary colors and halftone dots with explosive speech bubbles and POW energy.</div>
+    </div>
+  </a>
+
+  <!-- v23 -->
+  <a class="design-card" href="v23.html" data-category="dark">
+    <div class="card-thumb thumb-v23">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#C9A84C">23</span>
+        <div class="thumb-bars" style="color:#C9A84C">
+          <div class="thumb-bar" style="height:36px"></div>
+          <div class="thumb-bar" style="height:48px"></div>
+          <div class="thumb-bar" style="height:24px"></div>
+          <div class="thumb-bar" style="height:40px"></div>
+          <div class="thumb-bar" style="height:32px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v23</span><span class="card-tag">Dark</span></div>
+      <div class="card-name">Luxury Travel</div>
+      <div class="card-desc">Sophisticated black and gold editorial for the discerning desert traveller.</div>
+    </div>
+  </a>
+
+  <!-- v24 -->
+  <a class="design-card" href="v24.html" data-category="minimal">
+    <div class="card-thumb thumb-v24">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:rgba(255,255,255,0.7)">24</span>
+        <div class="thumb-bars" style="color:#FF6B00">
+          <div class="thumb-bar" style="height:44px"></div>
+          <div class="thumb-bar" style="height:30px"></div>
+          <div class="thumb-bar" style="height:40px"></div>
+          <div class="thumb-bar" style="height:24px"></div>
+          <div class="thumb-bar" style="height:46px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v24</span><span class="card-tag">Minimal</span></div>
+      <div class="card-name">Outdoor Gear Catalog</div>
+      <div class="card-desc">REI/Patagonia-inspired technical spec cards with forest green and bold orange CTAs.</div>
+    </div>
+  </a>
+
+  <!-- v25 -->
+  <a class="design-card" href="v25.html" data-category="minimal">
+    <div class="card-thumb thumb-v25">
+      <div class="thumb-inner">
+        <span class="thumb-num" style="color:#DC2743">25</span>
+        <div class="thumb-bars" style="color:#CC2366">
+          <div class="thumb-bar" style="height:30px"></div>
+          <div class="thumb-bar" style="height:44px"></div>
+          <div class="thumb-bar" style="height:22px"></div>
+          <div class="thumb-bar" style="height:38px"></div>
+          <div class="thumb-bar" style="height:28px"></div>
+        </div>
+      </div>
+      <div class="card-thumb-overlay"><div class="open-label">Open Design &#8594;</div></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta"><span class="card-number">v25</span><span class="card-tag">Minimal</span></div>
+      <div class="card-name">Social Media</div>
+      <div class="card-desc">Instagram-style profile with story circles, grid posts, and an interactive story overlay.</div>
+    </div>
+  </a>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">Mesa Trail <span>Designs</span> — 25 iterations</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">Mesa, Arizona</a>
+    <a href="#">5 Trails</a>
+    <a href="#">25 Designs</a>
+  </div>
+  <div class="footer-meta">&copy; 2024 &nbsp;·&nbsp; Design exploration series</div>
+</footer>
+
+<script>
+function filterCards(category, btn) {
+  // Update active button
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const cards = document.querySelectorAll('.design-card');
+  let visible = 0;
+
+  cards.forEach(card => {
+    const cat = card.getAttribute('data-category');
+    if (category === 'all' || cat === category) {
+      card.classList.remove('hidden');
+      visible++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+
+  const total = cards.length;
+  document.getElementById('filterCount').textContent =
+    visible === total
+      ? `Showing ${total} of ${total}`
+      : `Showing ${visible} of ${total}`;
+}
+</script>
+
+</body>
+</html>

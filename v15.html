@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mesa Trails — Material Design 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --md-primary: #8B3A2A;
+    --md-on-primary: #FFFFFF;
+    --md-primary-container: #FFDAD0;
+    --md-on-primary-container: #410002;
+    --md-secondary: #775650;
+    --md-on-secondary: #FFFFFF;
+    --md-secondary-container: #FFDAD6;
+    --md-on-secondary-container: #2C1512;
+    --md-tertiary: #705C2E;
+    --md-on-tertiary: #FFFFFF;
+    --md-tertiary-container: #FBDFA6;
+    --md-on-tertiary-container: #251A00;
+    --md-surface: #FFFBFE;
+    --md-surface-variant: #F5DDDA;
+    --md-on-surface: #201A19;
+    --md-on-surface-variant: #534341;
+    --md-outline: #857371;
+    --md-outline-variant: #D8C2BF;
+    --md-shadow: rgba(0,0,0,0.15);
+    --md-elevation-1: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+    --md-elevation-2: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px 2px rgba(0,0,0,0.15);
+    --md-elevation-3: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3);
+    --md-shape-extra-large: 28px;
+    --md-shape-large: 16px;
+    --md-shape-medium: 12px;
+    --md-shape-small: 8px;
+    --md-shape-full: 50px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--md-surface);
+    color: var(--md-on-surface);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  .top-app-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--md-surface);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    box-shadow: var(--md-elevation-1);
+    transition: box-shadow 0.3s;
+  }
+  .nav-btn {
+    width: 48px; height: 48px;
+    border: none;
+    background: none;
+    border-radius: var(--md-shape-full);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--md-on-surface);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .nav-btn:hover { background: rgba(32,26,25,0.08); }
+  .top-app-bar a {
+    text-decoration: none;
+    color: var(--md-on-surface);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+  }
+  .app-title {
+    flex: 1;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--md-on-surface);
+  }
+
+  /* HERO */
+  .hero {
+    margin-top: 64px;
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #8B3A2A 0%, #B5532A 40%, #E07B50 70%, #F4A574 100%);
+  }
+  .hero-shape {
+    position: absolute;
+    bottom: -2px;
+    left: 0; right: 0;
+    height: 80px;
+    background: var(--md-surface);
+    clip-path: ellipse(55% 80px at 50% 80px);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+  }
+  .hero-surface-card {
+    background: var(--md-surface);
+    border-radius: var(--md-shape-extra-large);
+    padding: 32px 40px;
+    max-width: 520px;
+    width: 100%;
+    box-shadow: var(--md-elevation-3);
+    animation: heroCardEnter 0.8s cubic-bezier(0.2, 0, 0, 1) both;
+  }
+  @keyframes heroCardEnter {
+    from { opacity: 0; transform: translateY(40px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .hero-eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--md-primary);
+    margin-bottom: 8px;
+  }
+  .hero-headline {
+    font-size: 45px;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--md-on-surface);
+    margin-bottom: 16px;
+  }
+  .hero-headline span { color: var(--md-primary); font-weight: 700; }
+  .hero-body {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--md-on-surface-variant);
+    margin-bottom: 28px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-filled {
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+    border: none;
+    border-radius: var(--md-shape-full);
+    padding: 10px 24px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+    box-shadow: var(--md-elevation-1);
+  }
+  .btn-filled:hover { box-shadow: var(--md-elevation-2); }
+  .btn-tonal {
+    background: var(--md-secondary-container);
+    color: var(--md-on-secondary-container);
+    border: none;
+    border-radius: var(--md-shape-full);
+    padding: 10px 24px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+  .ripple-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+  }
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    transform: scale(0);
+    animation: rippleAnim 0.6s linear;
+    pointer-events: none;
+  }
+  @keyframes rippleAnim {
+    to { transform: scale(4); opacity: 0; }
+  }
+
+  /* FAB */
+  .fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    width: 56px; height: 56px;
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+    border: none;
+    border-radius: 16px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--md-elevation-3);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .fab:hover { box-shadow: 0 6px 10px rgba(0,0,0,0.2); transform: scale(1.05); }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--md-primary-container);
+    padding: 20px 24px;
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--md-on-primary-container);
+  }
+  .stat-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: var(--md-on-primary-container);
+    opacity: 0.8;
+  }
+
+  /* CONTENT */
+  .content { padding: 32px 16px 80px; max-width: 1200px; margin: 0 auto; }
+
+  .section-title {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--md-on-surface);
+    margin-bottom: 24px;
+    padding-left: 8px;
+  }
+
+  .trails-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  /* M3 FILLED CARD */
+  .trail-card {
+    background: var(--md-surface-variant);
+    border-radius: var(--md-shape-extra-large);
+    overflow: hidden;
+    box-shadow: var(--md-elevation-1);
+    transition: box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1), transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+    opacity: 0;
+    transform: translateY(32px);
+    position: relative;
+  }
+  .trail-card.visible {
+    animation: cardEnter 0.5s cubic-bezier(0.2, 0, 0, 1) both;
+  }
+  @keyframes cardEnter {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .trail-card:hover {
+    box-shadow: var(--md-elevation-3);
+    transform: translateY(-2px);
+  }
+  .card-media {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+  }
+  .card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .trail-card:hover .card-media img { transform: scale(1.04); }
+
+  .card-body { padding: 20px 20px 8px; }
+  .card-headline {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--md-on-surface);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .card-subhead {
+    font-size: 14px;
+    color: var(--md-on-surface-variant);
+    margin-bottom: 16px;
+  }
+
+  /* CHIPS */
+  .chip-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .chip {
+    height: 32px;
+    padding: 0 12px;
+    border-radius: var(--md-shape-full);
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--md-surface);
+    color: var(--md-on-surface-variant);
+    border: 1px solid var(--md-outline-variant);
+  }
+  .chip.difficulty-easy { background: #E8F5E9; color: #1B5E20; border-color: #A5D6A7; }
+  .chip.difficulty-moderate { background: #FFF8E1; color: #E65100; border-color: #FFE082; }
+  .chip.difficulty-strenuous { background: #FFEBEE; color: #B71C1C; border-color: #EF9A9A; }
+
+  /* PROGRESS BAR */
+  .elevation-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .elevation-label {
+    font-size: 12px;
+    color: var(--md-on-surface-variant);
+    white-space: nowrap;
+    min-width: 80px;
+  }
+  .progress-track {
+    flex: 1;
+    height: 4px;
+    background: var(--md-outline-variant);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--md-primary);
+    border-radius: 2px;
+    width: 0;
+    transition: width 1s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .elevation-val {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--md-primary);
+    min-width: 54px;
+    text-align: right;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--md-outline-variant);
+    margin: 8px 0;
+  }
+
+  /* REVIEWS */
+  .reviews-section { padding: 8px 20px 20px; }
+  .reviews-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--md-on-surface-variant);
+    margin-bottom: 10px;
+  }
+  .review-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .review-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .review-content { flex: 1; }
+  .review-text {
+    font-size: 13px;
+    color: var(--md-on-surface);
+    line-height: 1.4;
+    margin-bottom: 2px;
+  }
+  .review-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .stars { font-size: 11px; letter-spacing: 1px; }
+  .reviewer-name { font-size: 11px; color: var(--md-on-surface-variant); }
+
+  /* DRAWER */
+  .drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 300;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .drawer-overlay.open { opacity: 1; pointer-events: all; }
+  .nav-drawer {
+    position: fixed;
+    top: 0; left: 0;
+    width: 280px;
+    height: 100%;
+    background: var(--md-surface);
+    z-index: 400;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+    padding: 24px 0;
+    box-shadow: var(--md-elevation-3);
+  }
+  .nav-drawer.open { transform: translateX(0); }
+  .drawer-header {
+    padding: 0 28px 16px;
+    border-bottom: 1px solid var(--md-outline-variant);
+    margin-bottom: 8px;
+  }
+  .drawer-title {
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--md-on-surface);
+  }
+  .drawer-subtitle {
+    font-size: 12px;
+    color: var(--md-on-surface-variant);
+  }
+  .drawer-item {
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--md-on-surface-variant);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 0 100px 100px 0;
+    margin-right: 12px;
+    transition: background 0.2s;
+  }
+  .drawer-item:hover { background: rgba(32,26,25,0.08); }
+
+  @media (max-width: 600px) {
+    .hero-headline { font-size: 32px; }
+    .trails-grid { grid-template-columns: 1fr; }
+    .stats-bar { gap: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV DRAWER OVERLAY -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<nav class="nav-drawer" id="navDrawer">
+  <div class="drawer-header">
+    <div class="drawer-title">Mesa Trails</div>
+    <div class="drawer-subtitle">Explore the desert</div>
+  </div>
+  <div class="drawer-item" onclick="closeDrawer()">🏠 Home</div>
+  <div class="drawer-item" onclick="closeDrawer()">🥾 All Trails</div>
+  <div class="drawer-item" onclick="closeDrawer()">🗺️ Trail Map</div>
+  <div class="drawer-item" onclick="closeDrawer()">⭐ Favorites</div>
+  <div class="drawer-item" onclick="closeDrawer(); window.location='index.html'">← All Designs</div>
+</nav>
+
+<!-- TOP APP BAR -->
+<header class="top-app-bar">
+  <button class="nav-btn" onclick="openDrawer()" title="Menu">☰</button>
+  <span class="app-title">Mesa Trails</span>
+  <a href="index.html" style="font-size:13px; color: var(--md-primary); font-weight:500;">← All Designs</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-surface-card">
+      <div class="hero-eyebrow">🌵 Mesa, Arizona</div>
+      <h1 class="hero-headline">Discover <span>Desert</span><br>Trails</h1>
+      <p class="hero-body">Five world-class hiking routes through Usery Mountain, Lost Dutchman, and the Superstition Wilderness — all within reach of Mesa, AZ.</p>
+      <div class="hero-actions">
+        <button class="btn-filled" onclick="addRipple(this, event); document.querySelector('.content').scrollIntoView({behavior:'smooth'})">
+          <div class="ripple-container"></div>
+          Explore Trails
+        </button>
+        <button class="btn-tonal">Plan a Hike</button>
+      </div>
+    </div>
+  </div>
+  <div class="hero-shape"></div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">5</div>
+    <div class="stat-label">Trails</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">18.4</div>
+    <div class="stat-label">Total Miles</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">5,530</div>
+    <div class="stat-label">Total Elevation (ft)</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">4.7</div>
+    <div class="stat-label">Avg Rating ⭐</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="content">
+  <h2 class="section-title">🥾 Featured Trails</h2>
+  <div class="trails-grid" id="trailsGrid">
+
+    <!-- Trail 1 -->
+    <article class="trail-card" data-elevation="860" data-max="2100">
+      <div class="card-media"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail" loading="lazy"></div>
+      <div class="card-body">
+        <div class="card-headline">Wind Cave Trail</div>
+        <div class="card-subhead">Usery Mountain Regional Park</div>
+        <div class="chip-row">
+          <span class="chip difficulty-moderate">⛰️ Moderate</span>
+          <span class="chip">📍 3.2 mi</span>
+          <span class="chip">⏱️ 1.5–2 hrs</span>
+        </div>
+        <div class="elevation-row">
+          <span class="elevation-label">Elevation</span>
+          <div class="progress-track"><div class="progress-fill" data-width="41"></div></div>
+          <span class="elevation-val">+860 ft</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="reviews-section">
+        <div class="reviews-label">Reviews</div>
+        <div class="review-item">
+          <div class="review-avatar">JR</div>
+          <div class="review-content">
+            <div class="review-text">"Stunning cave views at the top!"</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐⭐</span><span class="reviewer-name">— Jake R.</span></div>
+          </div>
+        </div>
+        <div class="review-item">
+          <div class="review-avatar">SM</div>
+          <div class="review-content">
+            <div class="review-text">"Great morning hike, bring water."</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐</span><span class="reviewer-name">— Sara M.</span></div>
+          </div>
+        </div>
+        <div class="review-item">
+          <div class="review-avatar">CT</div>
+          <div class="review-content">
+            <div class="review-text">"Trail is well-marked and rewarding."</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐⭐</span><span class="reviewer-name">— Chris T.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Trail 2 -->
+    <article class="trail-card" data-elevation="2045" data-max="2100">
+      <div class="card-media"><img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail" loading="lazy"></div>
+      <div class="card-body">
+        <div class="card-headline">Siphon Draw Trail</div>
+        <div class="card-subhead">Lost Dutchman State Park</div>
+        <div class="chip-row">
+          <span class="chip difficulty-strenuous">🔥 Strenuous</span>
+          <span class="chip">📍 4.2 mi</span>
+          <span class="chip">⏱️ 3–4 hrs</span>
+        </div>
+        <div class="elevation-row">
+          <span class="elevation-label">Elevation</span>
+          <div class="progress-track"><div class="progress-fill" data-width="97"></div></div>
+          <span class="elevation-val">+2,045 ft</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="reviews-section">
+        <div class="reviews-label">Reviews</div>
+        <div class="review-item">
+          <div class="review-avatar">ML</div>
+          <div class="review-content">
+            <div class="review-text">"Epic views of the Superstitions!"</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐⭐</span><span class="reviewer-name">— Maria L.</span></div>
+          </div>
+        </div>
+        <div class="review-item">
+          <div class="review-avatar">TB</div>
+          <div class="review-content">
+            <div class="review-text">"Very challenging but worth it."</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐</span><span class="reviewer-name">— Tom B.</span></div>
+          </div>
+        </div>
+        <div class="review-item">
+          <div class="review-avatar">AS</div>
+          <div class="review-content">
+            <div class="review-text">"Best hike in the East Valley."</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐⭐</span><span class="reviewer-name">— Ava S.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Trail 3 -->
+    <article class="trail-card" data-elevation="1425" data-max="2100">
+      <div class="card-media"><img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail" loading="lazy"></div>
+      <div class="card-body">
+        <div class="card-headline">Peralta Trail</div>
+        <div class="card-subhead">Superstition Wilderness</div>
+        <div class="chip-row">
+          <span class="chip difficulty-strenuous">⚡ Mod-Strenuous</span>
+          <span class="chip">📍 4.6 mi</span>
+          <span class="chip">⏱️ 3–3.5 hrs</span>
+        </div>
+        <div class="elevation-row">
+          <span class="elevation-label">Elevation</span>
+          <div class="progress-track"><div class="progress-fill" data-width="68"></div></div>
+          <span class="elevation-val">+1,425 ft</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="reviews-section">
+        <div class="reviews-label">Reviews</div>
+        <div class="review-item">
+          <div class="review-avatar">DK</div>
+          <div class="review-content">
+            <div class="review-text">"Weaver's Needle views are unreal."</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐⭐</span><span class="reviewer-name">— Dan K.</span></div>
+          </div>
+        </div>
+        <div class="review-item">
+          <div class="review-avatar">LW</div>
+          <div class="review-content">
+            <div class="review-text">"Rocky but beautiful terrain."</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐</span><span class="reviewer-name">— Lily W.</span></div>
+          </div>
+        </div>
+        <div class="review-item">
+          <div class="review-avatar">NP</div>
+          <div class="review-content">
+            <div class="review-text">"A must-do in Arizona."</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐⭐</span><span class="reviewer-name">— Noah P.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Trail 4 -->
+    <article class="trail-card" data-elevation="800" data-max="2100">
+      <div class="card-media"><img src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail" loading="lazy"></div>
+      <div class="card-body">
+        <div class="card-headline">Hieroglyphic Trail</div>
+        <div class="card-subhead">Superstition Wilderness</div>
+        <div class="chip-row">
+          <span class="chip difficulty-easy">🌿 Easy-Moderate</span>
+          <span class="chip">📍 3.4 mi</span>
+          <span class="chip">⏱️ 2–2.5 hrs</span>
+        </div>
+        <div class="elevation-row">
+          <span class="elevation-label">Elevation</span>
+          <div class="progress-track"><div class="progress-fill" data-width="38"></div></div>
+          <span class="elevation-val">+800 ft</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="reviews-section">
+        <div class="reviews-label">Reviews</div>
+        <div class="review-item">
+          <div class="review-avatar">ER</div>
+          <div class="review-content">
+            <div class="review-text">"Ancient petroglyphs are fascinating."</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐⭐</span><span class="reviewer-name">— Emma R.</span></div>
+          </div>
+        </div>
+        <div class="review-item">
+          <div class="review-avatar">LF</div>
+          <div class="review-content">
+            <div class="review-text">"Perfect for beginners."</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐</span><span class="reviewer-name">— Liam F.</span></div>
+          </div>
+        </div>
+        <div class="review-item">
+          <div class="review-avatar">ZC</div>
+          <div class="review-content">
+            <div class="review-text">"Hidden gem near Mesa."</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐⭐</span><span class="reviewer-name">— Zoe C.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Trail 5 -->
+    <article class="trail-card" data-elevation="400" data-max="2100">
+      <div class="card-media"><img src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail" loading="lazy"></div>
+      <div class="card-body">
+        <div class="card-headline">Red Mountain Trail</div>
+        <div class="card-subhead">Mesa, Arizona</div>
+        <div class="chip-row">
+          <span class="chip difficulty-easy">🌱 Easy-Moderate</span>
+          <span class="chip">📍 3.0 mi</span>
+          <span class="chip">⏱️ 1.5–2 hrs</span>
+        </div>
+        <div class="elevation-row">
+          <span class="elevation-label">Elevation</span>
+          <div class="progress-track"><div class="progress-fill" data-width="19"></div></div>
+          <span class="elevation-val">+400 ft</span>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="reviews-section">
+        <div class="reviews-label">Reviews</div>
+        <div class="review-item">
+          <div class="review-avatar">BH</div>
+          <div class="review-content">
+            <div class="review-text">"The red volcanic formations are wild."</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐⭐</span><span class="reviewer-name">— Ben H.</span></div>
+          </div>
+        </div>
+        <div class="review-item">
+          <div class="review-avatar">PN</div>
+          <div class="review-content">
+            <div class="review-text">"Kids loved it!"</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐</span><span class="reviewer-name">— Priya N.</span></div>
+          </div>
+        </div>
+        <div class="review-item">
+          <div class="review-avatar">ST</div>
+          <div class="review-content">
+            <div class="review-text">"Short but scenic, great for all levels."</div>
+            <div class="review-meta"><span class="stars">⭐⭐⭐⭐⭐</span><span class="reviewer-name">— Sam T.</span></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</main>
+
+<!-- FAB -->
+<button class="fab" title="Map View">🗺️</button>
+
+<script>
+  // Drawer
+  function openDrawer() {
+    document.getElementById('navDrawer').classList.add('open');
+    document.getElementById('drawerOverlay').classList.add('open');
+  }
+  function closeDrawer() {
+    document.getElementById('navDrawer').classList.remove('open');
+    document.getElementById('drawerOverlay').classList.remove('open');
+  }
+
+  // Ripple
+  function addRipple(el, e) {
+    const container = el.querySelector('.ripple-container');
+    if (!container) return;
+    const rect = el.getBoundingClientRect();
+    const r = document.createElement('span');
+    r.classList.add('ripple');
+    const size = Math.max(el.offsetWidth, el.offsetHeight);
+    r.style.width = r.style.height = size + 'px';
+    r.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    r.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    container.appendChild(r);
+    setTimeout(() => r.remove(), 700);
+  }
+
+  // Intersection Observer for cards
+  const cards = document.querySelectorAll('.trail-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        const card = entry.target;
+        const delay = Array.from(cards).indexOf(card) * 80;
+        setTimeout(() => {
+          card.style.animationDelay = '0ms';
+          card.classList.add('visible');
+          // Animate progress bars
+          card.querySelectorAll('.progress-fill').forEach(bar => {
+            bar.style.width = bar.dataset.width + '%';
+          });
+        }, delay);
+        observer.unobserve(card);
+      }
+    });
+  }, { threshold: 0.15 });
+  cards.forEach(card => observer.observe(card));
+</script>
+</body>
+</html>

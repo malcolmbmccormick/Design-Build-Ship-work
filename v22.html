@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mesa Hikes — Comic Book Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #E8001E;
+    --yellow: #FFE000;
+    --blue: #0047AB;
+    --black: #0D0D0D;
+    --white: #FFFEF0;
+  }
+
+  body {
+    background-color: var(--white);
+    background-image: radial-gradient(circle, #bbb 1px, transparent 1px);
+    background-size: 18px 18px;
+    font-family: 'Comic Neue', cursive;
+    color: var(--black);
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--yellow);
+    border-bottom: 4px solid var(--black);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 0 var(--black);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header .logo {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    color: var(--black);
+    text-shadow: 3px 3px 0 var(--red);
+    -webkit-text-stroke: 1px var(--black);
+  }
+  nav a {
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    color: var(--black);
+    text-decoration: none;
+    margin-left: 20px;
+    padding: 4px 12px;
+    border: 3px solid var(--black);
+    background: var(--white);
+    box-shadow: 3px 3px 0 var(--black);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  nav a:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--black);
+    background: var(--red);
+    color: var(--white);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 60px 20px;
+    overflow: hidden;
+    border-bottom: 5px solid var(--black);
+    background: var(--yellow);
+  }
+
+  /* Speed lines */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-conic-gradient(from 0deg at 50% 50%,
+      transparent 0deg, transparent 4deg,
+      rgba(255,255,255,0.25) 4deg, rgba(255,255,255,0.25) 5deg);
+    pointer-events: none;
+  }
+
+  .starburst {
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    background: var(--red);
+    clip-path: polygon(
+      50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%,
+      50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%,
+      50% 0%, 55% 18%, 65% 28%, 50% 25%, 35% 28%,
+      45% 18%
+    );
+    clip-path: polygon(
+      50% 0%,   54% 20%, 65% 5%,  62% 26%, 80% 15%,
+      72% 34%,  96% 32%, 80% 48%, 100% 55%, 78% 60%,
+      92% 77%,  70% 72%, 72% 95%, 55% 80%, 50% 100%,
+      45% 80%,  28% 95%, 30% 72%, 8%  77%, 22% 60%,
+      0%  55%,  20% 48%, 4%  32%, 28% 34%, 20% 15%,
+      38% 26%,  35% 5%,  46% 20%
+    );
+    z-index: 0;
+    animation: starburst-in 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes starburst-in {
+    0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+    60%  { opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  .starburst-spin {
+    animation: starburst-in 0.6s cubic-bezier(0.34,1.56,0.64,1) both,
+               starburst-spin 12s linear 0.6s infinite;
+  }
+
+  @keyframes starburst-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+
+  .pow-text {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(4rem, 12vw, 8rem);
+    color: var(--yellow);
+    -webkit-text-stroke: 4px var(--black);
+    text-shadow:
+      6px 6px 0 var(--black),
+      -2px -2px 0 var(--black);
+    line-height: 0.9;
+    letter-spacing: 4px;
+    animation: pow-in 0.5s 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes pow-in {
+    0%   { transform: scale(0.3) rotate(-5deg); opacity: 0; }
+    100% { transform: scale(1) rotate(-2deg); opacity: 1; }
+  }
+
+  .hero-sub {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(1.2rem, 4vw, 2.2rem);
+    color: var(--white);
+    -webkit-text-stroke: 2px var(--black);
+    text-shadow: 3px 3px 0 var(--black);
+    letter-spacing: 2px;
+    margin-top: 8px;
+    animation: pow-in 0.5s 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  .hero-location {
+    display: inline-block;
+    margin-top: 20px;
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    background: var(--blue);
+    color: var(--white);
+    border: 3px solid var(--black);
+    box-shadow: 4px 4px 0 var(--black);
+    padding: 6px 20px;
+    animation: pow-in 0.5s 0.8s both;
+  }
+
+  /* ── CHAPTER HEADER ── */
+  .chapter-header {
+    background: var(--black);
+    color: var(--yellow);
+    font-family: 'Bangers', cursive;
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    letter-spacing: 4px;
+    text-align: center;
+    padding: 16px 24px;
+    border-top: 4px solid var(--yellow);
+    border-bottom: 4px solid var(--yellow);
+    margin: 48px 0 32px;
+    text-shadow: 3px 3px 0 var(--red);
+    position: relative;
+  }
+  .chapter-header::before,
+  .chapter-header::after {
+    content: '★';
+    color: var(--red);
+    margin: 0 16px;
+    font-size: 1em;
+  }
+
+  /* ── TRAIL GRID ── */
+  .trails-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  .trail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 36px;
+  }
+
+  /* Comic panel card */
+  .trail-card {
+    background: var(--white);
+    border: 4px solid var(--black);
+    box-shadow: 8px 8px 0 var(--black);
+    overflow: visible;
+    position: relative;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .trail-card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0 var(--black);
+  }
+
+  .trail-card:nth-child(1) { background: #FFF5F5; }
+  .trail-card:nth-child(2) { background: #F5F8FF; }
+  .trail-card:nth-child(3) { background: #FFFFF0; }
+  .trail-card:nth-child(4) { background: #F0FFF5; }
+  .trail-card:nth-child(5) { background: #FFF0F8; }
+
+  .card-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    border-bottom: 4px solid var(--black);
+    filter: saturate(1.3) contrast(1.1);
+  }
+
+  .card-body {
+    padding: 18px 20px;
+  }
+
+  .card-name {
+    font-family: 'Bangers', cursive;
+    font-size: 1.9rem;
+    letter-spacing: 2px;
+    color: var(--black);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .card-park {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+
+  /* Difficulty badge */
+  .difficulty-badge {
+    display: inline-block;
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border: 3px solid var(--black);
+    box-shadow: 3px 3px 0 var(--black);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .diff-easy    { background: #00CC44; color: var(--white); }
+  .diff-easy-mod { background: #88CC00; color: var(--black); }
+  .diff-mod     { background: var(--yellow); color: var(--black); }
+  .diff-mod-str { background: #FF7700; color: var(--white); }
+  .diff-str     { background: var(--red); color: var(--white); }
+
+  /* Stats row */
+  .stats-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .stat-chip {
+    background: var(--black);
+    color: var(--yellow);
+    font-family: 'Bangers', cursive;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border: 2px solid var(--black);
+  }
+
+  /* Speech bubble reviews */
+  .reviews-label {
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--blue);
+    -webkit-text-stroke: 0.5px var(--black);
+    margin-bottom: 10px;
+  }
+
+  .review {
+    position: relative;
+    background: var(--blue);
+    color: var(--white);
+    border: 3px solid var(--black);
+    box-shadow: 3px 3px 0 var(--black);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .review::after {
+    content: '';
+    position: absolute;
+    bottom: -16px;
+    left: 24px;
+    border: 8px solid transparent;
+    border-top-color: var(--black);
+  }
+  .review::before {
+    content: '';
+    position: absolute;
+    bottom: -11px;
+    left: 26px;
+    border: 6px solid transparent;
+    border-top-color: var(--blue);
+    z-index: 1;
+  }
+  .trail-card:nth-child(odd) .review {
+    background: var(--red);
+  }
+  .trail-card:nth-child(odd) .review::before {
+    border-top-color: var(--red);
+  }
+
+  .review-author {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    opacity: 0.85;
+    font-style: italic;
+  }
+
+  .stars { color: var(--yellow); letter-spacing: 1px; }
+
+  /* ── ACTION BUTTON ── */
+  .card-btn {
+    display: block;
+    width: 100%;
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    text-align: center;
+    background: var(--red);
+    color: var(--white);
+    border: 3px solid var(--black);
+    box-shadow: 4px 4px 0 var(--black);
+    padding: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-top: 12px;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .card-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--black);
+    background: var(--yellow);
+    color: var(--black);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    color: var(--yellow);
+    text-align: center;
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    padding: 28px;
+    border-top: 5px solid var(--red);
+    text-shadow: 2px 2px 0 var(--red);
+  }
+  footer span {
+    color: var(--white);
+    font-size: 0.85rem;
+    font-family: 'Comic Neue', cursive;
+    font-weight: 700;
+    display: block;
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">&#128293; MESA TRAIL COMICS</div>
+  <nav>
+    <a href="index.html">&#8592; All Designs</a>
+    <a href="#">Trails</a>
+    <a href="#">Map</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="starburst starburst-spin"></div>
+  <div class="hero-content">
+    <div class="pow-text">POW!</div>
+    <div class="pow-text" style="font-size: clamp(2.5rem,7vw,5rem); color: var(--blue); animation-delay:0.4s;">MESA'S MOST</div>
+    <div class="pow-text" style="font-size: clamp(3rem,9vw,6.5rem); color: var(--red); animation-delay:0.5s;">EPIC HIKES!</div>
+    <div class="hero-sub">5 LEGENDARY TRAILS — ONE INCREDIBLE ADVENTURE</div>
+    <div class="hero-location">&#128205; MESA, ARIZONA</div>
+  </div>
+</section>
+
+<div class="chapter-header">MEANWHILE, IN THE SUPERSTITION MOUNTAINS...</div>
+
+<section class="trails-section">
+  <div class="trail-grid">
+
+    <!-- Trail 1 -->
+    <article class="trail-card">
+      <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail">
+      <div class="card-body">
+        <div class="card-name">Wind Cave Trail</div>
+        <div class="card-park">Usery Mountain Regional Park</div>
+        <span class="difficulty-badge diff-mod">&#9889; MODERATE</span>
+        <div class="stats-row">
+          <span class="stat-chip">&#128205; 3.2 MI</span>
+          <span class="stat-chip">&#8987; 1.5–2 HRS</span>
+          <span class="stat-chip">&#9650; +860 FT</span>
+        </div>
+        <div class="reviews-label">WHAT HEROES ARE SAYING:</div>
+        <div class="review">
+          "Stunning cave views at the top!"
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> — Jake R.</span>
+        </div>
+        <div class="review" style="margin-top:24px;">
+          "Great morning hike, bring water."
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;</span> — Sara M.</span>
+        </div>
+        <div class="review" style="margin-top:24px;">
+          "Trail is well-marked and rewarding."
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> — Chris T.</span>
+        </div>
+        <a class="card-btn" href="#">LET'S GO! &#128293;</a>
+      </div>
+    </article>
+
+    <!-- Trail 2 -->
+    <article class="trail-card">
+      <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail">
+      <div class="card-body">
+        <div class="card-name">Siphon Draw Trail</div>
+        <div class="card-park">Lost Dutchman State Park</div>
+        <span class="difficulty-badge diff-str">&#128293; STRENUOUS</span>
+        <div class="stats-row">
+          <span class="stat-chip">&#128205; 4.2 MI</span>
+          <span class="stat-chip">&#8987; 3–4 HRS</span>
+          <span class="stat-chip">&#9650; +2,045 FT</span>
+        </div>
+        <div class="reviews-label">WHAT HEROES ARE SAYING:</div>
+        <div class="review">
+          "Epic views of the Superstitions!"
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> — Maria L.</span>
+        </div>
+        <div class="review" style="margin-top:24px;">
+          "Very challenging but worth it."
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;</span> — Tom B.</span>
+        </div>
+        <div class="review" style="margin-top:24px;">
+          "Best hike in the East Valley."
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> — Ava S.</span>
+        </div>
+        <a class="card-btn" href="#">LET'S GO! &#128293;</a>
+      </div>
+    </article>
+
+    <!-- Trail 3 -->
+    <article class="trail-card">
+      <img class="card-img" src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail">
+      <div class="card-body">
+        <div class="card-name">Peralta Trail</div>
+        <div class="card-park">Superstition Wilderness</div>
+        <span class="difficulty-badge diff-mod-str">&#9889; MOD-STRENUOUS</span>
+        <div class="stats-row">
+          <span class="stat-chip">&#128205; 4.6 MI</span>
+          <span class="stat-chip">&#8987; 3–3.5 HRS</span>
+          <span class="stat-chip">&#9650; +1,425 FT</span>
+        </div>
+        <div class="reviews-label">WHAT HEROES ARE SAYING:</div>
+        <div class="review">
+          "Weaver's Needle views are unreal."
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> — Dan K.</span>
+        </div>
+        <div class="review" style="margin-top:24px;">
+          "Rocky but beautiful terrain."
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;</span> — Lily W.</span>
+        </div>
+        <div class="review" style="margin-top:24px;">
+          "A must-do in Arizona."
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> — Noah P.</span>
+        </div>
+        <a class="card-btn" href="#">LET'S GO! &#128293;</a>
+      </div>
+    </article>
+
+    <!-- Trail 4 -->
+    <article class="trail-card">
+      <img class="card-img" src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail">
+      <div class="card-body">
+        <div class="card-name">Hieroglyphic Trail</div>
+        <div class="card-park">Superstition Wilderness</div>
+        <span class="difficulty-badge diff-easy-mod">&#127807; EASY-MODERATE</span>
+        <div class="stats-row">
+          <span class="stat-chip">&#128205; 3.4 MI</span>
+          <span class="stat-chip">&#8987; 2–2.5 HRS</span>
+          <span class="stat-chip">&#9650; +800 FT</span>
+        </div>
+        <div class="reviews-label">WHAT HEROES ARE SAYING:</div>
+        <div class="review">
+          "Ancient petroglyphs are fascinating."
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> — Emma R.</span>
+        </div>
+        <div class="review" style="margin-top:24px;">
+          "Perfect for beginners."
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;</span> — Liam F.</span>
+        </div>
+        <div class="review" style="margin-top:24px;">
+          "Hidden gem near Mesa."
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> — Zoe C.</span>
+        </div>
+        <a class="card-btn" href="#">LET'S GO! &#128293;</a>
+      </div>
+    </article>
+
+    <!-- Trail 5 -->
+    <article class="trail-card">
+      <img class="card-img" src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail">
+      <div class="card-body">
+        <div class="card-name">Red Mountain Trail</div>
+        <div class="card-park">Red Mountain Park</div>
+        <span class="difficulty-badge diff-easy-mod">&#127807; EASY-MODERATE</span>
+        <div class="stats-row">
+          <span class="stat-chip">&#128205; 3.0 MI</span>
+          <span class="stat-chip">&#8987; 1.5–2 HRS</span>
+          <span class="stat-chip">&#9650; +400 FT</span>
+        </div>
+        <div class="reviews-label">WHAT HEROES ARE SAYING:</div>
+        <div class="review">
+          "The red volcanic formations are wild."
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> — Ben H.</span>
+        </div>
+        <div class="review" style="margin-top:24px;">
+          "Kids loved it!"
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;</span> — Priya N.</span>
+        </div>
+        <div class="review" style="margin-top:24px;">
+          "Short but scenic, great for all levels."
+          <span class="review-author"><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> — Sam T.</span>
+        </div>
+        <a class="card-btn" href="#">LET'S GO! &#128293;</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<footer>
+  MESA TRAIL COMICS &mdash; ISSUE #22
+  <span>All trails are real. All adventures are legendary. &copy; 2024 Mesa, Arizona</span>
+</footer>
+
+</body>
+</html>

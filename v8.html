@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magazine Editorial — Mesa Trail Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1B2B4B;
+    --warm-white: #F8F4EF;
+    --gold: #C9A84C;
+    --text: #2C2C2C;
+    --light-gray: #E8E3DC;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--warm-white);
+    color: var(--text);
+    font-family: 'Source Sans Pro', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  .top-nav {
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 40px;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--gold);
+  }
+  .top-nav a {
+    color: var(--warm-white);
+    text-decoration: none;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .top-nav a:hover { color: var(--gold); }
+  .nav-issue {
+    color: var(--gold);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  /* HERO */
+  .hero {
+    margin-top: 52px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: calc(100vh - 52px);
+    overflow: hidden;
+  }
+  .hero-photo {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.1s linear;
+  }
+  .hero-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.2) 0%, transparent 100%);
+  }
+  .hero-text {
+    background: var(--navy);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 64px;
+    transform: translateX(100%);
+    animation: slideInRight 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+  }
+  @keyframes slideInRight {
+    to { transform: translateX(0); }
+  }
+  .hero-eyebrow {
+    color: var(--gold);
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .hero-headline {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(42px, 5vw, 72px);
+    color: var(--warm-white);
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 32px;
+  }
+  .hero-headline em {
+    color: var(--gold);
+    font-style: italic;
+  }
+  .hero-subtext {
+    font-family: 'Source Sans Pro', sans-serif;
+    color: rgba(248,244,239,0.7);
+    font-size: 15px;
+    line-height: 1.8;
+    max-width: 380px;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 40px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(201,168,76,0.3);
+  }
+  .hero-meta-item label {
+    display: block;
+    color: var(--gold);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .hero-meta-item span {
+    color: var(--warm-white);
+    font-family: 'Libre Baskerville', serif;
+    font-size: 14px;
+  }
+
+  /* INTRO */
+  .intro-band {
+    background: var(--navy);
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    border-top: 1px solid var(--gold);
+  }
+  .intro-band-item {
+    color: var(--warm-white);
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+  .intro-band-item span {
+    color: var(--gold);
+    margin-right: 8px;
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    max-width: 900px;
+    margin: 80px auto 60px;
+    padding: 0 40px;
+    text-align: center;
+  }
+  .section-label {
+    color: var(--gold);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-family: 'Source Sans Pro', sans-serif;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .section-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 38px;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+  .section-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    max-width: 120px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .section-divider-icon {
+    color: var(--gold);
+    font-size: 18px;
+  }
+
+  /* TRAIL CARDS */
+  .trails-container {
+    max-width: 1100px;
+    margin: 0 auto 80px;
+    padding: 0 40px;
+  }
+  .trail-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-bottom: 80px;
+    border: 1px solid var(--light-gray);
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(27,43,75,0.08);
+    transition: box-shadow 0.3s;
+  }
+  .trail-card:hover {
+    box-shadow: 0 8px 50px rgba(27,43,75,0.15);
+  }
+  .trail-card:nth-child(even) {
+    direction: rtl;
+  }
+  .trail-card:nth-child(even) > * {
+    direction: ltr;
+  }
+  .trail-photo-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+  }
+  .trail-card .trail-photo-wrap {
+    aspect-ratio: unset;
+    min-height: 400px;
+  }
+  .trail-photo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .trail-card:hover .trail-photo-wrap img {
+    transform: scale(1.04);
+  }
+  .difficulty-badge {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 700;
+    padding: 6px 14px;
+  }
+  .trail-content {
+    background: var(--warm-white);
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .trail-number {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 80px;
+    color: var(--light-gray);
+    line-height: 1;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .trail-name {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .trail-location {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Source Sans Pro', sans-serif;
+    margin-bottom: 24px;
+  }
+  .trail-pull-quote {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--navy);
+    line-height: 1.6;
+    border-left: 3px solid var(--gold);
+    padding-left: 20px;
+    margin-bottom: 28px;
+  }
+  .trail-pull-quote::first-letter {
+    font-size: 2.5em;
+    float: left;
+    line-height: 0.8;
+    margin-right: 6px;
+    margin-top: 4px;
+    color: var(--gold);
+  }
+  .trail-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding: 24px 0;
+    border-top: 1px solid var(--light-gray);
+    border-bottom: 1px solid var(--light-gray);
+  }
+  .stat-item label {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: 'Source Sans Pro', sans-serif;
+    margin-bottom: 4px;
+  }
+  .stat-item span {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 15px;
+    color: var(--navy);
+    font-weight: 700;
+  }
+  .trail-reviews {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .review-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: #555;
+  }
+  .review-stars {
+    color: var(--gold);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .review-author {
+    font-weight: 600;
+    color: var(--navy);
+    margin-right: 4px;
+    font-size: 12px;
+  }
+
+  /* HR ORNAMENT */
+  .ornamental-hr {
+    max-width: 1100px;
+    margin: 0 auto 40px;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .ornamental-hr::before,
+  .ornamental-hr::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--light-gray), transparent);
+  }
+  .ornamental-hr-center {
+    color: var(--gold);
+    font-size: 14px;
+    letter-spacing: 8px;
+  }
+
+  /* FOOTER */
+  .footer {
+    background: var(--navy);
+    padding: 48px 40px;
+    text-align: center;
+    border-top: 3px solid var(--gold);
+  }
+  .footer-logo {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 24px;
+    color: var(--warm-white);
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .footer-tagline {
+    color: rgba(248,244,239,0.5);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; height: auto; }
+    .hero-photo { height: 300px; }
+    .trail-card { grid-template-columns: 1fr; }
+    .trail-card:nth-child(even) { direction: ltr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="index.html">← All Designs</a>
+  <span class="nav-issue">Issue No. 8 &nbsp;·&nbsp; Spring 2026 &nbsp;·&nbsp; Mesa, Arizona</span>
+  <span style="color:var(--gold);font-family:'Libre Baskerville',serif;font-size:13px;">Trail Guide</span>
+</nav>
+
+<section class="hero">
+  <div class="hero-photo" id="heroPhoto">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Mesa Arizona Trails">
+  </div>
+  <div class="hero-text">
+    <div class="hero-eyebrow">Field Report</div>
+    <h1 class="hero-headline">MESA'S<br><em>FINEST</em><br>TRAILS</h1>
+    <p class="hero-subtext">From ancient petroglyphs to volcanic formations — five curated routes through the American Southwest's most dramatic desert terrain.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <label>Routes</label>
+        <span>5 Selected</span>
+      </div>
+      <div class="hero-meta-item">
+        <label>Region</label>
+        <span>East Valley</span>
+      </div>
+      <div class="hero-meta-item">
+        <label>Season</label>
+        <span>Spring 2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="intro-band">
+  <span class="intro-band-item"><span>◆</span> Usery Mountain Regional Park</span>
+  <span class="intro-band-item"><span>◆</span> Lost Dutchman State Park</span>
+  <span class="intro-band-item"><span>◆</span> Superstition Wilderness</span>
+  <span class="intro-band-item"><span>◆</span> Red Mountain</span>
+</div>
+
+<div class="section-header">
+  <span class="section-label">Curated Selection</span>
+  <h2 class="section-title">Five Trails Worth Every Step</h2>
+  <div class="section-divider">
+    <span class="section-divider-icon">◆</span>
+  </div>
+</div>
+
+<div class="trails-container">
+
+  <!-- Trail 1 -->
+  <article class="trail-card">
+    <div class="trail-photo-wrap">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg" alt="Wind Cave Trail">
+      <span class="difficulty-badge">Moderate</span>
+    </div>
+    <div class="trail-content">
+      <div>
+        <div class="trail-number">01</div>
+        <h2 class="trail-name">Wind Cave Trail</h2>
+        <div class="trail-location">Usery Mountain Regional Park</div>
+        <blockquote class="trail-pull-quote">"Stunning cave views at the top — a trail that rewards every ounce of effort with panoramic desert splendor."</blockquote>
+      </div>
+      <div>
+        <div class="trail-stats">
+          <div class="stat-item"><label>Distance</label><span>3.2 mi RT</span></div>
+          <div class="stat-item"><label>Duration</label><span>1.5–2 hrs</span></div>
+          <div class="stat-item"><label>Elevation</label><span>+860 ft</span></div>
+          <div class="stat-item"><label>Difficulty</label><span>Moderate</span></div>
+        </div>
+        <div class="trail-reviews">
+          <div class="review-item">
+            <span class="review-stars">★★★★★</span>
+            <span><span class="review-author">Jake R.</span> "Stunning cave views at the top!"</span>
+          </div>
+          <div class="review-item">
+            <span class="review-stars">★★★★☆</span>
+            <span><span class="review-author">Sara M.</span> "Great morning hike, bring water."</span>
+          </div>
+          <div class="review-item">
+            <span class="review-stars">★★★★★</span>
+            <span><span class="review-author">Chris T.</span> "Trail is well-marked and rewarding."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <div class="ornamental-hr"><span class="ornamental-hr-center">· · ·</span></div>
+
+  <!-- Trail 2 -->
+  <article class="trail-card">
+    <div class="trail-photo-wrap">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="Siphon Draw Trail">
+      <span class="difficulty-badge">Strenuous</span>
+    </div>
+    <div class="trail-content">
+      <div>
+        <div class="trail-number">02</div>
+        <h2 class="trail-name">Siphon Draw Trail</h2>
+        <div class="trail-location">Lost Dutchman State Park</div>
+        <blockquote class="trail-pull-quote">"Epic views of the Superstitions — the best hike in the East Valley, bar none."</blockquote>
+      </div>
+      <div>
+        <div class="trail-stats">
+          <div class="stat-item"><label>Distance</label><span>4.2 mi RT</span></div>
+          <div class="stat-item"><label>Duration</label><span>3–4 hrs</span></div>
+          <div class="stat-item"><label>Elevation</label><span>+2,045 ft</span></div>
+          <div class="stat-item"><label>Difficulty</label><span>Strenuous</span></div>
+        </div>
+        <div class="trail-reviews">
+          <div class="review-item">
+            <span class="review-stars">★★★★★</span>
+            <span><span class="review-author">Maria L.</span> "Epic views of the Superstitions!"</span>
+          </div>
+          <div class="review-item">
+            <span class="review-stars">★★★★☆</span>
+            <span><span class="review-author">Tom B.</span> "Very challenging but worth it."</span>
+          </div>
+          <div class="review-item">
+            <span class="review-stars">★★★★★</span>
+            <span><span class="review-author">Ava S.</span> "Best hike in the East Valley."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <div class="ornamental-hr"><span class="ornamental-hr-center">· · ·</span></div>
+
+  <!-- Trail 3 -->
+  <article class="trail-card">
+    <div class="trail-photo-wrap">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg" alt="Peralta Trail">
+      <span class="difficulty-badge">Mod–Strenuous</span>
+    </div>
+    <div class="trail-content">
+      <div>
+        <div class="trail-number">03</div>
+        <h2 class="trail-name">Peralta Trail</h2>
+        <div class="trail-location">Superstition Wilderness</div>
+        <blockquote class="trail-pull-quote">"Weaver's Needle views are unreal — a must-do in Arizona with rocky, beautiful terrain."</blockquote>
+      </div>
+      <div>
+        <div class="trail-stats">
+          <div class="stat-item"><label>Distance</label><span>4.6 mi RT</span></div>
+          <div class="stat-item"><label>Duration</label><span>3–3.5 hrs</span></div>
+          <div class="stat-item"><label>Elevation</label><span>+1,425 ft</span></div>
+          <div class="stat-item"><label>Difficulty</label><span>Mod–Strenuous</span></div>
+        </div>
+        <div class="trail-reviews">
+          <div class="review-item">
+            <span class="review-stars">★★★★★</span>
+            <span><span class="review-author">Dan K.</span> "Weaver's Needle views are unreal."</span>
+          </div>
+          <div class="review-item">
+            <span class="review-stars">★★★★☆</span>
+            <span><span class="review-author">Lily W.</span> "Rocky but beautiful terrain."</span>
+          </div>
+          <div class="review-item">
+            <span class="review-stars">★★★★★</span>
+            <span><span class="review-author">Noah P.</span> "A must-do in Arizona."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <div class="ornamental-hr"><span class="ornamental-hr-center">· · ·</span></div>
+
+  <!-- Trail 4 -->
+  <article class="trail-card">
+    <div class="trail-photo-wrap">
+      <img src="https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg" alt="Hieroglyphic Trail">
+      <span class="difficulty-badge">Easy–Moderate</span>
+    </div>
+    <div class="trail-content">
+      <div>
+        <div class="trail-number">04</div>
+        <h2 class="trail-name">Hieroglyphic Trail</h2>
+        <div class="trail-location">Superstition Wilderness</div>
+        <blockquote class="trail-pull-quote">"Ancient petroglyphs are fascinating — a hidden gem near Mesa, perfect for beginners."</blockquote>
+      </div>
+      <div>
+        <div class="trail-stats">
+          <div class="stat-item"><label>Distance</label><span>3.4 mi RT</span></div>
+          <div class="stat-item"><label>Duration</label><span>2–2.5 hrs</span></div>
+          <div class="stat-item"><label>Elevation</label><span>+800 ft</span></div>
+          <div class="stat-item"><label>Difficulty</label><span>Easy–Moderate</span></div>
+        </div>
+        <div class="trail-reviews">
+          <div class="review-item">
+            <span class="review-stars">★★★★★</span>
+            <span><span class="review-author">Emma R.</span> "Ancient petroglyphs are fascinating."</span>
+          </div>
+          <div class="review-item">
+            <span class="review-stars">★★★★☆</span>
+            <span><span class="review-author">Liam F.</span> "Perfect for beginners."</span>
+          </div>
+          <div class="review-item">
+            <span class="review-stars">★★★★★</span>
+            <span><span class="review-author">Zoe C.</span> "Hidden gem near Mesa."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <div class="ornamental-hr"><span class="ornamental-hr-center">· · ·</span></div>
+
+  <!-- Trail 5 -->
+  <article class="trail-card">
+    <div class="trail-photo-wrap">
+      <img src="https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg" alt="Red Mountain Trail">
+      <span class="difficulty-badge">Easy–Moderate</span>
+    </div>
+    <div class="trail-content">
+      <div>
+        <div class="trail-number">05</div>
+        <h2 class="trail-name">Red Mountain Trail</h2>
+        <div class="trail-location">Red Mountain Recreation Area</div>
+        <blockquote class="trail-pull-quote">"The red volcanic formations are wild — short but scenic, great for all levels."</blockquote>
+      </div>
+      <div>
+        <div class="trail-stats">
+          <div class="stat-item"><label>Distance</label><span>3.0 mi RT</span></div>
+          <div class="stat-item"><label>Duration</label><span>1.5–2 hrs</span></div>
+          <div class="stat-item"><label>Elevation</label><span>+400 ft</span></div>
+          <div class="stat-item"><label>Difficulty</label><span>Easy–Moderate</span></div>
+        </div>
+        <div class="trail-reviews">
+          <div class="review-item">
+            <span class="review-stars">★★★★★</span>
+            <span><span class="review-author">Ben H.</span> "The red volcanic formations are wild."</span>
+          </div>
+          <div class="review-item">
+            <span class="review-stars">★★★★☆</span>
+            <span><span class="review-author">Priya N.</span> "Kids loved it!"</span>
+          </div>
+          <div class="review-item">
+            <span class="review-stars">★★★★★</span>
+            <span><span class="review-author">Sam T.</span> "Short but scenic, great for all levels."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-logo">Mesa Trail Guide</div>
+  <div class="footer-tagline">Volume I &nbsp;·&nbsp; Issue No. 8 &nbsp;·&nbsp; Spring 2026</div>
+</footer>
+
+<script>
+  // Parallax on hero photo
+  const heroPhoto = document.getElementById('heroPhoto');
+  const heroImg = heroPhoto.querySelector('img');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const rate = scrolled * 0.3;
+    heroImg.style.transform = `translateY(${rate}px) scale(1.1)`;
+  });
+  // Initialize slight scale for parallax
+  heroImg.style.transform = 'scale(1.1)';
+</script>
+</body>
+</html>
