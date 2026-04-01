@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mesa Trails — Watercolor Stories</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #FAFAF7;
+    --paper:     #F7F3EC;
+    --rose:      #E8A598;
+    --rose-deep: #C96B5A;
+    --sage:      #7A9E7E;
+    --sage-deep: #527556;
+    --sand:      #C9A96E;
+    --sand-light:#E5D5B5;
+    --sky:       #87CEEB;
+    --ink:       #2C2418;
+    --ink-mid:   #5C4F3E;
+    --ink-light: #9C8C7C;
+    --white:     #FFFFFF;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(250,250,247,0.90);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,169,110,0.25);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  nav a.back {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  nav a.back:hover { color: var(--sage-deep); }
+  .nav-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--ink);
+  }
+  .nav-sub {
+    font-size: 12px;
+    color: var(--ink-light);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    padding: 80px 40px 60px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  /* Watercolor blobs */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .blob-1 { width:560px; height:460px; background:radial-gradient(ellipse,#E8A598,#F0C4BA); top:-15%; left:-8%; }
+  .blob-2 { width:460px; height:460px; background:radial-gradient(ellipse,#87CEEB,#B5E4F7); top:10%; right:-12%; }
+  .blob-3 { width:640px; height:360px; background:radial-gradient(ellipse,#C9A96E,#E5D5B5); bottom:-10%; left:15%; opacity:0.3; }
+
+  .hero-content { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; }
+
+  .hero-eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--sage-deep);
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: paintIn 1.2s ease 0.2s forwards;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 8vw, 80px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: paintIn 1.4s ease 0.4s forwards;
+  }
+  .hero-title em { font-weight: 600; color: var(--rose-deep); font-style: italic; }
+
+  .hero-divider {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; max-width: 300px; margin: 0 auto 20px;
+    opacity: 0; animation: paintIn 1s ease 0.8s forwards;
+  }
+  .div-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--sand), transparent); }
+  .div-dot { width: 8px; height: 8px; background: var(--rose); border-radius: 50% 0 50% 0; transform: rotate(45deg); }
+
+  .hero-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--ink-mid);
+    line-height: 1.75;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: paintIn 1s ease 1s forwards;
+  }
+  .hero-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-light);
+    opacity: 0;
+    animation: paintIn 1s ease 1.3s forwards;
+  }
+
+  @keyframes paintIn {
+    from { opacity: 0; filter: blur(6px); transform: translateY(20px); }
+    to   { opacity: 1; filter: blur(0);   transform: translateY(0); }
+  }
+
+  /* ── STORY CIRCLES ── */
+  .stories-section {
+    padding: 40px 40px 56px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .stories-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rose-deep);
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  .stories-row {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .story-circle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  /* Painted ring using SVG-style CSS */
+  .story-ring {
+    position: relative;
+    width: 90px;
+    height: 90px;
+  }
+  /* Watercolor ring border using box-shadow + border trick */
+  .story-ring::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--rose) 0deg,
+      var(--sand) 90deg,
+      var(--sage) 180deg,
+      var(--sky) 270deg,
+      var(--rose) 360deg
+    );
+    opacity: 0.75;
+    filter: blur(2px);
+    transition: opacity 0.3s, filter 0.3s;
+  }
+  .story-ring::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    background: var(--bg);
+  }
+  .story-circle:hover .story-ring::before {
+    opacity: 1;
+    filter: blur(3px);
+  }
+  .story-ring-inner {
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 1;
+    transition: transform 0.3s ease;
+  }
+  .story-circle:hover .story-ring-inner { transform: scale(1.04); }
+  .story-ring-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.85) brightness(0.95);
+    transition: filter 0.3s;
+  }
+  .story-circle:hover .story-ring-inner img { filter: saturate(1) brightness(1); }
+
+  .story-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--ink-mid);
+    text-align: center;
+    max-width: 90px;
+    line-height: 1.3;
+  }
+
+  /* ── STORY OVERLAY ── */
+  .story-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(44,36,24,0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    backdrop-filter: blur(4px);
+  }
+  .story-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* Modal — looks like a journal page */
+  .story-modal {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    height: 88vh;
+    max-height: 760px;
+    background: var(--paper);
+    border-radius: 4px;
+    overflow: hidden;
+    transform: scale(0.93) translateY(16px);
+    transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1);
+    display: flex;
+    flex-direction: column;
+    /* Subtle paper shadow */
+    box-shadow:
+      0 40px 80px rgba(44,36,24,0.35),
+      0 4px 12px rgba(44,36,24,0.2),
+      inset 0 0 0 1px rgba(201,169,110,0.3);
+  }
+  .story-overlay.open .story-modal {
+    transform: scale(1) translateY(0);
+  }
+
+  /* Watercolor wash overlay on the modal — painted on top of the photo */
+  .story-wc-wash {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 15% 85%, rgba(232,165,152,0.35) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 10%, rgba(135,206,235,0.25) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 50%, rgba(201,169,110,0.12) 0%, transparent 60%);
+  }
+
+  /* Photo fills top ~55% */
+  .story-photo {
+    position: relative;
+    height: 55%;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .story-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.8) brightness(0.9) sepia(0.15);
+    transition: opacity 0.4s ease;
+  }
+
+  /* Painted edge — photo bleeds into paper */
+  .story-photo::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent 0%, var(--paper) 100%);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* Progress bars */
+  .story-progress {
+    position: absolute;
+    top: 14px; left: 14px; right: 14px;
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+  }
+  .prog-seg {
+    flex: 1;
+    height: 2px;
+    background: rgba(247,243,236,0.4);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: var(--paper);
+    width: 0%;
+    opacity: 0.9;
+    transition: width 5s linear;
+  }
+  .prog-fill.done   { width: 100%; transition: none; }
+  .prog-fill.active { width: 100%; }
+
+  /* Story header (top of photo) */
+  .story-header {
+    position: absolute;
+    top: 28px; left: 14px; right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+  }
+  .story-avatar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .story-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(247,243,236,0.7);
+    filter: saturate(0.7);
+  }
+  .story-handle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--paper);
+    font-weight: 600;
+    text-shadow: 0 1px 4px rgba(44,36,24,0.5);
+  }
+  .story-close {
+    font-size: 20px;
+    color: var(--paper);
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    text-shadow: 0 1px 4px rgba(44,36,24,0.5);
+    padding: 4px 6px;
+  }
+  .story-close:hover { opacity: 1; }
+
+  /* Journal body — the content below the photo */
+  .story-body {
+    flex: 1;
+    padding: 8px 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+    position: relative;
+    z-index: 5;
+  }
+
+  /* Trail name — large italic */
+  .story-trail-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 0;
+  }
+  .story-trail-park {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-light);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: -6px;
+  }
+
+  /* Painted divider */
+  .story-divider {
+    height: 1px;
+    background: linear-gradient(to right, var(--sand-light), var(--rose), transparent);
+    opacity: 0.6;
+  }
+
+  /* Stats — journal annotation style */
+  .story-stats {
+    display: flex;
+    gap: 0;
+  }
+  .story-stat-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-right: 16px;
+    border-right: 1px dashed rgba(201,169,110,0.4);
+  }
+  .story-stat-item:last-child { border-right: none; padding-right: 0; padding-left: 16px; }
+  .story-stat-item:first-child { padding-left: 0; }
+  .story-stat-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+  }
+  .story-stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  /* Difficulty badge — hand-stamped feel */
+  .story-diff {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    align-self: flex-start;
+  }
+  .diff-easy     { background: rgba(122,158,126,0.15); color: var(--sage-deep); border: 1px solid rgba(122,158,126,0.3); }
+  .diff-moderate { background: rgba(201,169,110,0.15); color: #8B6F30; border: 1px solid rgba(201,169,110,0.35); }
+  .diff-strenuous{ background: rgba(201,107,90,0.12);  color: var(--rose-deep); border: 1px solid rgba(201,107,90,0.3); }
+
+  /* Reviews — italic journal entries */
+  .story-reviews {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow: hidden;
+  }
+  .story-review {
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.6);
+    border-left: 2px solid var(--sand-light);
+    border-radius: 0 4px 4px 0;
+  }
+  .story-review-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-mid);
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  .story-review-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .story-stars { font-size: 9px; color: var(--sand); }
+  .story-author { font-size: 11px; font-weight: 600; color: var(--ink-light); }
+
+  /* Nav tap zones */
+  .story-nav-left, .story-nav-right {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 38%;
+    z-index: 9;
+    cursor: pointer;
+  }
+  .story-nav-left  { left: 0; }
+  .story-nav-right { right: 0; }
+
+  /* ── TRAIL PREVIEW CARDS (below stories) ── */
+  .trails-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 40px 100px;
+  }
+  .trails-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sage-deep);
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .trail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .trail-preview {
+    background: var(--white);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(44,36,24,0.07), inset 0 0 0 1px rgba(201,169,110,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  .trail-preview.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.3s ease;
+  }
+  .trail-preview:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(44,36,24,0.13), inset 0 0 0 1px rgba(201,169,110,0.35);
+  }
+  .trail-preview-img {
+    height: 140px;
+    overflow: hidden;
+    position: relative;
+  }
+  .trail-preview-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.8) brightness(0.92) sepia(0.1);
+    transition: transform 0.5s ease, filter 0.3s;
+  }
+  .trail-preview:hover .trail-preview-img img {
+    transform: scale(1.06);
+    filter: saturate(0.95) brightness(0.98);
+  }
+  /* Watercolor bleed at bottom of image */
+  .trail-preview-img::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--white));
+    pointer-events: none;
+  }
+  .trail-preview-body { padding: 12px 16px 18px; }
+  .trail-preview-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    font-style: italic;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .trail-preview-park {
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-bottom: 10px;
+  }
+  .trail-preview-stats {
+    display: flex;
+    gap: 14px;
+    border-top: 1px dashed rgba(201,169,110,0.35);
+    padding-top: 10px;
+  }
+  .tp-stat { display: flex; flex-direction: column; gap: 1px; }
+  .tp-stat-label { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-light); }
+  .tp-stat-val { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 600; font-style: italic; color: var(--ink); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 48px 40px;
+    border-top: 1px solid rgba(201,169,110,0.2);
+    background: var(--white);
+  }
+  .footer-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .footer-sub { font-size: 13px; color: var(--ink-light); margin-bottom: 20px; }
+  .footer-dots { display: flex; justify-content: center; gap: 10px; }
+  .footer-dot { width: 12px; height: 12px; border-radius: 50%; opacity: 0.65; }
+
+  @media (max-width: 600px) {
+    nav { padding: 12px 20px; }
+    .hero { padding: 60px 20px 40px; }
+    .stories-section { padding: 32px 20px 48px; }
+    .stories-row { gap: 20px; }
+    .trails-section { padding: 0 20px 80px; }
+    .story-modal { height: 92vh; border-radius: 2px; }
+    .story-trail-name { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="back">← Gallery</a>
+  <span class="nav-title">Mesa Trails</span>
+  <span class="nav-sub">Watercolor Stories</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Mesa, Arizona — Sonoran Desert</p>
+    <h1 class="hero-title">Five trails,<br><em>painted</em></h1>
+    <div class="hero-divider">
+      <div class="div-line"></div>
+      <div class="div-dot"></div>
+      <div class="div-line"></div>
+    </div>
+    <p class="hero-sub">Tap a trail below to open its story — distance, time, elevation, and voices from the path.</p>
+    <p class="hero-hint">← tap to go back &nbsp;·&nbsp; tap to go forward →</p>
+  </div>
+</section>
+
+<!-- STORY CIRCLES -->
+<div class="stories-section">
+  <p class="stories-label">Tap to open a trail story</p>
+  <div class="stories-row" id="storyCircles"></div>
+</div>
+
+<!-- TRAIL PREVIEW GRID -->
+<div class="trails-section">
+  <p class="trails-label">All Routes</p>
+  <div class="trail-grid" id="trailGrid"></div>
+</div>
+
+<footer>
+  <p class="footer-title">Mesa Hiking Routes</p>
+  <p class="footer-sub">Painted by sun, wind, and desert time — Mesa, Arizona</p>
+  <div class="footer-dots">
+    <div class="footer-dot" style="background:#E8A598"></div>
+    <div class="footer-dot" style="background:#7A9E7E"></div>
+    <div class="footer-dot" style="background:#C9A96E"></div>
+    <div class="footer-dot" style="background:#87CEEB"></div>
+    <div class="footer-dot" style="background:#C96B5A"></div>
+  </div>
+</footer>
+
+<!-- STORY OVERLAY -->
+<div class="story-overlay" id="storyOverlay">
+  <div class="story-modal" id="storyModal">
+
+    <!-- Progress -->
+    <div class="story-progress" id="storyProgress"></div>
+
+    <!-- Photo -->
+    <div class="story-photo">
+      <img id="storyImg" src="" alt="">
+      <div class="story-wc-wash"></div>
+
+      <!-- Header over photo -->
+      <div class="story-header">
+        <div class="story-avatar-wrap">
+          <img class="story-avatar" src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="">
+          <span class="story-handle">mesa.trails</span>
+        </div>
+        <span class="story-close" onclick="closeStory()">&#10005;</span>
+      </div>
+    </div>
+
+    <!-- Journal body -->
+    <div class="story-body">
+      <div>
+        <div class="story-trail-name" id="storyName"></div>
+        <div class="story-trail-park" id="storyPark"></div>
+      </div>
+      <div class="story-divider"></div>
+      <div class="story-stats" id="storyStats"></div>
+      <div id="storyDiff"></div>
+      <div class="story-reviews" id="storyReviews"></div>
+    </div>
+
+    <!-- Tap zones -->
+    <div class="story-nav-left"  onclick="prevStory()"></div>
+    <div class="story-nav-right" onclick="nextStory()"></div>
+
+  </div>
+</div>
+
+<script>
+const trails = [
+  {
+    name: "Wind Cave Trail",
+    park: "Usery Mountain Regional Park",
+    img: "https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg",
+    distance: "3.2 mi",
+    time: "1.5–2 hrs",
+    elevation: "+860 ft",
+    difficulty: "Moderate",
+    diffClass: "diff-moderate",
+    reviews: [
+      { stars: "★★★★★", author: "Jake R.", text: "Stunning cave views at the top — worth every step." },
+      { stars: "★★★★",  author: "Sara M.", text: "Great morning hike. Bring plenty of water." },
+    ]
+  },
+  {
+    name: "Siphon Draw Trail",
+    park: "Lost Dutchman State Park",
+    img: "https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg",
+    distance: "4.2 mi",
+    time: "3–4 hrs",
+    elevation: "+2,045 ft",
+    difficulty: "Strenuous",
+    diffClass: "diff-strenuous",
+    reviews: [
+      { stars: "★★★★★", author: "Maria L.", text: "Epic views of the Superstitions. Nothing like it." },
+      { stars: "★★★★",  author: "Tom B.",   text: "Very challenging but absolutely worth it." },
+    ]
+  },
+  {
+    name: "Peralta Trail",
+    park: "Superstition Wilderness",
+    img: "https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg",
+    distance: "4.6 mi",
+    time: "3–3.5 hrs",
+    elevation: "+1,425 ft",
+    difficulty: "Mod–Strenuous",
+    diffClass: "diff-strenuous",
+    reviews: [
+      { stars: "★★★★★", author: "Dan K.",  text: "Weaver's Needle rising from the canyon — unreal." },
+      { stars: "★★★★",  author: "Lily W.", text: "Rocky terrain but the views paint themselves." },
+    ]
+  },
+  {
+    name: "Hieroglyphic Trail",
+    park: "Superstition Wilderness",
+    img: "https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg",
+    distance: "3.4 mi",
+    time: "2–2.5 hrs",
+    elevation: "+800 ft",
+    difficulty: "Easy–Moderate",
+    diffClass: "diff-easy",
+    reviews: [
+      { stars: "★★★★★", author: "Emma R.", text: "Ancient petroglyphs feel like a living museum." },
+      { stars: "★★★★",  author: "Liam F.", text: "Perfect for beginners. Hidden gem near Mesa." },
+    ]
+  },
+  {
+    name: "Red Mountain Trail",
+    park: "Red Mountain Park",
+    img: "https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg",
+    distance: "3.0 mi",
+    time: "1.5–2 hrs",
+    elevation: "+400 ft",
+    difficulty: "Easy–Moderate",
+    diffClass: "diff-easy",
+    reviews: [
+      { stars: "★★★★★", author: "Ben H.",   text: "The red volcanic formations are otherworldly." },
+      { stars: "★★★★",  author: "Priya N.", text: "Kids absolutely loved it. Beautiful and gentle." },
+    ]
+  }
+];
+
+// Build story circles
+const circlesEl = document.getElementById('storyCircles');
+trails.forEach((t, i) => {
+  circlesEl.innerHTML += `
+    <div class="story-circle" onclick="openStory(${i})">
+      <div class="story-ring">
+        <div class="story-ring-inner">
+          <img src="${t.img}" alt="${t.name}" loading="lazy">
+        </div>
+      </div>
+      <div class="story-name">${t.name.replace(' Trail','')}</div>
+    </div>`;
+});
+
+// Build trail preview cards
+const gridEl = document.getElementById('trailGrid');
+trails.forEach((t, i) => {
+  gridEl.innerHTML += `
+    <div class="trail-preview" onclick="openStory(${i})">
+      <div class="trail-preview-img">
+        <img src="${t.img}" alt="${t.name}" loading="lazy">
+      </div>
+      <div class="trail-preview-body">
+        <div class="trail-preview-name">${t.name}</div>
+        <div class="trail-preview-park">${t.park}</div>
+        <div class="trail-preview-stats">
+          <div class="tp-stat"><span class="tp-stat-label">Dist</span><span class="tp-stat-val">${t.distance}</span></div>
+          <div class="tp-stat"><span class="tp-stat-label">Time</span><span class="tp-stat-val">${t.time}</span></div>
+          <div class="tp-stat"><span class="tp-stat-label">Gain</span><span class="tp-stat-val">${t.elevation}</span></div>
+        </div>
+      </div>
+    </div>`;
+});
+
+// Scroll reveal for cards
+const cards = document.querySelectorAll('.trail-preview');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((entry, idx) => {
+    if (entry.isIntersecting) {
+      const i = Array.from(cards).indexOf(entry.target);
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+cards.forEach(c => observer.observe(c));
+
+// Story state
+let current = 0;
+
+function openStory(idx) {
+  current = idx;
+  renderStory();
+  document.getElementById('storyOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeStory() {
+  document.getElementById('storyOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function nextStory() {
+  current = (current + 1) % trails.length;
+  renderStory();
+}
+
+function prevStory() {
+  current = (current - 1 + trails.length) % trails.length;
+  renderStory();
+}
+
+function renderStory() {
+  const t = trails[current];
+
+  // Photo — fade swap
+  const img = document.getElementById('storyImg');
+  img.style.opacity = 0;
+  setTimeout(() => { img.src = t.img; img.style.opacity = 1; }, 100);
+
+  document.getElementById('storyName').textContent = t.name;
+  document.getElementById('storyPark').textContent = t.park;
+
+  document.getElementById('storyStats').innerHTML = `
+    <div class="story-stat-item">
+      <span class="story-stat-label">Distance</span>
+      <span class="story-stat-val">${t.distance}</span>
+    </div>
+    <div class="story-stat-item">
+      <span class="story-stat-label">Avg Time</span>
+      <span class="story-stat-val">${t.time}</span>
+    </div>
+    <div class="story-stat-item">
+      <span class="story-stat-label">Elevation</span>
+      <span class="story-stat-val">${t.elevation}</span>
+    </div>`;
+
+  document.getElementById('storyDiff').innerHTML =
+    `<span class="story-diff ${t.diffClass}">${t.difficulty}</span>`;
+
+  document.getElementById('storyReviews').innerHTML = t.reviews.map(r => `
+    <div class="story-review">
+      <div class="story-review-text">"${r.text}"</div>
+      <div class="story-review-meta">
+        <span class="story-stars">${r.stars}</span>
+        <span class="story-author">${r.author}</span>
+      </div>
+    </div>`).join('');
+
+  // Progress bars
+  document.getElementById('storyProgress').innerHTML = trails.map((_, i) => `
+    <div class="prog-seg">
+      <div class="prog-fill ${i < current ? 'done' : i === current ? 'active' : ''}"></div>
+    </div>`).join('');
+}
+
+// Close on backdrop click
+document.getElementById('storyOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeStory();
+});
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape')      closeStory();
+  if (e.key === 'ArrowRight')  nextStory();
+  if (e.key === 'ArrowLeft')   prevStory();
+});
+</script>
+</body>
+</html>
