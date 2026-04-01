@@ -9,6 +9,7 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
+    /* Watercolor palette */
     --bg:        #FAFAF7;
     --paper:     #F7F3EC;
     --rose:      #E8A598;
@@ -22,6 +23,13 @@
     --ink-mid:   #5C4F3E;
     --ink-light: #9C8C7C;
     --white:     #FFFFFF;
+    /* Night Sky palette */
+    --navy:      #0A0E1A;
+    --navy-mid:  #0F1525;
+    --navy-card: rgba(15,21,37,0.92);
+    --silver:    #C8D6E5;
+    --silver-dim:#6B7F95;
+    --ns-white:  #F0F4FA;
   }
 
   html { scroll-behavior: smooth; }
@@ -38,9 +46,9 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(250,250,247,0.90);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(201,169,110,0.25);
+    background: rgba(10,14,26,0.94);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(200,214,229,0.12);
     padding: 14px 40px;
     display: flex;
     align-items: center;
@@ -49,43 +57,45 @@
   nav a.back {
     font-size: 13px;
     font-weight: 600;
-    color: var(--ink-mid);
+    color: var(--silver-dim);
     text-decoration: none;
     transition: color 0.2s;
   }
-  nav a.back:hover { color: var(--sage-deep); }
+  nav a.back:hover { color: var(--silver); }
   .nav-title {
     font-family: 'Cormorant Garamond', serif;
     font-size: 20px;
     font-weight: 600;
     font-style: italic;
-    color: var(--ink);
+    color: var(--ns-white);
   }
   .nav-sub {
     font-size: 12px;
-    color: var(--ink-light);
+    color: var(--silver-dim);
     letter-spacing: 0.05em;
   }
 
   /* ── HERO ── */
   .hero {
     position: relative;
-    padding: 80px 40px 60px;
+    padding: 90px 40px 70px;
     text-align: center;
     overflow: hidden;
+    background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 40%, var(--bg) 100%);
   }
 
-  /* Watercolor blobs */
+  /* Watercolor blobs over the dark hero */
   .blob {
     position: absolute;
     border-radius: 50%;
-    filter: blur(90px);
-    opacity: 0.4;
+    filter: blur(100px);
     pointer-events: none;
   }
-  .blob-1 { width:560px; height:460px; background:radial-gradient(ellipse,#E8A598,#F0C4BA); top:-15%; left:-8%; }
-  .blob-2 { width:460px; height:460px; background:radial-gradient(ellipse,#87CEEB,#B5E4F7); top:10%; right:-12%; }
-  .blob-3 { width:640px; height:360px; background:radial-gradient(ellipse,#C9A96E,#E5D5B5); bottom:-10%; left:15%; opacity:0.3; }
+  .blob-1 { width:560px; height:420px; background:radial-gradient(ellipse,rgba(232,165,152,0.5),transparent); top:-10%; left:-8%; }
+  .blob-2 { width:420px; height:420px; background:radial-gradient(ellipse,rgba(135,206,235,0.35),transparent); top:5%; right:-10%; }
+  .blob-3 { width:500px; height:300px; background:radial-gradient(ellipse,rgba(201,169,110,0.3),transparent); bottom:5%; left:20%; }
+  /* Navy depth blob */
+  .blob-4 { width:700px; height:500px; background:radial-gradient(ellipse,rgba(15,21,37,0.9),transparent); top:0; left:50%; transform:translateX(-50%); }
 
   .hero-content { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; }
 
@@ -93,8 +103,8 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 15px;
     font-style: italic;
-    color: var(--sage-deep);
-    letter-spacing: 0.08em;
+    color: var(--silver-dim);
+    letter-spacing: 0.1em;
     margin-bottom: 16px;
     opacity: 0;
     animation: paintIn 1.2s ease 0.2s forwards;
@@ -105,25 +115,25 @@
     font-weight: 300;
     font-style: italic;
     line-height: 1.05;
-    color: var(--ink);
+    color: var(--ns-white);
     margin-bottom: 20px;
     opacity: 0;
     animation: paintIn 1.4s ease 0.4s forwards;
   }
-  .hero-title em { font-weight: 600; color: var(--rose-deep); font-style: italic; }
+  .hero-title em { font-weight: 600; color: var(--rose); font-style: italic; }
 
   .hero-divider {
     display: flex; align-items: center; justify-content: center;
     gap: 16px; max-width: 300px; margin: 0 auto 20px;
     opacity: 0; animation: paintIn 1s ease 0.8s forwards;
   }
-  .div-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--sand), transparent); }
-  .div-dot { width: 8px; height: 8px; background: var(--rose); border-radius: 50% 0 50% 0; transform: rotate(45deg); }
+  .div-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(200,214,229,0.4), transparent); }
+  .div-dot  { width: 8px; height: 8px; background: var(--rose); border-radius: 50% 0 50% 0; transform: rotate(45deg); }
 
   .hero-sub {
     font-size: 15px;
     font-weight: 300;
-    color: var(--ink-mid);
+    color: var(--silver-dim);
     line-height: 1.75;
     margin-bottom: 16px;
     opacity: 0;
@@ -133,7 +143,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 14px;
     font-style: italic;
-    color: var(--ink-light);
+    color: rgba(107,127,149,0.6);
     opacity: 0;
     animation: paintIn 1s ease 1.3s forwards;
   }
@@ -143,9 +153,12 @@
     to   { opacity: 1; filter: blur(0);   transform: translateY(0); }
   }
 
-  /* ── STORY CIRCLES ── */
+  /* ── STORY CIRCLES SECTION — dark panel ── */
   .stories-section {
-    padding: 40px 40px 56px;
+    background: var(--navy);
+    padding: 48px 40px 56px;
+  }
+  .stories-inner {
     max-width: 900px;
     margin: 0 auto;
   }
@@ -154,8 +167,8 @@
     font-weight: 700;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--rose-deep);
-    margin-bottom: 28px;
+    color: var(--silver-dim);
+    margin-bottom: 32px;
     text-align: center;
   }
   .stories-row {
@@ -173,26 +186,26 @@
     cursor: pointer;
   }
 
-  /* Painted ring using SVG-style CSS */
+  /* Ring: watercolor conic with navy accent */
   .story-ring {
     position: relative;
     width: 90px;
     height: 90px;
   }
-  /* Watercolor ring border using box-shadow + border trick */
   .story-ring::before {
     content: '';
     position: absolute;
     inset: -4px;
     border-radius: 50%;
     background: conic-gradient(
-      var(--rose) 0deg,
-      var(--sand) 90deg,
-      var(--sage) 180deg,
-      var(--sky) 270deg,
-      var(--rose) 360deg
+      var(--rose)   0deg,
+      var(--sand)   72deg,
+      var(--sage)   144deg,
+      var(--sky)    216deg,
+      var(--navy-mid) 288deg,
+      var(--rose)   360deg
     );
-    opacity: 0.75;
+    opacity: 0.8;
     filter: blur(2px);
     transition: opacity 0.3s, filter 0.3s;
   }
@@ -201,12 +214,9 @@
     position: absolute;
     inset: -1px;
     border-radius: 50%;
-    background: var(--bg);
+    background: var(--navy);
   }
-  .story-circle:hover .story-ring::before {
-    opacity: 1;
-    filter: blur(3px);
-  }
+  .story-circle:hover .story-ring::before { opacity: 1; filter: blur(3px); }
   .story-ring-inner {
     position: absolute;
     inset: 3px;
@@ -217,11 +227,9 @@
   }
   .story-circle:hover .story-ring-inner { transform: scale(1.04); }
   .story-ring-inner img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    filter: saturate(0.85) brightness(0.95);
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    filter: saturate(0.75) brightness(0.9);
     transition: filter 0.3s;
   }
   .story-circle:hover .story-ring-inner img { filter: saturate(1) brightness(1); }
@@ -230,38 +238,37 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 13px;
     font-style: italic;
-    color: var(--ink-mid);
+    color: var(--silver-dim);
     text-align: center;
     max-width: 90px;
     line-height: 1.3;
+    transition: color 0.2s;
   }
+  .story-circle:hover .story-name { color: var(--silver); }
 
   /* ── STORY OVERLAY ── */
   .story-overlay {
     position: fixed;
     inset: 0;
     z-index: 1000;
-    background: rgba(44,36,24,0.65);
+    background: rgba(10,14,26,0.80);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s ease;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
   }
-  .story-overlay.open {
-    opacity: 1;
-    pointer-events: all;
-  }
+  .story-overlay.open { opacity: 1; pointer-events: all; }
 
-  /* Modal — looks like a journal page */
+  /* Modal — paper journal with dark photo top */
   .story-modal {
     position: relative;
     width: 100%;
     max-width: 440px;
     height: 88vh;
-    max-height: 760px;
+    max-height: 780px;
     background: var(--paper);
     border-radius: 4px;
     overflow: hidden;
@@ -269,259 +276,211 @@
     transition: transform 0.4s cubic-bezier(0.34,1.4,0.64,1);
     display: flex;
     flex-direction: column;
-    /* Subtle paper shadow */
     box-shadow:
-      0 40px 80px rgba(44,36,24,0.35),
-      0 4px 12px rgba(44,36,24,0.2),
-      inset 0 0 0 1px rgba(201,169,110,0.3);
+      0 48px 96px rgba(10,14,26,0.6),
+      0 4px 16px rgba(10,14,26,0.4),
+      inset 0 0 0 1px rgba(200,214,229,0.15);
   }
-  .story-overlay.open .story-modal {
-    transform: scale(1) translateY(0);
-  }
+  .story-overlay.open .story-modal { transform: scale(1) translateY(0); }
 
-  /* Watercolor wash overlay on the modal — painted on top of the photo */
-  .story-wc-wash {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    background:
-      radial-gradient(ellipse at 15% 85%, rgba(232,165,152,0.35) 0%, transparent 50%),
-      radial-gradient(ellipse at 85% 10%, rgba(135,206,235,0.25) 0%, transparent 45%),
-      radial-gradient(ellipse at 50% 50%, rgba(201,169,110,0.12) 0%, transparent 60%);
-  }
-
-  /* Photo fills top ~55% */
+  /* Photo fills top ~50% */
   .story-photo {
     position: relative;
-    height: 55%;
+    height: 50%;
     flex-shrink: 0;
     overflow: hidden;
+    background: var(--navy);
   }
   .story-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    filter: saturate(0.8) brightness(0.9) sepia(0.15);
-    transition: opacity 0.4s ease;
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    filter: saturate(0.7) brightness(0.75) sepia(0.1);
+    transition: opacity 0.35s ease;
   }
-
-  /* Painted edge — photo bleeds into paper */
+  /* Navy-to-paper bleed at bottom of photo */
   .story-photo::after {
     content: '';
     position: absolute;
     bottom: -2px; left: 0; right: 0;
-    height: 100px;
-    background: linear-gradient(to bottom, transparent 0%, var(--paper) 100%);
+    height: 110px;
+    background: linear-gradient(to bottom, transparent 0%, var(--navy) 50%, var(--paper) 100%);
     pointer-events: none;
     z-index: 3;
+  }
+  /* Watercolor wash over photo */
+  .story-wc-wash {
+    position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background:
+      radial-gradient(ellipse at 10% 80%, rgba(232,165,152,0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 15%, rgba(135,206,235,0.2) 0%, transparent 45%);
   }
 
   /* Progress bars */
   .story-progress {
     position: absolute;
     top: 14px; left: 14px; right: 14px;
-    display: flex;
-    gap: 5px;
-    z-index: 10;
+    display: flex; gap: 5px; z-index: 10;
   }
   .prog-seg {
-    flex: 1;
-    height: 2px;
-    background: rgba(247,243,236,0.4);
-    border-radius: 2px;
-    overflow: hidden;
+    flex: 1; height: 2px;
+    background: rgba(200,214,229,0.25);
+    border-radius: 2px; overflow: hidden;
   }
   .prog-fill {
     height: 100%;
-    background: var(--paper);
-    width: 0%;
-    opacity: 0.9;
+    background: var(--silver);
+    width: 0%; opacity: 0.85;
     transition: width 5s linear;
   }
   .prog-fill.done   { width: 100%; transition: none; }
   .prog-fill.active { width: 100%; }
 
-  /* Story header (top of photo) */
+  /* Story header */
   .story-header {
     position: absolute;
     top: 28px; left: 14px; right: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 10;
+    display: flex; align-items: center;
+    justify-content: space-between; z-index: 10;
   }
-  .story-avatar-wrap {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .story-avatar-wrap { display: flex; align-items: center; gap: 10px; }
   .story-avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid rgba(247,243,236,0.7);
-    filter: saturate(0.7);
+    width: 34px; height: 34px;
+    border-radius: 50%; object-fit: cover;
+    border: 2px solid rgba(200,214,229,0.4);
+    filter: saturate(0.6);
   }
   .story-handle {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 15px;
-    font-style: italic;
-    color: var(--paper);
-    font-weight: 600;
-    text-shadow: 0 1px 4px rgba(44,36,24,0.5);
+    font-size: 15px; font-style: italic;
+    color: var(--ns-white); font-weight: 600;
+    text-shadow: 0 1px 6px rgba(10,14,26,0.7);
   }
   .story-close {
-    font-size: 20px;
-    color: var(--paper);
-    cursor: pointer;
-    opacity: 0.8;
+    font-size: 20px; color: var(--ns-white);
+    cursor: pointer; opacity: 0.7;
     transition: opacity 0.2s;
-    text-shadow: 0 1px 4px rgba(44,36,24,0.5);
+    text-shadow: 0 1px 6px rgba(10,14,26,0.7);
     padding: 4px 6px;
   }
   .story-close:hover { opacity: 1; }
 
-  /* Journal body — the content below the photo */
+  /* Journal body */
   .story-body {
     flex: 1;
-    padding: 8px 28px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    overflow: hidden;
-    position: relative;
-    z-index: 5;
+    padding: 10px 26px 16px;
+    display: flex; flex-direction: column;
+    gap: 10px; overflow-y: auto;
+    position: relative; z-index: 5;
   }
+  .story-body::-webkit-scrollbar { width: 3px; }
+  .story-body::-webkit-scrollbar-thumb { background: rgba(201,169,110,0.3); border-radius: 2px; }
 
-  /* Trail name — large italic */
   .story-trail-name {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 300;
-    font-style: italic;
-    color: var(--ink);
-    line-height: 1.1;
-    margin-bottom: 0;
+    font-size: 30px; font-weight: 300; font-style: italic;
+    color: var(--ink); line-height: 1.1;
   }
   .story-trail-park {
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 11px; font-weight: 500;
     color: var(--ink-light);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-top: -6px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-top: -4px;
   }
 
-  /* Painted divider */
+  /* Painted divider — rose fading into navy */
   .story-divider {
     height: 1px;
-    background: linear-gradient(to right, var(--sand-light), var(--rose), transparent);
-    opacity: 0.6;
+    background: linear-gradient(to right, var(--navy-mid), var(--rose), var(--sand-light), transparent);
+    opacity: 0.5;
   }
 
-  /* Stats — journal annotation style */
-  .story-stats {
-    display: flex;
-    gap: 0;
-  }
+  /* Stats */
+  .story-stats { display: flex; gap: 0; }
   .story-stat-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding-right: 16px;
-    border-right: 1px dashed rgba(201,169,110,0.4);
+    flex: 1; display: flex; flex-direction: column; gap: 2px;
+    padding-right: 14px;
+    border-right: 1px dashed rgba(107,127,149,0.3);
   }
-  .story-stat-item:last-child { border-right: none; padding-right: 0; padding-left: 16px; }
+  .story-stat-item:last-child { border-right: none; padding-right: 0; padding-left: 14px; }
   .story-stat-item:first-child { padding-left: 0; }
-  .story-stat-label {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-light);
-  }
+  .story-stat-label { font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--silver-dim); }
   .story-stat-val {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 600;
-    font-style: italic;
-    color: var(--ink);
-    line-height: 1;
+    font-size: 19px; font-weight: 600; font-style: italic;
+    color: var(--ink); line-height: 1;
   }
 
-  /* Difficulty badge — hand-stamped feel */
+  /* Difficulty badge */
   .story-diff {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 2px;
-    align-self: flex-start;
+    display: inline-block; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 2px; align-self: flex-start;
   }
-  .diff-easy     { background: rgba(122,158,126,0.15); color: var(--sage-deep); border: 1px solid rgba(122,158,126,0.3); }
-  .diff-moderate { background: rgba(201,169,110,0.15); color: #8B6F30; border: 1px solid rgba(201,169,110,0.35); }
-  .diff-strenuous{ background: rgba(201,107,90,0.12);  color: var(--rose-deep); border: 1px solid rgba(201,107,90,0.3); }
+  .diff-easy      { background: rgba(82,117,86,0.1);  color: var(--sage-deep); border: 1px solid rgba(82,117,86,0.3); }
+  .diff-moderate  { background: rgba(201,169,110,0.12); color: #8B6F30;          border: 1px solid rgba(201,169,110,0.3); }
+  .diff-strenuous { background: rgba(201,107,90,0.1);  color: var(--rose-deep); border: 1px solid rgba(201,107,90,0.3); }
 
-  /* Reviews — italic journal entries */
-  .story-reviews {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    overflow: hidden;
+  /* Gear section — dark navy card */
+  .story-gear-section {
+    background: var(--navy-mid);
+    border-radius: 4px;
+    padding: 12px 14px;
+    border: 1px solid rgba(200,214,229,0.1);
+  }
+  .story-gear-label {
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--silver-dim); margin-bottom: 10px;
+  }
+  .story-gear-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .gear-tag {
+    font-size: 11px; font-weight: 500;
+    color: var(--silver);
+    background: rgba(200,214,229,0.08);
+    border: 1px solid rgba(200,214,229,0.15);
+    padding: 4px 10px; border-radius: 20px;
+  }
+
+  /* Reviews */
+  .story-reviews { display: flex; flex-direction: column; gap: 7px; }
+  .story-review-label {
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--ink-light); margin-bottom: 2px;
   }
   .story-review {
-    padding: 10px 14px;
-    background: rgba(255,255,255,0.6);
+    padding: 9px 13px;
+    background: rgba(255,255,255,0.55);
     border-left: 2px solid var(--sand-light);
     border-radius: 0 4px 4px 0;
   }
   .story-review-text {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 14px;
-    font-style: italic;
-    color: var(--ink-mid);
-    line-height: 1.5;
-    margin-bottom: 4px;
+    font-size: 14px; font-style: italic;
+    color: var(--ink-mid); line-height: 1.5; margin-bottom: 4px;
   }
-  .story-review-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .story-review-meta { display: flex; align-items: center; gap: 8px; }
   .story-stars { font-size: 9px; color: var(--sand); }
   .story-author { font-size: 11px; font-weight: 600; color: var(--ink-light); }
 
   /* Nav tap zones */
   .story-nav-left, .story-nav-right {
-    position: absolute;
-    top: 0; bottom: 0;
-    width: 38%;
-    z-index: 9;
-    cursor: pointer;
+    position: absolute; top: 0; bottom: 0;
+    width: 38%; z-index: 9; cursor: pointer;
   }
   .story-nav-left  { left: 0; }
   .story-nav-right { right: 0; }
 
-  /* ── TRAIL PREVIEW CARDS (below stories) ── */
+  /* ── TRAIL PREVIEW CARDS — on light bg ── */
   .trails-section {
     max-width: 860px;
     margin: 0 auto;
-    padding: 0 40px 100px;
+    padding: 56px 40px 100px;
   }
   .trails-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--sage-deep);
-    margin-bottom: 32px;
-    text-align: center;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--sage-deep); margin-bottom: 32px; text-align: center;
   }
   .trail-grid {
     display: grid;
@@ -531,97 +490,89 @@
 
   .trail-preview {
     background: var(--white);
-    border-radius: 4px;
-    overflow: hidden;
-    cursor: pointer;
-    box-shadow: 0 2px 12px rgba(44,36,24,0.07), inset 0 0 0 1px rgba(201,169,110,0.2);
+    border-radius: 4px; overflow: hidden; cursor: pointer;
+    box-shadow: 0 2px 12px rgba(10,14,26,0.1), inset 0 0 0 1px rgba(201,169,110,0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    opacity: 0;
-    transform: translateY(24px);
+    opacity: 0; transform: translateY(24px);
   }
   .trail-preview.visible {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1; transform: translateY(0);
     transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.3s ease;
   }
   .trail-preview:hover {
     transform: translateY(-6px);
-    box-shadow: 0 16px 40px rgba(44,36,24,0.13), inset 0 0 0 1px rgba(201,169,110,0.35);
+    box-shadow: 0 20px 48px rgba(10,14,26,0.18), inset 0 0 0 1px rgba(107,127,149,0.3);
   }
-  .trail-preview-img {
-    height: 140px;
-    overflow: hidden;
-    position: relative;
-  }
+  .trail-preview-img { height: 140px; overflow: hidden; position: relative; }
   .trail-preview-img img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-    filter: saturate(0.8) brightness(0.92) sepia(0.1);
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    filter: saturate(0.78) brightness(0.9) sepia(0.1);
     transition: transform 0.5s ease, filter 0.3s;
   }
-  .trail-preview:hover .trail-preview-img img {
-    transform: scale(1.06);
-    filter: saturate(0.95) brightness(0.98);
-  }
-  /* Watercolor bleed at bottom of image */
+  .trail-preview:hover .trail-preview-img img { transform: scale(1.06); filter: saturate(0.95) brightness(0.98); }
   .trail-preview-img::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 60px;
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 60px;
     background: linear-gradient(to bottom, transparent, var(--white));
     pointer-events: none;
   }
-  .trail-preview-body { padding: 12px 16px 18px; }
+  .trail-preview-body { padding: 12px 16px 16px; }
   .trail-preview-name {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 18px;
-    font-weight: 600;
-    font-style: italic;
-    color: var(--ink);
-    margin-bottom: 2px;
+    font-size: 18px; font-weight: 600; font-style: italic;
+    color: var(--ink); margin-bottom: 2px;
   }
-  .trail-preview-park {
-    font-size: 11px;
-    color: var(--ink-light);
-    margin-bottom: 10px;
-  }
+  .trail-preview-park { font-size: 11px; color: var(--ink-light); margin-bottom: 10px; }
   .trail-preview-stats {
-    display: flex;
-    gap: 14px;
+    display: flex; gap: 14px;
     border-top: 1px dashed rgba(201,169,110,0.35);
-    padding-top: 10px;
+    padding-top: 10px; margin-bottom: 10px;
   }
   .tp-stat { display: flex; flex-direction: column; gap: 1px; }
   .tp-stat-label { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-light); }
   .tp-stat-val { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 600; font-style: italic; color: var(--ink); }
 
+  /* Gear strip on card — dark navy accent */
+  .trail-preview-gear {
+    background: var(--navy);
+    margin: 0 -16px -16px;
+    padding: 8px 16px;
+    display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
+  }
+  .gear-strip-label {
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--silver-dim); margin-right: 2px;
+  }
+  .gear-strip-tag {
+    font-size: 10px; font-weight: 500; color: var(--silver);
+    background: rgba(200,214,229,0.08);
+    border: 1px solid rgba(200,214,229,0.12);
+    padding: 2px 8px; border-radius: 20px;
+  }
+
   /* ── FOOTER ── */
   footer {
     text-align: center;
-    padding: 48px 40px;
-    border-top: 1px solid rgba(201,169,110,0.2);
-    background: var(--white);
+    padding: 56px 40px;
+    background: var(--navy);
+    border-top: 1px solid rgba(200,214,229,0.08);
   }
   .footer-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 24px;
-    font-weight: 500;
-    font-style: italic;
-    color: var(--ink);
-    margin-bottom: 6px;
+    font-size: 24px; font-weight: 500; font-style: italic;
+    color: var(--ns-white); margin-bottom: 6px;
   }
-  .footer-sub { font-size: 13px; color: var(--ink-light); margin-bottom: 20px; }
+  .footer-sub { font-size: 13px; color: var(--silver-dim); margin-bottom: 24px; }
   .footer-dots { display: flex; justify-content: center; gap: 10px; }
-  .footer-dot { width: 12px; height: 12px; border-radius: 50%; opacity: 0.65; }
+  .footer-dot { width: 12px; height: 12px; border-radius: 50%; opacity: 0.6; }
 
   @media (max-width: 600px) {
     nav { padding: 12px 20px; }
-    .hero { padding: 60px 20px 40px; }
+    .hero { padding: 60px 20px 50px; }
     .stories-section { padding: 32px 20px 48px; }
     .stories-row { gap: 20px; }
-    .trails-section { padding: 0 20px 80px; }
+    .trails-section { padding: 40px 20px 80px; }
     .story-modal { height: 92vh; border-radius: 2px; }
     .story-trail-name { font-size: 26px; }
   }
@@ -637,6 +588,7 @@
 
 <!-- HERO -->
 <section class="hero">
+  <div class="blob blob-4"></div>
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
   <div class="blob blob-3"></div>
@@ -648,18 +600,20 @@
       <div class="div-dot"></div>
       <div class="div-line"></div>
     </div>
-    <p class="hero-sub">Tap a trail below to open its story — distance, time, elevation, and voices from the path.</p>
+    <p class="hero-sub">Tap a trail to open its story — distance, time, elevation, gear, and voices from the path.</p>
     <p class="hero-hint">← tap to go back &nbsp;·&nbsp; tap to go forward →</p>
   </div>
 </section>
 
-<!-- STORY CIRCLES -->
+<!-- STORY CIRCLES — dark panel -->
 <div class="stories-section">
-  <p class="stories-label">Tap to open a trail story</p>
-  <div class="stories-row" id="storyCircles"></div>
+  <div class="stories-inner">
+    <p class="stories-label">Tap a trail to open its story</p>
+    <div class="stories-row" id="storyCircles"></div>
+  </div>
 </div>
 
-<!-- TRAIL PREVIEW GRID -->
+<!-- TRAIL GRID -->
 <div class="trails-section">
   <p class="trails-label">All Routes</p>
   <div class="trail-grid" id="trailGrid"></div>
@@ -673,7 +627,7 @@
     <div class="footer-dot" style="background:#7A9E7E"></div>
     <div class="footer-dot" style="background:#C9A96E"></div>
     <div class="footer-dot" style="background:#87CEEB"></div>
-    <div class="footer-dot" style="background:#C96B5A"></div>
+    <div class="footer-dot" style="background:#C8D6E5"></div>
   </div>
 </footer>
 
@@ -681,15 +635,11 @@
 <div class="story-overlay" id="storyOverlay">
   <div class="story-modal" id="storyModal">
 
-    <!-- Progress -->
     <div class="story-progress" id="storyProgress"></div>
 
-    <!-- Photo -->
     <div class="story-photo">
       <img id="storyImg" src="" alt="">
       <div class="story-wc-wash"></div>
-
-      <!-- Header over photo -->
       <div class="story-header">
         <div class="story-avatar-wrap">
           <img class="story-avatar" src="https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg" alt="">
@@ -699,7 +649,6 @@
       </div>
     </div>
 
-    <!-- Journal body -->
     <div class="story-body">
       <div>
         <div class="story-trail-name" id="storyName"></div>
@@ -708,10 +657,16 @@
       <div class="story-divider"></div>
       <div class="story-stats" id="storyStats"></div>
       <div id="storyDiff"></div>
-      <div class="story-reviews" id="storyReviews"></div>
+      <div class="story-gear-section">
+        <div class="story-gear-label">Pack List</div>
+        <div class="story-gear-tags" id="storyGear"></div>
+      </div>
+      <div class="story-reviews">
+        <div class="story-review-label">From the Trail</div>
+        <div id="storyReviews"></div>
+      </div>
     </div>
 
-    <!-- Tap zones -->
     <div class="story-nav-left"  onclick="prevStory()"></div>
     <div class="story-nav-right" onclick="nextStory()"></div>
 
@@ -724,11 +679,10 @@ const trails = [
     name: "Wind Cave Trail",
     park: "Usery Mountain Regional Park",
     img: "https://upload.wikimedia.org/wikipedia/commons/f/f2/Levee_Trail%2C_Usery_Mountain_Regional_Park%2C_May_2015_-_panoramio.jpg",
-    distance: "3.2 mi",
-    time: "1.5–2 hrs",
-    elevation: "+860 ft",
-    difficulty: "Moderate",
-    diffClass: "diff-moderate",
+    distance: "3.2 mi", time: "1.5–2 hrs", elevation: "+860 ft",
+    difficulty: "Moderate", diffClass: "diff-moderate",
+    gear: ["2L water", "Sun hat", "Sunscreen SPF 50+", "Trail runners", "Snacks", "Trekking poles"],
+    gearStrip: ["2L water", "Sun hat", "Trail runners"],
     reviews: [
       { stars: "★★★★★", author: "Jake R.", text: "Stunning cave views at the top — worth every step." },
       { stars: "★★★★",  author: "Sara M.", text: "Great morning hike. Bring plenty of water." },
@@ -738,11 +692,10 @@ const trails = [
     name: "Siphon Draw Trail",
     park: "Lost Dutchman State Park",
     img: "https://upload.wikimedia.org/wikipedia/commons/8/8c/2021_Superstition_Mountains_from_Lost_Dutchman_State_Park_1.jpg",
-    distance: "4.2 mi",
-    time: "3–4 hrs",
-    elevation: "+2,045 ft",
-    difficulty: "Strenuous",
-    diffClass: "diff-strenuous",
+    distance: "4.2 mi", time: "3–4 hrs", elevation: "+2,045 ft",
+    difficulty: "Strenuous", diffClass: "diff-strenuous",
+    gear: ["3L+ water", "Hiking boots", "Trekking poles", "Headlamp", "High-calorie snacks", "Sun hat", "Emergency whistle"],
+    gearStrip: ["3L+ water", "Hiking boots", "Trekking poles"],
     reviews: [
       { stars: "★★★★★", author: "Maria L.", text: "Epic views of the Superstitions. Nothing like it." },
       { stars: "★★★★",  author: "Tom B.",   text: "Very challenging but absolutely worth it." },
@@ -752,11 +705,10 @@ const trails = [
     name: "Peralta Trail",
     park: "Superstition Wilderness",
     img: "https://upload.wikimedia.org/wikipedia/commons/8/87/Weavers_Needle-pan.jpg",
-    distance: "4.6 mi",
-    time: "3–3.5 hrs",
-    elevation: "+1,425 ft",
-    difficulty: "Mod–Strenuous",
-    diffClass: "diff-strenuous",
+    distance: "4.6 mi", time: "3–3.5 hrs", elevation: "+1,425 ft",
+    difficulty: "Mod–Strenuous", diffClass: "diff-strenuous",
+    gear: ["2.5L water", "Hiking boots", "Trekking poles", "Sun hat", "Sunscreen", "Light layers", "Snacks"],
+    gearStrip: ["2.5L water", "Hiking boots", "Light layers"],
     reviews: [
       { stars: "★★★★★", author: "Dan K.",  text: "Weaver's Needle rising from the canyon — unreal." },
       { stars: "★★★★",  author: "Lily W.", text: "Rocky terrain but the views paint themselves." },
@@ -766,11 +718,10 @@ const trails = [
     name: "Hieroglyphic Trail",
     park: "Superstition Wilderness",
     img: "https://wildpathsaz.com/wp-content/uploads/2022/12/hieroglyphic-trail-superstition-mountains-0.jpg",
-    distance: "3.4 mi",
-    time: "2–2.5 hrs",
-    elevation: "+800 ft",
-    difficulty: "Easy–Moderate",
-    diffClass: "diff-easy",
+    distance: "3.4 mi", time: "2–2.5 hrs", elevation: "+800 ft",
+    difficulty: "Easy–Moderate", diffClass: "diff-easy",
+    gear: ["1.5L water", "Trail runners", "Sun hat", "Sunscreen", "Camera"],
+    gearStrip: ["1.5L water", "Trail runners", "Camera"],
     reviews: [
       { stars: "★★★★★", author: "Emma R.", text: "Ancient petroglyphs feel like a living museum." },
       { stars: "★★★★",  author: "Liam F.", text: "Perfect for beginners. Hidden gem near Mesa." },
@@ -780,11 +731,10 @@ const trails = [
     name: "Red Mountain Trail",
     park: "Red Mountain Park",
     img: "https://arizonabirdingtrail.com/wp-content/uploads/2020/12/RedMtnPrk2.jpg",
-    distance: "3.0 mi",
-    time: "1.5–2 hrs",
-    elevation: "+400 ft",
-    difficulty: "Easy–Moderate",
-    diffClass: "diff-easy",
+    distance: "3.0 mi", time: "1.5–2 hrs", elevation: "+400 ft",
+    difficulty: "Easy–Moderate", diffClass: "diff-easy",
+    gear: ["1.5L water", "Trail runners", "Sunscreen", "Camera", "Light layers"],
+    gearStrip: ["1.5L water", "Trail runners", "Sunscreen"],
     reviews: [
       { stars: "★★★★★", author: "Ben H.",   text: "The red volcanic formations are otherworldly." },
       { stars: "★★★★",  author: "Priya N.", text: "Kids absolutely loved it. Beautiful and gentle." },
@@ -822,14 +772,18 @@ trails.forEach((t, i) => {
           <div class="tp-stat"><span class="tp-stat-label">Time</span><span class="tp-stat-val">${t.time}</span></div>
           <div class="tp-stat"><span class="tp-stat-label">Gain</span><span class="tp-stat-val">${t.elevation}</span></div>
         </div>
+        <div class="trail-preview-gear">
+          <span class="gear-strip-label">Gear</span>
+          ${t.gearStrip.map(g => `<span class="gear-strip-tag">${g}</span>`).join('')}
+        </div>
       </div>
     </div>`;
 });
 
-// Scroll reveal for cards
+// Scroll reveal
 const cards = document.querySelectorAll('.trail-preview');
 const observer = new IntersectionObserver(entries => {
-  entries.forEach((entry, idx) => {
+  entries.forEach(entry => {
     if (entry.isIntersecting) {
       const i = Array.from(cards).indexOf(entry.target);
       setTimeout(() => entry.target.classList.add('visible'), i * 80);
@@ -839,7 +793,7 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
 cards.forEach(c => observer.observe(c));
 
-// Story state
+// Story
 let current = 0;
 
 function openStory(idx) {
@@ -848,26 +802,16 @@ function openStory(idx) {
   document.getElementById('storyOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-
 function closeStory() {
   document.getElementById('storyOverlay').classList.remove('open');
   document.body.style.overflow = '';
 }
-
-function nextStory() {
-  current = (current + 1) % trails.length;
-  renderStory();
-}
-
-function prevStory() {
-  current = (current - 1 + trails.length) % trails.length;
-  renderStory();
-}
+function nextStory() { current = (current + 1) % trails.length; renderStory(); }
+function prevStory() { current = (current - 1 + trails.length) % trails.length; renderStory(); }
 
 function renderStory() {
   const t = trails[current];
 
-  // Photo — fade swap
   const img = document.getElementById('storyImg');
   img.style.opacity = 0;
   setTimeout(() => { img.src = t.img; img.style.opacity = 1; }, 100);
@@ -892,6 +836,9 @@ function renderStory() {
   document.getElementById('storyDiff').innerHTML =
     `<span class="story-diff ${t.diffClass}">${t.difficulty}</span>`;
 
+  document.getElementById('storyGear').innerHTML =
+    t.gear.map(g => `<span class="gear-tag">${g}</span>`).join('');
+
   document.getElementById('storyReviews').innerHTML = t.reviews.map(r => `
     <div class="story-review">
       <div class="story-review-text">"${r.text}"</div>
@@ -901,23 +848,22 @@ function renderStory() {
       </div>
     </div>`).join('');
 
-  // Progress bars
   document.getElementById('storyProgress').innerHTML = trails.map((_, i) => `
     <div class="prog-seg">
       <div class="prog-fill ${i < current ? 'done' : i === current ? 'active' : ''}"></div>
     </div>`).join('');
+
+  // Scroll body back to top on trail change
+  document.querySelector('.story-body').scrollTop = 0;
 }
 
-// Close on backdrop click
 document.getElementById('storyOverlay').addEventListener('click', function(e) {
   if (e.target === this) closeStory();
 });
-
-// Keyboard
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape')      closeStory();
-  if (e.key === 'ArrowRight')  nextStory();
-  if (e.key === 'ArrowLeft')   prevStory();
+  if (e.key === 'Escape')     closeStory();
+  if (e.key === 'ArrowRight') nextStory();
+  if (e.key === 'ArrowLeft')  prevStory();
 });
 </script>
 </body>
