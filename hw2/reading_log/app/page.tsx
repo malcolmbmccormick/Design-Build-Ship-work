@@ -1,0 +1,100 @@
+'use client';
+
+import Link from 'next/link';
+import { useBooks } from '@/context/BookContext';
+import BookCard from '@/components/BookCard';
+
+export default function HomePage() {
+  const { books } = useBooks();
+
+  const finished = books.filter((b) => b.status === 'finished');
+  const reading = books.filter((b) => b.status === 'reading');
+  const wantToRead = books.filter((b) => b.status === 'want-to-read');
+  const recent = [...books].sort((a, b) => b.dateAdded.localeCompare(a.dateAdded)).slice(0, 3);
+
+  const avgRating =
+    finished.filter((b) => b.rating).length > 0
+      ? (
+          finished.filter((b) => b.rating).reduce((sum, b) => sum + (b.rating ?? 0), 0) /
+          finished.filter((b) => b.rating).length
+        ).toFixed(1)
+      : null;
+
+  return (
+    <div className="space-y-12">
+      {/* Hero */}
+      <div className="border-b border-stone-200 pb-10">
+        <h1 className="font-playfair text-5xl font-bold text-stone-900 mb-3">
+          My Reading Journal
+        </h1>
+        <p className="text-stone-500 text-lg max-w-xl">
+          A quiet corner to track what I&apos;ve read, what I&apos;m reading, and what&apos;s next on the shelf.
+        </p>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {[
+          { label: 'Books Read', value: finished.length, color: 'text-indigo-700' },
+          { label: 'Reading Now', value: reading.length, color: 'text-emerald-700' },
+          { label: 'Want to Read', value: wantToRead.length, color: 'text-amber-700' },
+          { label: 'Avg Rating', value: avgRating ? `${avgRating}/10` : '—', color: 'text-indigo-700' },
+        ].map(({ label, value, color }) => (
+          <div
+            key={label}
+            className="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm"
+          >
+            <p className={`font-playfair text-3xl font-bold ${color}`}>{value}</p>
+            <p className="text-stone-500 text-sm mt-1">{label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Currently Reading */}
+      {reading.length > 0 && (
+        <section>
+          <h2 className="font-playfair text-2xl font-bold text-stone-900 mb-5">
+            Currently Reading
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {reading.map((book) => (
+              <BookCard key={book.id} book={book} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Recently Added */}
+      <section>
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="font-playfair text-2xl font-bold text-stone-900">Recently Added</h2>
+          <Link
+            href="/shelf"
+            className="text-sm text-indigo-700 font-medium hover:underline underline-offset-2"
+          >
+            View all →
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {recent.map((book) => (
+            <BookCard key={book.id} book={book} />
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <div className="bg-indigo-700 rounded-2xl p-8 flex items-center justify-between">
+        <div>
+          <h3 className="font-playfair text-2xl font-bold text-white mb-1">Log a new book</h3>
+          <p className="text-indigo-200 text-sm">Add a title to your shelf in under a minute.</p>
+        </div>
+        <Link
+          href="/add"
+          className="bg-white text-indigo-700 font-semibold px-6 py-3 rounded-full text-sm hover:bg-indigo-50 transition-colors shrink-0"
+        >
+          + Add Book
+        </Link>
+      </div>
+    </div>
+  );
+}

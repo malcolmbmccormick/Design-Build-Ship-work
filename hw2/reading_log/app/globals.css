@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-playfair: var(--font-playfair);
+  --font-lora: var(--font-lora);
+}
+
+.font-playfair {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+.font-lora {
+  font-family: var(--font-lora), Georgia, serif;
+}
