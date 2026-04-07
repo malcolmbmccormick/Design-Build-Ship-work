@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${playfair.variable} ${lora.variable}`}>
-      <body className="bg-amber-50 text-stone-800 font-lora min-h-screen">
+      <body className="bg-[#111111] text-stone-100 font-lora min-h-screen">
         <BookProvider>
           <Nav />
           <main className="max-w-5xl mx-auto px-6 py-10">{children}</main>

@@ -10,11 +10,11 @@ function TimelineEvent({ date, label, note }: { date?: string; label: string; no
   if (!date) return null;
   return (
     <div className="relative pl-8">
-      <div className="absolute left-0 top-1.5 w-3 h-3 rounded-full bg-indigo-700 border-2 border-amber-50" />
-      <div className="absolute left-1.5 top-4 bottom-0 w-px bg-stone-200 last:hidden" />
-      <p className="text-xs text-stone-400 uppercase tracking-wider mb-0.5">{label}</p>
-      <p className="font-medium text-stone-800">{date}</p>
-      {note && <p className="text-sm text-stone-500 mt-0.5">{note}</p>}
+      <div className="absolute left-0 top-1.5 w-3 h-3 rounded-full bg-indigo-500 border-2 border-[#111111]" />
+      <div className="absolute left-1.5 top-4 bottom-0 w-px bg-zinc-800 last:hidden" />
+      <p className="text-xs text-zinc-600 uppercase tracking-wider mb-0.5">{label}</p>
+      <p className="font-medium text-stone-100">{date}</p>
+      {note && <p className="text-sm text-zinc-500 mt-0.5">{note}</p>}
     </div>
   );
 }
@@ -29,8 +29,8 @@ export default function BookDetailPage() {
   if (!book) {
     return (
       <div className="text-center py-24">
-        <p className="font-playfair text-2xl text-stone-600 mb-4">Book not found</p>
-        <Link href="/shelf" className="text-indigo-700 hover:underline text-sm">
+        <p className="font-playfair text-2xl text-zinc-500 mb-4">Book not found</p>
+        <Link href="/shelf" className="text-indigo-400 hover:underline text-sm">
           ← Back to shelf
         </Link>
       </div>
@@ -55,33 +55,33 @@ export default function BookDetailPage() {
   return (
     <div className="max-w-2xl space-y-10">
       {/* Back */}
-      <Link href="/shelf" className="inline-flex items-center gap-1 text-sm text-stone-500 hover:text-indigo-700 transition-colors">
+      <Link href="/shelf" className="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-indigo-400 transition-colors">
         ← Back to shelf
       </Link>
 
       {/* Header */}
-      <div className="border-b border-stone-200 pb-8 space-y-3">
+      <div className="border-b border-zinc-800 pb-8 space-y-3">
         <div className="flex items-center gap-3 flex-wrap">
           <StatusBadge status={book.status} />
           {book.genre && (
-            <span className="text-xs text-stone-400 uppercase tracking-wider">{book.genre}</span>
+            <span className="text-xs text-zinc-600 uppercase tracking-wider">{book.genre}</span>
           )}
         </div>
-        <h1 className="font-playfair text-4xl font-bold text-stone-900 leading-tight">
+        <h1 className="font-playfair text-4xl font-bold text-stone-100 leading-tight">
           {book.title}
         </h1>
-        <p className="text-stone-500 text-xl">{book.author}</p>
+        <p className="text-zinc-400 text-xl">{book.author}</p>
         <div className="flex items-center gap-2">
           <RatingDisplay rating={book.rating} />
           {daysReading && (
-            <span className="text-stone-400 text-sm">· read in {daysReading} days</span>
+            <span className="text-zinc-600 text-sm">· read in {daysReading} days</span>
           )}
         </div>
       </div>
 
       {/* Reading Timeline */}
       <section>
-        <h2 className="font-playfair text-xl font-bold text-stone-900 mb-6">Reading Timeline</h2>
+        <h2 className="font-playfair text-xl font-bold text-stone-100 mb-6">Reading Timeline</h2>
         <div className="space-y-6">
           <TimelineEvent
             date={book.dateAdded}
@@ -99,7 +99,7 @@ export default function BookDetailPage() {
             note={daysReading ? `Completed in ${daysReading} days` : undefined}
           />
           {!book.dateStarted && !book.dateFinished && (
-            <p className="text-stone-400 text-sm italic pl-1">No reading dates logged yet.</p>
+            <p className="text-zinc-600 text-sm italic pl-1">No reading dates logged yet.</p>
           )}
         </div>
       </section>
@@ -107,8 +107,8 @@ export default function BookDetailPage() {
       {/* Quotes */}
       {book.quotes && (
         <section>
-          <h2 className="font-playfair text-xl font-bold text-stone-900 mb-4">Favourite Quotes</h2>
-          <blockquote className="border-l-4 border-indigo-300 pl-5 italic text-stone-600 leading-relaxed whitespace-pre-wrap">
+          <h2 className="font-playfair text-xl font-bold text-stone-100 mb-4">Favourite Quotes</h2>
+          <blockquote className="border-l-4 border-indigo-500/50 pl-5 italic text-zinc-400 leading-relaxed whitespace-pre-wrap">
             {book.quotes}
           </blockquote>
         </section>
@@ -117,16 +117,16 @@ export default function BookDetailPage() {
       {/* Thoughts */}
       {book.thoughts && (
         <section>
-          <h2 className="font-playfair text-xl font-bold text-stone-900 mb-4">Personal Thoughts</h2>
-          <p className="text-stone-700 leading-relaxed whitespace-pre-wrap">{book.thoughts}</p>
+          <h2 className="font-playfair text-xl font-bold text-stone-100 mb-4">Personal Thoughts</h2>
+          <p className="text-zinc-300 leading-relaxed whitespace-pre-wrap">{book.thoughts}</p>
         </section>
       )}
 
       {/* Delete */}
-      <div className="border-t border-stone-200 pt-8">
+      <div className="border-t border-zinc-800 pt-8">
         <button
           onClick={handleDelete}
-          className="text-sm text-red-400 hover:text-red-600 transition-colors"
+          className="text-sm text-zinc-700 hover:text-red-400 transition-colors"
         >
           Remove from shelf
         </button>

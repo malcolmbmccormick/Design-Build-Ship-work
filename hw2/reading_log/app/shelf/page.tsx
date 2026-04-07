@@ -20,9 +20,9 @@ export default function ShelfPage() {
 
   return (
     <div className="space-y-8">
-      <div className="border-b border-stone-200 pb-8">
-        <h1 className="font-playfair text-4xl font-bold text-stone-900 mb-2">My Shelf</h1>
-        <p className="text-stone-500">{books.length} books in your collection</p>
+      <div className="border-b border-zinc-800 pb-8">
+        <h1 className="font-playfair text-4xl font-bold text-stone-100 mb-2">My Shelf</h1>
+        <p className="text-zinc-500">{books.length} books in your collection</p>
       </div>
 
       {/* Filter pills */}
@@ -33,12 +33,12 @@ export default function ShelfPage() {
             onClick={() => setFilter(value)}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               filter === value
-                ? 'bg-indigo-700 text-white'
-                : 'bg-white border border-stone-200 text-stone-600 hover:border-indigo-300 hover:text-indigo-700'
+                ? 'bg-indigo-500 text-white'
+                : 'bg-zinc-900 border border-zinc-800 text-zinc-400 hover:border-indigo-500/50 hover:text-indigo-400'
             }`}
           >
             {label}
-            <span className="ml-2 opacity-60">
+            <span className="ml-2 opacity-50">
               {value === 'all' ? books.length : books.filter((b) => b.status === value).length}
             </span>
           </button>
@@ -47,7 +47,7 @@ export default function ShelfPage() {
 
       {/* Grid */}
       {displayed.length === 0 ? (
-        <div className="text-center py-16 text-stone-400">
+        <div className="text-center py-16 text-zinc-600">
           <p className="font-playfair text-xl mb-2">Nothing here yet</p>
           <p className="text-sm">Add a book to get started.</p>
         </div>

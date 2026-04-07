@@ -12,6 +12,9 @@ const statusOptions: { value: BookStatus; label: string }[] = [
   { value: 'finished', label: 'Finished' },
 ];
 
+const inputClass =
+  'w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-stone-100 placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition';
+
 export default function AddBookPage() {
   const { addBook } = useBooks();
   const router = useRouter();
@@ -59,28 +62,28 @@ export default function AddBookPage() {
   if (submitted) {
     return (
       <div className="flex flex-col items-center justify-center py-24 gap-4">
-        <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center text-3xl">
+        <div className="w-16 h-16 bg-indigo-900/50 rounded-full flex items-center justify-center text-3xl text-indigo-400">
           ✓
         </div>
-        <p className="font-playfair text-2xl font-bold text-stone-900">Book added!</p>
-        <p className="text-stone-500 text-sm">Redirecting to your shelf…</p>
+        <p className="font-playfair text-2xl font-bold text-stone-100">Book added!</p>
+        <p className="text-zinc-500 text-sm">Redirecting to your shelf…</p>
       </div>
     );
   }
 
   return (
     <div className="max-w-2xl space-y-8">
-      <div className="border-b border-stone-200 pb-8">
-        <h1 className="font-playfair text-4xl font-bold text-stone-900 mb-2">Add a Book</h1>
-        <p className="text-stone-500">Log a new title to your reading journal.</p>
+      <div className="border-b border-zinc-800 pb-8">
+        <h1 className="font-playfair text-4xl font-bold text-stone-100 mb-2">Add a Book</h1>
+        <p className="text-zinc-500">Log a new title to your reading journal.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Title + Author */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-stone-700 mb-1.5">
-              Title <span className="text-red-400">*</span>
+            <label className="block text-sm font-medium text-zinc-300 mb-1.5">
+              Title <span className="text-red-500">*</span>
             </label>
             <input
               required
@@ -88,12 +91,12 @@ export default function AddBookPage() {
               value={form.title}
               onChange={(e) => set('title', e.target.value)}
               placeholder="e.g. Dune"
-              className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-stone-700 mb-1.5">
-              Author <span className="text-red-400">*</span>
+            <label className="block text-sm font-medium text-zinc-300 mb-1.5">
+              Author <span className="text-red-500">*</span>
             </label>
             <input
               required
@@ -101,7 +104,7 @@ export default function AddBookPage() {
               value={form.author}
               onChange={(e) => set('author', e.target.value)}
               placeholder="e.g. Frank Herbert"
-              className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition"
+              className={inputClass}
             />
           </div>
         </div>
@@ -109,21 +112,21 @@ export default function AddBookPage() {
         {/* Genre + Status */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-stone-700 mb-1.5">Genre</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-1.5">Genre</label>
             <input
               type="text"
               value={form.genre}
               onChange={(e) => set('genre', e.target.value)}
               placeholder="e.g. Science Fiction"
-              className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-stone-700 mb-1.5">Status</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-1.5">Status</label>
             <select
               value={form.status}
               onChange={(e) => set('status', e.target.value)}
-              className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-stone-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition"
+              className={inputClass}
             >
               {statusOptions.map(({ value, label }) => (
                 <option key={value} value={value}>
@@ -136,7 +139,7 @@ export default function AddBookPage() {
 
         {/* Rating */}
         <div>
-          <label className="block text-sm font-medium text-stone-700 mb-1.5">
+          <label className="block text-sm font-medium text-zinc-300 mb-1.5">
             Rating (1–10)
           </label>
           <div className="flex items-center gap-3">
@@ -146,16 +149,16 @@ export default function AddBookPage() {
               max={10}
               value={form.rating || 5}
               onChange={(e) => set('rating', e.target.value)}
-              className="flex-1 accent-indigo-700"
+              className="flex-1 accent-indigo-500"
             />
-            <span className="w-12 text-center font-playfair font-bold text-indigo-700 text-lg">
+            <span className="w-12 text-center font-playfair font-bold text-indigo-400 text-lg">
               {form.rating || '—'}
             </span>
             {form.rating && (
               <button
                 type="button"
                 onClick={() => set('rating', '')}
-                className="text-stone-400 hover:text-stone-600 text-xs"
+                className="text-zinc-600 hover:text-zinc-400 text-xs"
               >
                 Clear
               </button>
@@ -165,7 +168,7 @@ export default function AddBookPage() {
             <button
               type="button"
               onClick={() => set('rating', '5')}
-              className="mt-1 text-xs text-indigo-600 hover:underline"
+              className="mt-1 text-xs text-indigo-400 hover:underline"
             >
               + Add rating
             </button>
@@ -175,28 +178,28 @@ export default function AddBookPage() {
         {/* Dates */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-stone-700 mb-1.5">Date Started</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-1.5">Date Started</label>
             <input
               type="date"
               value={form.dateStarted}
               onChange={(e) => set('dateStarted', e.target.value)}
-              className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-stone-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition"
+              className={inputClass}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-stone-700 mb-1.5">Date Finished</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-1.5">Date Finished</label>
             <input
               type="date"
               value={form.dateFinished}
               onChange={(e) => set('dateFinished', e.target.value)}
-              className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-stone-900 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition"
+              className={inputClass}
             />
           </div>
         </div>
 
         {/* Quotes */}
         <div>
-          <label className="block text-sm font-medium text-stone-700 mb-1.5">
+          <label className="block text-sm font-medium text-zinc-300 mb-1.5">
             Favourite Quotes
           </label>
           <textarea
@@ -204,13 +207,13 @@ export default function AddBookPage() {
             onChange={(e) => set('quotes', e.target.value)}
             rows={3}
             placeholder='"The mystery of life is not a problem to solve..."'
-            className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition resize-none"
+            className={inputClass + ' resize-none'}
           />
         </div>
 
         {/* Thoughts */}
         <div>
-          <label className="block text-sm font-medium text-stone-700 mb-1.5">
+          <label className="block text-sm font-medium text-zinc-300 mb-1.5">
             Personal Thoughts
           </label>
           <textarea
@@ -218,13 +221,13 @@ export default function AddBookPage() {
             onChange={(e) => set('thoughts', e.target.value)}
             rows={4}
             placeholder="What did this book make you feel or think?"
-            className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 transition resize-none"
+            className={inputClass + ' resize-none'}
           />
         </div>
 
         <button
           type="submit"
-          className="w-full bg-indigo-700 text-white font-semibold py-3.5 rounded-xl hover:bg-indigo-800 active:scale-[0.99] transition-all"
+          className="w-full bg-indigo-600 text-white font-semibold py-3.5 rounded-xl hover:bg-indigo-500 active:scale-[0.99] transition-all"
         >
           Add to Shelf
         </button>
