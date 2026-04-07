@@ -49,8 +49,8 @@ export default function HomePage() {
         <section>
           <h2 className="font-playfair text-2xl font-bold text-stone-900 mb-5">Currently Reading</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {reading.map((book) => (
-              <BookCard key={book.id} book={book} />
+            {reading.map((book, i) => (
+              <BookCard key={book.id} book={book} index={i} />
             ))}
           </div>
         </section>
@@ -64,8 +64,8 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {recent.map((book) => (
-            <BookCard key={book.id} book={book} />
+          {recent.map((book, i) => (
+            <BookCard key={book.id} book={book} index={i} />
           ))}
         </div>
       </section>

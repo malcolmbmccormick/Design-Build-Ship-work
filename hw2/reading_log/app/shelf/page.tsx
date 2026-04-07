@@ -51,8 +51,8 @@ export default function ShelfPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {displayed.map((book) => (
-            <BookCard key={book.id} book={book} />
+          {displayed.map((book, i) => (
+            <BookCard key={book.id} book={book} index={i} />
           ))}
         </div>
       )}

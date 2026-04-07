@@ -2,9 +2,16 @@ import Link from 'next/link';
 import { Book } from '@/types/book';
 import StatusBadge from './StatusBadge';
 
-export default function BookCard({ book }: { book: Book }) {
+export default function BookCard({ book, index = 0 }: { book: Book; index?: number }) {
   return (
-    <Link href={`/book/${book.id}`} className="group block">
+    <Link
+      href={`/book/${book.id}`}
+      className="group block"
+      style={{
+        animation: 'fadeUp 1.6s ease both',
+        animationDelay: `${index * 150}ms`,
+      }}
+    >
       <div className="bg-white border border-stone-200 rounded-2xl px-5 py-4 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-200">
         {/* Top row: title + genre */}
         <div className="flex items-start justify-between gap-4 mb-1">
