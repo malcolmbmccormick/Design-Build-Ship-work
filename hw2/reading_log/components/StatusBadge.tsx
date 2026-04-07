@@ -3,15 +3,15 @@ import { BookStatus } from '@/types/book';
 const config: Record<BookStatus, { label: string; className: string }> = {
   reading: {
     label: 'Reading',
-    className: 'bg-emerald-900/50 text-emerald-400 border border-emerald-800',
+    className: 'bg-emerald-100 text-emerald-800 border border-emerald-200',
   },
   finished: {
     label: 'Finished',
-    className: 'bg-indigo-900/50 text-indigo-400 border border-indigo-800',
+    className: 'bg-indigo-100 text-indigo-800 border border-indigo-200',
   },
   'want-to-read': {
     label: 'Want to Read',
-    className: 'bg-amber-900/50 text-amber-400 border border-amber-800',
+    className: 'bg-amber-100 text-amber-800 border border-amber-200',
   },
 };
 

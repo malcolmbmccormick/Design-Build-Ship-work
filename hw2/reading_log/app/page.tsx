@@ -22,40 +22,32 @@ export default function HomePage() {
 
   return (
     <div className="space-y-12">
-      {/* Hero */}
-      <div className="border-b border-zinc-800 pb-10">
-        <h1 className="font-playfair text-5xl font-bold text-stone-100 mb-3">
+      <div className="border-b border-stone-200 pb-10">
+        <h1 className="font-playfair text-5xl font-bold text-stone-900 mb-3">
           My Reading Journal
         </h1>
-        <p className="text-zinc-400 text-lg max-w-xl">
+        <p className="text-stone-500 text-lg max-w-xl">
           A quiet corner to track what I&apos;ve read, what I&apos;m reading, and what&apos;s next on the shelf.
         </p>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { label: 'Books Read', value: finished.length, color: 'text-indigo-400' },
-          { label: 'Reading Now', value: reading.length, color: 'text-emerald-400' },
-          { label: 'Want to Read', value: wantToRead.length, color: 'text-amber-400' },
-          { label: 'Avg Rating', value: avgRating ? `${avgRating}/10` : '—', color: 'text-indigo-400' },
+          { label: 'Books Read', value: finished.length, color: 'text-indigo-700' },
+          { label: 'Reading Now', value: reading.length, color: 'text-emerald-700' },
+          { label: 'Want to Read', value: wantToRead.length, color: 'text-amber-700' },
+          { label: 'Avg Rating', value: avgRating ? `${avgRating}/10` : '—', color: 'text-indigo-700' },
         ].map(({ label, value, color }) => (
-          <div
-            key={label}
-            className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-sm"
-          >
+          <div key={label} className="bg-white border border-stone-200 rounded-2xl p-5 shadow-sm">
             <p className={`font-playfair text-3xl font-bold ${color}`}>{value}</p>
-            <p className="text-zinc-500 text-sm mt-1">{label}</p>
+            <p className="text-stone-500 text-sm mt-1">{label}</p>
           </div>
         ))}
       </div>
 
-      {/* Currently Reading */}
       {reading.length > 0 && (
         <section>
-          <h2 className="font-playfair text-2xl font-bold text-stone-100 mb-5">
-            Currently Reading
-          </h2>
+          <h2 className="font-playfair text-2xl font-bold text-stone-900 mb-5">Currently Reading</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {reading.map((book) => (
               <BookCard key={book.id} book={book} />
@@ -64,14 +56,10 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Recently Added */}
       <section>
         <div className="flex items-center justify-between mb-5">
-          <h2 className="font-playfair text-2xl font-bold text-stone-100">Recently Added</h2>
-          <Link
-            href="/shelf"
-            className="text-sm text-indigo-400 font-medium hover:underline underline-offset-2"
-          >
+          <h2 className="font-playfair text-2xl font-bold text-stone-900">Recently Added</h2>
+          <Link href="/shelf" className="text-sm text-indigo-700 font-medium hover:underline underline-offset-2">
             View all →
           </Link>
         </div>
@@ -82,16 +70,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <div className="bg-indigo-600 rounded-2xl p-8 flex items-center justify-between">
+      <div className="bg-indigo-700 rounded-2xl p-8 flex items-center justify-between">
         <div>
           <h3 className="font-playfair text-2xl font-bold text-white mb-1">Log a new book</h3>
           <p className="text-indigo-200 text-sm">Add a title to your shelf in under a minute.</p>
         </div>
-        <Link
-          href="/add"
-          className="bg-white text-indigo-700 font-semibold px-6 py-3 rounded-full text-sm hover:bg-indigo-50 transition-colors shrink-0"
-        >
+        <Link href="/add" className="bg-white text-indigo-700 font-semibold px-6 py-3 rounded-full text-sm hover:bg-indigo-50 transition-colors shrink-0">
           + Add Book
         </Link>
       </div>

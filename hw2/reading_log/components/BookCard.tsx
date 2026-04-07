@@ -1,28 +1,40 @@
 import Link from 'next/link';
 import { Book } from '@/types/book';
 import StatusBadge from './StatusBadge';
-import RatingDisplay from './RatingDisplay';
 
 export default function BookCard({ book }: { book: Book }) {
   return (
     <Link href={`/book/${book.id}`} className="group block">
-      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-sm hover:shadow-lg hover:border-indigo-500/50 transition-all duration-200">
-        <div className="flex items-start justify-between gap-2 mb-3">
-          <StatusBadge status={book.status} />
-          <RatingDisplay rating={book.rating} />
+      <div className="bg-white border border-stone-200 rounded-2xl px-5 py-4 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all duration-200">
+        {/* Top row: title + genre */}
+        <div className="flex items-start justify-between gap-4 mb-1">
+          <h3 className="font-playfair font-bold text-stone-900 text-lg leading-tight group-hover:text-indigo-700 transition-colors">
+            {book.title}
+          </h3>
+          {book.genre && (
+            <span className="text-xs text-stone-400 uppercase tracking-wider shrink-0 mt-1">
+              {book.genre}
+            </span>
+          )}
         </div>
-        <h3 className="font-playfair font-bold text-stone-100 text-lg leading-tight mb-1 group-hover:text-indigo-400 transition-colors">
-          {book.title}
-        </h3>
-        <p className="text-zinc-400 text-sm mb-3">{book.author}</p>
-        {book.genre && (
-          <p className="text-xs text-zinc-600 uppercase tracking-wider">{book.genre}</p>
-        )}
-        {book.thoughts && (
-          <p className="mt-3 text-zinc-400 text-sm line-clamp-2 italic border-t border-zinc-800 pt-3">
-            {book.thoughts}
-          </p>
-        )}
+
+        {/* Second row: author + rating */}
+        <div className="flex items-center justify-between gap-4 mb-3">
+          <p className="text-stone-500 text-sm">{book.author}</p>
+          {book.rating ? (
+            <span className="text-sm shrink-0">
+              <span className="font-bold text-indigo-700">{book.rating}</span>
+              <span className="text-stone-400"> / 10</span>
+            </span>
+          ) : (
+            <span className="text-stone-300 text-sm shrink-0">—</span>
+          )}
+        </div>
+
+        {/* Divider + status */}
+        <div className="border-t border-stone-100 pt-3">
+          <StatusBadge status={book.status} />
+        </div>
       </div>
     </Link>
   );
