@@ -37,7 +37,7 @@ export default function Nav() {
             );
           })}
           <div className="ml-3">
-            <UserButton afterSignOutUrl="/sign-in" />
+            <UserButton />
           </div>
         </nav>
       </div>
