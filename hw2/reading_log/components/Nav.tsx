@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { UserButton } from '@clerk/nextjs';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -35,6 +36,9 @@ export default function Nav() {
               </Link>
             );
           })}
+          <div className="ml-3">
+            <UserButton afterSignOutUrl="/sign-in" />
+          </div>
         </nav>
       </div>
     </header>

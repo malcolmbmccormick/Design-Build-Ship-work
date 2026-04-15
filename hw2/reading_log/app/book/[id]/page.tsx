@@ -1,10 +1,11 @@
-'use client';
-
-import { useParams, useRouter } from 'next/navigation';
-import { useBooks } from '@/context/BookContext';
+import { auth } from '@clerk/nextjs/server';
+import { getSupabase } from '@/lib/supabase';
+import { Book } from '@/types/book';
 import StatusBadge from '@/components/StatusBadge';
 import RatingDisplay from '@/components/RatingDisplay';
+import DeleteBookButton from '@/components/DeleteBookButton';
 import Link from 'next/link';
+import Image from 'next/image';
 
 function TimelineEvent({ date, label, note }: { date?: string; label: string; note?: string }) {
   if (!date) return null;
@@ -19,12 +20,19 @@ function TimelineEvent({ date, label, note }: { date?: string; label: string; no
   );
 }
 
-export default function BookDetailPage() {
-  const { id } = useParams<{ id: string }>();
-  const { books, deleteBook } = useBooks();
-  const router = useRouter();
+export default async function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const { userId } = await auth();
+  const supabase = getSupabase();
 
-  const book = books.find((b) => b.id === id);
+  const { data } = await supabase
+    .from('books')
+    .select('*')
+    .eq('id', id)
+    .eq('user_id', userId!)
+    .single();
+
+  const book = data as Book | null;
 
   if (!book) {
     return (
@@ -38,19 +46,12 @@ export default function BookDetailPage() {
   }
 
   const daysReading =
-    book.dateStarted && book.dateFinished
+    book.date_started && book.date_finished
       ? Math.ceil(
-          (new Date(book.dateFinished).getTime() - new Date(book.dateStarted).getTime()) /
-            (1000 * 60 * 60 * 24)
+          (new Date(book.date_finished).getTime() - new Date(book.date_started).getTime()) /
+            (1000 * 60 * 60 * 24),
         )
       : null;
-
-  function handleDelete() {
-    if (confirm(`Remove "${book!.title}" from your shelf?`)) {
-      deleteBook(book!.id);
-      router.push('/shelf');
-    }
-  }
 
   return (
     <div className="max-w-2xl space-y-10">
@@ -59,29 +60,48 @@ export default function BookDetailPage() {
       </Link>
 
       <div className="border-b border-stone-200 pb-8 space-y-3">
-        <div className="flex items-center gap-3 flex-wrap">
-          <StatusBadge status={book.status} />
-          {book.genre && (
-            <span className="text-xs text-stone-400 uppercase tracking-wider">{book.genre}</span>
+        <div className="flex gap-5">
+          {book.cover_url && (
+            <Image
+              src={book.cover_url}
+              alt={book.title}
+              width={80}
+              height={120}
+              className="rounded-lg object-cover shrink-0 shadow-sm"
+            />
           )}
+          <div className="space-y-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              <StatusBadge status={book.status} />
+              {book.genre && (
+                <span className="text-xs text-stone-400 uppercase tracking-wider">{book.genre}</span>
+              )}
+              {book.page_count && (
+                <span className="text-xs text-stone-400">{book.page_count} pages</span>
+              )}
+            </div>
+            <h1 className="font-playfair text-4xl font-bold text-stone-900 leading-tight">{book.title}</h1>
+            <p className="text-stone-500 text-xl">{book.author}</p>
+            <div className="flex items-center gap-2">
+              <RatingDisplay rating={book.rating} />
+              {daysReading && (
+                <span className="text-stone-400 text-sm">· read in {daysReading} days</span>
+              )}
+            </div>
+          </div>
         </div>
-        <h1 className="font-playfair text-4xl font-bold text-stone-900 leading-tight">{book.title}</h1>
-        <p className="text-stone-500 text-xl">{book.author}</p>
-        <div className="flex items-center gap-2">
-          <RatingDisplay rating={book.rating} />
-          {daysReading && (
-            <span className="text-stone-400 text-sm">· read in {daysReading} days</span>
-          )}
-        </div>
+        {book.description && (
+          <p className="text-stone-600 text-sm leading-relaxed mt-4">{book.description}</p>
+        )}
       </div>
 
       <section>
         <h2 className="font-playfair text-xl font-bold text-stone-900 mb-6">Reading Timeline</h2>
         <div className="space-y-6">
-          <TimelineEvent date={book.dateAdded} label="Added to shelf" note="Book was added to the reading log" />
-          <TimelineEvent date={book.dateStarted} label="Started reading" note={book.status === 'reading' ? 'Currently in progress' : undefined} />
-          <TimelineEvent date={book.dateFinished} label="Finished" note={daysReading ? `Completed in ${daysReading} days` : undefined} />
-          {!book.dateStarted && !book.dateFinished && (
+          <TimelineEvent date={book.date_added} label="Added to shelf" note="Book was added to the reading log" />
+          <TimelineEvent date={book.date_started} label="Started reading" note={book.status === 'reading' ? 'Currently in progress' : undefined} />
+          <TimelineEvent date={book.date_finished} label="Finished" note={daysReading ? `Completed in ${daysReading} days` : undefined} />
+          {!book.date_started && !book.date_finished && (
             <p className="text-stone-400 text-sm italic pl-1">No reading dates logged yet.</p>
           )}
         </div>
@@ -104,9 +124,7 @@ export default function BookDetailPage() {
       )}
 
       <div className="border-t border-stone-200 pt-8">
-        <button onClick={handleDelete} className="text-sm text-red-400 hover:text-red-600 transition-colors">
-          Remove from shelf
-        </button>
+        <DeleteBookButton bookId={book.id} bookTitle={book.title} />
       </div>
     </div>
   );

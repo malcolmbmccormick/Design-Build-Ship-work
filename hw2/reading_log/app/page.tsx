@@ -1,23 +1,30 @@
-'use client';
-
+import { auth } from '@clerk/nextjs/server';
+import { getSupabase } from '@/lib/supabase';
+import { Book } from '@/types/book';
 import Link from 'next/link';
-import { useBooks } from '@/context/BookContext';
 import BookCard from '@/components/BookCard';
 
-export default function HomePage() {
-  const { books } = useBooks();
+export default async function HomePage() {
+  const { userId } = await auth();
+  const supabase = getSupabase();
+
+  const { data } = await supabase
+    .from('books')
+    .select('*')
+    .eq('user_id', userId!)
+    .order('created_at', { ascending: false });
+
+  const books: Book[] = data ?? [];
 
   const finished = books.filter((b) => b.status === 'finished');
   const reading = books.filter((b) => b.status === 'reading');
   const wantToRead = books.filter((b) => b.status === 'want-to-read');
-  const recent = [...books].sort((a, b) => b.dateAdded.localeCompare(a.dateAdded)).slice(0, 3);
+  const recent = books.slice(0, 3);
 
+  const ratedFinished = finished.filter((b) => b.rating);
   const avgRating =
-    finished.filter((b) => b.rating).length > 0
-      ? (
-          finished.filter((b) => b.rating).reduce((sum, b) => sum + (b.rating ?? 0), 0) /
-          finished.filter((b) => b.rating).length
-        ).toFixed(1)
+    ratedFinished.length > 0
+      ? (ratedFinished.reduce((sum, b) => sum + (b.rating ?? 0), 0) / ratedFinished.length).toFixed(1)
       : null;
 
   return (
@@ -56,26 +63,38 @@ export default function HomePage() {
         </section>
       )}
 
-      <section>
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="font-playfair text-2xl font-bold text-stone-900">Recently Added</h2>
-          <Link href="/shelf" className="text-sm text-indigo-700 font-medium hover:underline underline-offset-2">
-            View all →
-          </Link>
+      {recent.length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="font-playfair text-2xl font-bold text-stone-900">Recently Added</h2>
+            <Link href="/shelf" className="text-sm text-indigo-700 font-medium hover:underline underline-offset-2">
+              View all →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {recent.map((book, i) => (
+              <BookCard key={book.id} book={book} index={i} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {books.length === 0 && (
+        <div className="text-center py-16 text-stone-400">
+          <p className="font-playfair text-xl mb-2">Your shelf is empty</p>
+          <p className="text-sm">Add your first book to get started.</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {recent.map((book, i) => (
-            <BookCard key={book.id} book={book} index={i} />
-          ))}
-        </div>
-      </section>
+      )}
 
       <div className="bg-indigo-700 rounded-2xl p-8 flex items-center justify-between">
         <div>
           <h3 className="font-playfair text-2xl font-bold text-white mb-1">Log a new book</h3>
           <p className="text-indigo-200 text-sm">Add a title to your shelf in under a minute.</p>
         </div>
-        <Link href="/add" className="bg-white text-indigo-700 font-semibold px-6 py-3 rounded-full text-sm hover:bg-indigo-50 transition-colors shrink-0">
+        <Link
+          href="/add"
+          className="bg-white text-indigo-700 font-semibold px-6 py-3 rounded-full text-sm hover:bg-indigo-50 transition-colors shrink-0"
+        >
           + Add Book
         </Link>
       </div>
