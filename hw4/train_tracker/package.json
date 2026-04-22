@@ -1,0 +1,16 @@
+{
+  "name": "cta-train-tracker",
+  "private": true,
+  "packageManager": "pnpm@10.12.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "corepack pnpm --filter web dev",
+    "dev:worker": "corepack pnpm --filter worker dev",
+    "build": "corepack pnpm --filter @tracker/shared build && corepack pnpm --filter web build && corepack pnpm --filter worker build",
+    "lint": "corepack pnpm --filter web lint && corepack pnpm --filter worker lint",
+    "typecheck": "corepack pnpm --filter @tracker/shared build && corepack pnpm --filter web typecheck && corepack pnpm --filter worker typecheck"
+  }
+}
