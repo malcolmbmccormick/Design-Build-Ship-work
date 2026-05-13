@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
+import { SavedTripsDashboard } from "@/components/saved-trips-dashboard";
 import { isClerkConfigured } from "@/lib/auth-config";
+import type { SavedTripRecord } from "@/lib/saved-trips";
+import {
+  createSupabaseAdminClient,
+  isSupabaseConfigured,
+  SAVED_TRIPS_TABLE,
+} from "@/lib/supabase";
 
 export default async function DashboardPage() {
   if (!isClerkConfigured()) {
@@ -33,6 +40,24 @@ export default async function DashboardPage() {
   }
 
   const { userId } = await auth();
+  const supabaseEnabled = isSupabaseConfigured();
+  let savedTrips: SavedTripRecord[] = [];
+  let loadError: string | null = null;
+
+  if (supabaseEnabled) {
+    const supabase = createSupabaseAdminClient();
+    const { data, error } = await supabase
+      .from(SAVED_TRIPS_TABLE)
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      loadError = error.message;
+    } else {
+      savedTrips = (data ?? []) as SavedTripRecord[];
+    }
+  }
 
   return (
     <main className="grid-fade min-h-screen px-4 py-8 sm:px-6 lg:px-8">
@@ -42,34 +67,43 @@ export default async function DashboardPage() {
             Saved trips
           </p>
           <h1 className="mt-3 font-serif text-4xl text-slate-950">
-            Your dashboard
+            Your saved weekends
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
             Signed in as <span className="font-medium text-slate-900">{userId}</span>.
-            Saved itineraries are the next step after auth.
+            Saved itineraries now live here once Supabase is configured.
           </p>
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            <div className="rounded-[1.25rem] border border-border-soft bg-slate-50/85 p-5">
-              <p className="text-sm font-semibold text-slate-900">Next implementation step</p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                Connect this page to Supabase and persist saved trip snapshots
-                with link-status metadata.
-              </p>
-            </div>
-            <div className="rounded-[1.25rem] border border-border-soft bg-slate-50/85 p-5">
-              <p className="text-sm font-semibold text-slate-900">Current auth status</p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                Clerk is protecting the dashboard route and exposing the signed-in
-                session on the server.
-              </p>
-            </div>
+          <div className="mt-5 flex flex-wrap gap-2.5">
+            <Link
+              className="med-button-dark inline-flex rounded-xl px-4 py-3 text-sm font-semibold"
+              href="/#planner"
+            >
+              Generate another trip
+            </Link>
+            <Link
+              className="med-button-light inline-flex rounded-xl border px-4 py-3 text-sm font-semibold"
+              href="/"
+            >
+              Back to homepage
+            </Link>
           </div>
-          <Link
-            className="mt-6 inline-flex rounded-xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-900"
-            href="/"
-          >
-            Back to planner
-          </Link>
+          <div className="mt-6 space-y-4">
+            {!supabaseEnabled ? (
+              <div className="rounded-[1.25rem] border border-amber-200 bg-amber-50/80 p-5">
+                <p className="text-sm font-semibold text-slate-900">Supabase setup pending</p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Add <code>NEXT_PUBLIC_SUPABASE_URL</code> and <code>SUPABASE_SERVICE_ROLE_KEY</code> to enable saved trips.
+                </p>
+              </div>
+            ) : loadError ? (
+              <div className="rounded-[1.25rem] border border-red-200 bg-red-50 p-5">
+                <p className="text-sm font-semibold text-red-800">Unable to load saved trips</p>
+                <p className="mt-2 text-sm leading-6 text-red-700">{loadError}</p>
+              </div>
+            ) : (
+              <SavedTripsDashboard initialTrips={savedTrips} />
+            )}
+          </div>
         </div>
       </section>
     </main>

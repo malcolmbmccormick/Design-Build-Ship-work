@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { SignOutButton } from "@clerk/nextjs";
 import { useState, useTransition } from "react";
 import type {
   GenerateTripRequest,
@@ -13,6 +14,7 @@ type GenerateTripMeta = GenerateTripResponse["meta"];
 
 type PlannerExperienceProps = {
   authEnabled: boolean;
+  isSignedIn: boolean;
   initialRequest: GenerateTripRequest;
   initialMeta: GenerateTripMeta;
   initialOptions: TripOption[];
@@ -30,6 +32,7 @@ const preferenceOptions: Array<{
 
 export function PlannerExperience({
   authEnabled,
+  isSignedIn,
   initialRequest,
   initialMeta,
   initialOptions,
@@ -130,14 +133,14 @@ export function PlannerExperience({
             <a className="rounded-xl px-3 py-2 hover:bg-white/80" href="#planner">
               Plan a trip
             </a>
-            <AuthControls authEnabled={authEnabled} />
+            <AuthControls authEnabled={authEnabled} isSignedIn={isSignedIn} />
           </div>
         </header>
 
         <div className="grid gap-5 lg:grid-cols-[1fr_0.9fr]">
           <section className="flex flex-col justify-between gap-5">
             <div className="space-y-4">
-              <span className="inline-flex w-fit rounded-xl border border-accent/15 bg-accent-soft px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-accent">
+              <span className="inline-flex w-fit rounded-xl border border-[color:var(--color-warm)]/20 bg-[color:var(--color-accent-soft)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-warm)]">
                 Rules-based v1
               </span>
               <div className="max-w-3xl space-y-3">
@@ -182,7 +185,7 @@ export function PlannerExperience({
                   Build a weekend in under a minute
                 </h2>
               </div>
-              <span className="rounded-xl bg-slate-950 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
+              <span className="med-button-dark rounded-xl px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em]">
                 {resultMeta.source === "openai" ? "AI live" : "Rules fallback"}
               </span>
             </div>
@@ -292,7 +295,7 @@ export function PlannerExperience({
               ) : null}
 
               <button
-                className="w-full rounded-xl bg-slate-950 px-4 py-3.5 text-sm font-semibold uppercase tracking-[0.18em] text-white hover:-translate-y-0.5 hover:bg-slate-900 disabled:cursor-wait disabled:opacity-70 disabled:hover:translate-y-0"
+                className="med-button-dark w-full rounded-xl px-4 py-3.5 text-sm font-semibold uppercase tracking-[0.18em] hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-70 disabled:hover:translate-y-0"
                 disabled={isPending}
                 type="submit"
               >
@@ -355,6 +358,9 @@ export function PlannerExperience({
                 ))
               : results.map((trip) => (
                   <TripCard
+                    canSave={isSignedIn}
+                    meta={resultMeta}
+                    request={lastSubmittedRequest}
                     key={`${trip.destinationCity}-${trip.destinationCountry}`}
                     trip={trip}
                   />
@@ -366,9 +372,61 @@ export function PlannerExperience({
   );
 }
 
-function TripCard({ trip }: { trip: TripOption }) {
+function TripCard({
+  trip,
+  request,
+  meta,
+  canSave,
+}: {
+  trip: TripOption;
+  request: GenerateTripRequest;
+  meta: GenerateTripMeta;
+  canSave: boolean;
+}) {
+  const [saveLabel, setSaveLabel] = useState("Save trip");
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [isSaving, startSaveTransition] = useTransition();
+  const accentClass = getTripAccentClass(trip.vibeLabel);
+
+  function handleSave() {
+    if (!canSave || isSaving) {
+      return;
+    }
+
+    setSaveError(null);
+
+    startSaveTransition(async () => {
+      try {
+        const response = await fetch("/api/saved-trips", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ request, trip, meta }),
+        });
+
+        const payload = (await response.json()) as {
+          duplicate?: boolean;
+          error?: string;
+        };
+
+        if (!response.ok) {
+          throw new Error(payload.error ?? "Unable to save trip.");
+        }
+
+        setSaveLabel(payload.duplicate ? "Already saved" : "Saved");
+      } catch (saveTripError) {
+        setSaveError(
+          saveTripError instanceof Error
+            ? saveTripError.message
+            : "Unable to save trip.",
+        );
+      }
+    });
+  }
+
   return (
-    <article className="trip-card rounded-[1.4rem] p-4">
+    <article className={`trip-card ${accentClass} rounded-[1.4rem] p-4`}>
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-muted)]">
@@ -378,7 +436,7 @@ function TripCard({ trip }: { trip: TripOption }) {
             {trip.destinationCity}, {trip.destinationCountry}
           </h3>
         </div>
-        <span className="rounded-lg bg-accent-soft px-2.5 py-1 text-[11px] font-semibold text-accent">
+        <span className="rounded-lg bg-[color:var(--color-accent-soft)] px-2.5 py-1 text-[11px] font-semibold text-[color:var(--color-accent)]">
           Weekend fit
         </span>
       </div>
@@ -448,6 +506,30 @@ function TripCard({ trip }: { trip: TripOption }) {
           label={labelForStayLink(trip)}
           variant="outline"
         />
+      </div>
+
+      <div className="mt-3">
+        {canSave ? (
+          <button
+            className="med-button-light w-full rounded-xl border px-3 py-3 text-sm font-semibold disabled:opacity-60"
+            disabled={isSaving || saveLabel === "Saved"}
+            onClick={handleSave}
+            type="button"
+          >
+            {isSaving ? "Saving..." : saveLabel}
+          </button>
+        ) : (
+          <Link
+            className="med-button-light block w-full rounded-xl border px-3 py-3 text-center text-sm font-semibold"
+            href="/sign-in"
+            prefetch={false}
+          >
+            Sign in to save
+          </Link>
+        )}
+        {saveError ? (
+          <p className="mt-2 text-xs leading-5 text-red-700">{saveError}</p>
+        ) : null}
       </div>
     </article>
   );
@@ -541,8 +623,10 @@ function FeatureCard({
 
 function AuthControls({
   authEnabled,
+  isSignedIn,
 }: {
   authEnabled: boolean;
+  isSignedIn: boolean;
 }) {
   if (!authEnabled) {
     return (
@@ -552,20 +636,32 @@ function AuthControls({
     );
   }
 
+  if (isSignedIn) {
+    return (
+      <>
+        <a className="rounded-xl px-3 py-2 hover:bg-[color:var(--button-light)]" href="/dashboard">
+          Saved trips
+        </a>
+        <SignOutButton>
+          <button className="med-button-light rounded-xl border px-3 py-2 font-medium">
+            Sign out
+          </button>
+        </SignOutButton>
+      </>
+    );
+  }
+
   return (
     <>
-      <a className="rounded-xl px-3 py-2 hover:bg-white/80" href="/dashboard">
-        Dashboard
-      </a>
       <Link
-        className="rounded-xl border border-border-soft bg-white/80 px-3 py-2 font-medium text-slate-700 hover:bg-white"
+        className="med-button-light rounded-xl border px-3 py-2 font-medium"
         href="/sign-in"
         prefetch={false}
       >
         Sign in
       </Link>
       <Link
-        className="rounded-xl bg-slate-950 px-3 py-2 font-medium text-white hover:bg-slate-900"
+        className="med-button-dark rounded-xl px-3 py-2 font-medium"
         href="/sign-up"
         prefetch={false}
       >
@@ -573,6 +669,38 @@ function AuthControls({
       </Link>
     </>
   );
+}
+
+function getTripAccentClass(vibeLabel: string) {
+  const label = vibeLabel.toLowerCase();
+
+  if (
+    label.includes("nightlife") ||
+    label.includes("bars") ||
+    label.includes("thermal")
+  ) {
+    return "trip-accent-nightlife";
+  }
+
+  if (
+    label.includes("nature") ||
+    label.includes("alpine") ||
+    label.includes("outdoors") ||
+    label.includes("scenic")
+  ) {
+    return "trip-accent-nature";
+  }
+
+  if (
+    label.includes("culture") ||
+    label.includes("design") ||
+    label.includes("historic") ||
+    label.includes("elegant")
+  ) {
+    return "trip-accent-culture";
+  }
+
+  return "trip-accent-balanced";
 }
 
 function describeLinkStatus(
