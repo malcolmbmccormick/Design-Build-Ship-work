@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #c7dce3;
-  --foreground: #213547;
-  --surface: rgba(233, 242, 241, 0.84);
-  --surface-strong: #eef6f4;
-  --border-soft: rgba(67, 84, 76, 0.16);
-  --accent: #26758b;
-  --accent-soft: #d6e8e8;
-  --warm: #c96c4a;
-  --olive: #6c7b52;
-  --ink-muted: #6c6f69;
-  --card-surface: #eef7f4;
-  --card-border: rgba(63, 103, 109, 0.16);
-  --card-shadow: rgba(54, 83, 89, 0.11);
-  --button-dark: #28424b;
-  --button-dark-hover: #203840;
-  --button-light: #e7f0ee;
-  --button-light-hover: #dce9e5;
+  --background: #e6f0f7;
+  --foreground: #16202a;
+  --surface: rgba(255, 255, 255, 0.9);
+  --surface-strong: #ffffff;
+  --border-soft: rgba(21, 34, 47, 0.1);
+  --accent: #1f5e7a;
+  --accent-soft: #e8f0f4;
+  --warm: #b86a4b;
+  --olive: #5d7254;
+  --ink-muted: #5f6b76;
+  --card-surface: #ffffff;
+  --card-border: rgba(21, 34, 47, 0.09);
+  --card-shadow: rgba(16, 24, 40, 0.07);
+  --button-dark: #162c3d;
+  --button-dark-hover: #0f2231;
+  --button-light: #ffffff;
+  --button-light-hover: #f5f8fa;
   --font-sans-stack:
     "Avenir Next", "Segoe UI", "Helvetica Neue", "Nimbus Sans", sans-serif;
   --font-serif-stack:
@@ -54,11 +54,9 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans-stack);
   background-image:
-    radial-gradient(circle at top left, rgba(38, 117, 139, 0.3), transparent 33%),
-    radial-gradient(circle at top right, rgba(67, 138, 162, 0.24), transparent 30%),
-    radial-gradient(circle at 78% 82%, rgba(38, 117, 139, 0.14), transparent 22%),
-    radial-gradient(circle at 18% 78%, rgba(201, 108, 74, 0.06), transparent 18%),
-    linear-gradient(180deg, #dcebef 0%, #c7dce3 54%, #bdd4dc 100%);
+    radial-gradient(circle at top left, rgba(31, 94, 122, 0.18), transparent 30%),
+    radial-gradient(circle at top right, rgba(80, 137, 168, 0.12), transparent 26%),
+    linear-gradient(180deg, #eff6fb 0%, #e6f0f7 56%, #dae8f2 100%);
 }
 
 a,
@@ -79,16 +77,16 @@ select {
 
 .glass-panel {
   background: var(--surface);
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(10px);
   box-shadow:
-    0 14px 34px rgba(54, 83, 89, 0.08),
-    inset 0 1px 0 rgba(244, 250, 248, 0.7);
+    0 18px 38px rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .trip-card {
   background: var(--card-surface);
   box-shadow:
-    0 16px 40px var(--card-shadow),
+    0 16px 36px var(--card-shadow),
     0 0 0 1px var(--card-border);
 }
 
@@ -130,9 +128,9 @@ select {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 8% 12%, rgba(244, 251, 250, 0.36), transparent 18%),
-    radial-gradient(circle at 88% 16%, rgba(38, 117, 139, 0.16), transparent 24%),
-    radial-gradient(circle at 84% 72%, rgba(201, 108, 74, 0.07), transparent 18%);
+    radial-gradient(circle at 8% 12%, rgba(255, 255, 255, 0.6), transparent 18%),
+    radial-gradient(circle at 88% 16%, rgba(31, 94, 122, 0.15), transparent 24%),
+    radial-gradient(circle at 84% 72%, rgba(80, 137, 168, 0.08), transparent 18%);
   z-index: -1;
 }
 
@@ -146,6 +144,7 @@ select {
 .med-button-dark {
   background: var(--button-dark);
   color: #fffdf8;
+  box-shadow: 0 10px 24px rgba(15, 34, 49, 0.16);
 }
 
 .med-button-dark:hover {
@@ -154,8 +153,9 @@ select {
 
 .med-button-light {
   background: var(--button-light);
-  color: #33444b;
-  border-color: var(--card-border);
+  color: #22313d;
+  border-color: rgba(21, 34, 47, 0.14);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset;
 }
 
 .med-button-light:hover {

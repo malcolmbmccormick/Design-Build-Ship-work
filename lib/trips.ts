@@ -364,16 +364,18 @@ const TRIP_SEEDS: TripSeed[] = [
 const DEFAULT_DISCLAIMER =
   "Estimated costs are rough ranges, not live fares or guaranteed booking prices.";
 
-const DEFAULT_REQUEST: GenerateTripRequest = {
-  originCity: "Vienna",
-  departureDate: "2026-05-08",
-  returnDate: "2026-05-10",
-  budgetEuros: 180,
-  preference: "balanced",
-};
-
 export function getDefaultTripRequest(): GenerateTripRequest {
-  return DEFAULT_REQUEST;
+  const today = new Date();
+  const departureDate = getNextWeekendDate(today, 5);
+  const returnDate = getNextWeekendDate(today, 0, departureDate);
+
+  return {
+    originCity: "Vienna",
+    departureDate: formatDateForInput(departureDate),
+    returnDate: formatDateForInput(returnDate),
+    budgetEuros: 180,
+    preference: "balanced",
+  };
 }
 
 export function generateTripOptions(
@@ -783,4 +785,35 @@ function isPreference(value: string): value is TravelPreference {
     value === "nightlife" ||
     value === "nature"
   );
+}
+
+function getNextWeekendDate(
+  today: Date,
+  targetDay: number,
+  baseDate?: Date,
+): Date {
+  const start = baseDate ? new Date(baseDate) : new Date(today);
+  start.setHours(12, 0, 0, 0);
+
+  const currentDay = start.getDay();
+  let offset = (targetDay - currentDay + 7) % 7;
+
+  if (!baseDate && (offset === 0 || (currentDay > targetDay && currentDay !== 0))) {
+    offset += 7;
+  }
+
+  if (baseDate && offset === 0) {
+    offset = 7;
+  }
+
+  start.setDate(start.getDate() + offset);
+  return start;
+}
+
+function formatDateForInput(value: Date): string {
+  const year = value.getFullYear();
+  const month = `${value.getMonth() + 1}`.padStart(2, "0");
+  const day = `${value.getDate()}`.padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }

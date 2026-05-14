@@ -40,14 +40,14 @@ export function SavedTripsDashboard({
 
   if (trips.length < 1) {
     return (
-      <div className="rounded-[1.25rem] border border-border-soft bg-slate-50/85 p-5">
+      <div className="rounded-[1.1rem] border border-border-soft bg-white p-5 shadow-[0_12px_28px_rgba(15,23,42,0.05)]">
         <p className="text-sm font-semibold text-slate-900">No saved trips yet</p>
         <p className="mt-2 text-sm leading-6 text-slate-600">
           Save one of your generated itineraries from the planner and it will
           show up here.
         </p>
         <Link
-          className="med-button-dark mt-4 inline-flex rounded-xl px-4 py-3 text-sm font-semibold"
+          className="med-button-dark mt-4 inline-flex rounded-lg px-4 py-3 text-sm font-semibold"
           href="/#planner"
         >
           Generate a trip
@@ -68,7 +68,7 @@ export function SavedTripsDashboard({
         {trips.map((trip) => (
           <article
             key={trip.id}
-            className={`trip-card ${getTripAccentClass(trip.vibe_label)} rounded-[1.4rem] p-5`}
+            className={`trip-card ${getTripAccentClass(trip.vibe_label)} rounded-[1.2rem] p-5`}
           >
             <div className="flex items-start justify-between gap-3">
               <div>
@@ -76,6 +76,9 @@ export function SavedTripsDashboard({
                   {trip.vibe_label}
                 </p>
                 <h2 className="mt-1.5 text-[1.45rem] font-semibold leading-tight text-slate-950">
+                  <span className="mr-2" aria-hidden="true">
+                    {flagForCountry(trip.destination_country)}
+                  </span>
                   {trip.destination_city}, {trip.destination_country}
                 </h2>
                 <p className="mt-2 text-xs leading-5 text-[var(--color-ink-muted)]">
@@ -83,7 +86,7 @@ export function SavedTripsDashboard({
                 </p>
               </div>
               <button
-                className="med-button-light rounded-xl border px-3 py-2 text-sm font-medium disabled:opacity-60"
+                className="med-button-light rounded-lg border px-3 py-2 text-sm font-medium disabled:opacity-60"
                 disabled={isPending}
                 onClick={() => handleDelete(trip.id)}
                 type="button"
@@ -110,7 +113,7 @@ export function SavedTripsDashboard({
               {trip.highlights.map((highlight) => (
                 <span
                   key={`${trip.id}-${highlight}`}
-                  className="rounded-md border border-border-soft bg-white/85 px-2.5 py-1 text-[11px] font-medium text-slate-600"
+                  className="rounded-full border border-border-soft bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-600"
                 >
                   {highlight}
                 </span>
@@ -118,25 +121,25 @@ export function SavedTripsDashboard({
             </div>
 
             <div className="mt-4 grid gap-2 text-sm text-slate-600 sm:grid-cols-2">
-              <div className="rounded-xl border border-border-soft bg-slate-50/75 p-3">
+              <div className="rounded-lg border border-border-soft bg-slate-50 p-3">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-muted)]">
                   Route
                 </p>
                 <p className="mt-1">{trip.origin_city} to {trip.destination_city}</p>
               </div>
-              <div className="rounded-xl border border-border-soft bg-slate-50/75 p-3">
+              <div className="rounded-lg border border-border-soft bg-slate-50 p-3">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-muted)]">
                   Dates
                 </p>
                 <p className="mt-1">{trip.departure_date} to {trip.return_date}</p>
               </div>
-              <div className="rounded-xl border border-border-soft bg-slate-50/75 p-3">
+              <div className="rounded-lg border border-border-soft bg-slate-50 p-3">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-muted)]">
                   Estimated cost
                 </p>
                 <p className="mt-1">EUR {trip.estimated_cost_min}-{trip.estimated_cost_max}</p>
               </div>
-              <div className="rounded-xl border border-border-soft bg-slate-50/75 p-3">
+              <div className="rounded-lg border border-border-soft bg-slate-50 p-3">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-muted)]">
                   Transit
                 </p>
@@ -151,7 +154,7 @@ export function SavedTripsDashboard({
             <div className="mt-4 flex gap-2.5">
               {trip.transport_link ? (
                 <a
-                  className="med-button-dark flex-1 rounded-xl px-3 py-3 text-center text-sm font-semibold"
+                  className="med-button-dark flex-1 rounded-lg px-3 py-3 text-center text-sm font-semibold"
                   href={trip.transport_link}
                   rel="noreferrer noopener"
                   target="_blank"
@@ -161,7 +164,7 @@ export function SavedTripsDashboard({
               ) : null}
               {trip.stay_link ? (
                 <a
-                  className="med-button-light flex-1 rounded-xl border px-3 py-3 text-center text-sm font-semibold"
+                  className="med-button-light flex-1 rounded-lg border px-3 py-3 text-center text-sm font-semibold"
                   href={trip.stay_link}
                   rel="noreferrer noopener"
                   target="_blank"
@@ -215,4 +218,27 @@ function getTripAccentClass(vibeLabel: string) {
   }
 
   return "trip-accent-balanced";
+}
+
+function flagForCountry(country: string) {
+  switch (country) {
+    case "Austria":
+      return "🇦🇹";
+    case "Czech Republic":
+      return "🇨🇿";
+    case "Hungary":
+      return "🇭🇺";
+    case "Slovenia":
+      return "🇸🇮";
+    case "Croatia":
+      return "🇭🇷";
+    case "Italy":
+      return "🇮🇹";
+    case "Germany":
+      return "🇩🇪";
+    case "Slovakia":
+      return "🇸🇰";
+    default:
+      return "📍";
+  }
 }
